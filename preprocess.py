@@ -49,10 +49,9 @@ def preprocessSetInfo(setInfo,types):
     # remove all of the partitions that have a high probability of having a sum of 0
     partitionRatios = reducePartitions(types,setPartitions)
 
-
     return setPartitions,partitionRatios
+    
 def reducePartitions(types,setPartitions):
-    global allRatios
 
     partitionRatios = {}
 
@@ -95,11 +94,14 @@ def reducePartitions(types,setPartitions):
         # will hash a string of the product tracker
         productTracker = [[0,len(p)] for p in partitionsForIndices]
         productTracker[-1][0] = -1
+        theCounter = counter(productTracker)
 
         if(USE_DEBUG3):
             print('\n\n-------------- Entering product loop ---------------\n\n')
-        while(incrementCounter(productTracker,-1)):
-            currentPartitions = [partitionsForIndices[i][j[0]] for i,j in enumerate(productTracker)]
+        # while(incrementCounter(productTracker,-1)):
+        #     currentPartitions = [partitionsForIndices[i][j[0]] for i,j in enumerate(productTracker)]
+        while(theCounter.incrementCounter(-1)):
+            currentPartitions = [partitionsForIndices[i][j[0]] for i,j in enumerate(theCounter.productCounter)]
             
             updatePartitionRatios(typeString,currentPartitions,partitionRatios)
 

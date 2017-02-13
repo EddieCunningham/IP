@@ -5,42 +5,106 @@ import math
 import random
 from vals import *
 from preprocess import *
+import numpy as np
+
 
 USE_DEBUG2 = False
 OUTER_RATIO_TEST = True
 PRINT_EVERY_TIME = False
 
-
-allRatios = []
-
-def incrementCounter(counts,i):
-    if(i < 0):
-        i = len(counts)+i
-    for j in range(i+1,len(counts)):
-        counts[j][0] = 0
-
-    while(i >= 0):
-        index,maxIndex = counts[i]
-        if(index == maxIndex-1):
-            counts[i][0] = 0
-            i -= 1
-            continue
-        counts[i][0] += 1
-        return True
-    return False
+RANDOM_SEED = 1
+np.random.seed(seed=RANDOM_SEED)
 
 
-def partitionIterator(setPartitions,partitionRatios,types,productCounter,dynamicSpeedup,otherInfo,EPSILON=0.0):
+
+class counter():
+    def __init__(self,productCounter,stochastic=False,numSamples=1000,bootstrap=False):
+        self._stochastic = stochastic
+        self.productCounter = productCounter
+        self._bootstrap = bootstrap
+
+        if(self._stochastic):
+            _,total = self.getTotal()
+            self._nSamples = 0
+            self._totalSamples = min(total,numSamples)
+            self._allChoices = self._getChoices(total)#np.random.choice(total,self._totalSamples,replace=False)
+
+            self._effectiveVals = [0 for _ in productCounter]
+            multiplier = 1
+            for i,p in enumerate(reversed(self.productCounter)):
+                self._effectiveVals[len(self._effectiveVals)-i-1] = multiplier
+                multiplier *= p[1]
+
+    def _getChoices(self,total):
+        # self._totalSamples
+        used = {}
+        for i in range(self._totalSamples):
+            val = int(np.random.random()*total)
+            while(not self._bootstrap and val in used):
+                val = int(np.random.random()*total)
+            used[val] = 1
+        return used.keys()
+
+
+    def _deterministicChoice(self,i):
+        if(i < 0):
+            i = len(self.productCounter)+i
+        for j in range(i+1,len(self.productCounter)):
+            self.productCounter[j][0] = 0
+
+        while(i >= 0):
+            index,maxIndex = self.productCounter[i]
+            if(index == maxIndex-1):
+                self.productCounter[i][0] = 0
+                i -= 1
+                continue
+            self.productCounter[i][0] += 1
+            return True
+        return False
+
+    def _updateBasedOnVal(self,choice):
+
+        self.productCounter = [[0,p[1]] for p in self.productCounter]
+        i=0
+        while(i < len(self.productCounter)):
+            if(choice < self._effectiveVals[i]):
+                i += 1
+                continue
+            self.productCounter[i][0] += 1
+            choice -= self._effectiveVals[i]
+
+
+    def _stochasticChoice(self):
+
+        currentChoice = self._allChoices[self._nSamples]
+        self._updateBasedOnVal(currentChoice)
+        self._nSamples += 1
+        return self._nSamples < self._totalSamples
+
+    def incrementCounter(self,i):
+        if(self._stochastic):
+            return self._stochasticChoice()
+        return self._deterministicChoice(i)
+
+    def getTotal(self):
+        current = 0
+        multiplier = 1
+        for p in reversed(self.productCounter):
+            current += p[0]*multiplier
+            multiplier *= p[1]
+        return current,multiplier
+
+def partitionIterator(setPartitions,partitionRatios,types,theCounter,dynamicSpeedup,otherInfo,EPSILON=0.0):
 
     if(USE_DEBUG2):
         print('\ntypes: '+str(types))
 
     if(PRINT_EVERY_TIME):
-        total = getTotal(productCounter)
+        total = theCounter.getTotal()
         print(str(total[0])+' / '+str(total[1])+' -> '+str(float(total[0])/total[1]))
-        print('productCounter: '+str(productCounter))
+        print('productCounter: '+str(theCounter.productCounter))
 
-    currentPartitions = [setPartitions[i][j[0]] for i,j in enumerate(productCounter)]
+    currentPartitions = [setPartitions[i][j[0]] for i,j in enumerate(theCounter.productCounter)]
 
     # see if the partitions we have have a high chance of being 0
     # if so, increment productCounter by 1
@@ -51,13 +115,13 @@ def partitionIterator(setPartitions,partitionRatios,types,productCounter,dynamic
 
         if(USE_DEBUG2):
             print('indexToIncrement: '+str(indexToIncrement))
-        if(not incrementCounter(productCounter,indexToIncrement)):
+        if(not theCounter.incrementCounter(indexToIncrement)):
             return False
         return 'continue'
 
 
     # then return the current partitions
-    if(not incrementCounter(productCounter,-1)):
+    if(not theCounter.incrementCounter(-1)):
         return False
 
     return currentPartitions
@@ -216,12 +280,3 @@ def updatePartitionRatios(typeString,currentPartitions,partitionRatios,assignedI
         partitionRatios[typePartitionString2] = [numbNonZero,totalNumb]
     else:
         assert [numbNonZero,totalNumb] == partitionRatios[typePartitionString2], 'Look here'
-
-def getTotal(productCounter):
-    current = 0
-    multiplier = 1
-    for p in reversed(productCounter):
-        current += p[0]*multiplier
-        multiplier *= p[1]
-
-    return current,multiplier

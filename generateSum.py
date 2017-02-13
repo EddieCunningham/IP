@@ -7,11 +7,11 @@ from preprocess import *
 from partitionIterator import *
 from generateSumForSetVal import *
 
-PRINT_PARTITION = True
-PRINT_RATIO = False
+PRINT = True
+PRINT_ZERO_RATIO = False
 
 
-def calcSum(types,EPSILON=0.0):
+def calcSum(types,d_checkpoint=0.1,EPSILON=0.0,stochastic=False,writeResults=False,numSamples=1000,random_seed=1):
 
     # first we build the information needed for the sets
     # that we pull indices from
@@ -55,7 +55,8 @@ def calcSum(types,EPSILON=0.0):
 
     # productCounter is keeps track of the current state of the setValsIterator
     setPartitions,partitionRatios = preprocessSetInfo(setInfo,types)
-    productCounter = [[0,len(p)] for p in setPartitions]
+    pC = [[0,len(p)] for p in setPartitions]
+    theCounter = counter(pC,stochastic,numSamples)
 
     print('setPartitions:')
     for s in setPartitions:
@@ -64,8 +65,10 @@ def calcSum(types,EPSILON=0.0):
     # assert 0
 
     totalTerms = 0
+    checkpoint = 0.0
     while(True):
-        currentPartition = partitionIterator(setPartitions,partitionRatios,types,productCounter,dynamicSpeedup,otherInfo,EPSILON)
+        currentPartition = partitionIterator(setPartitions,partitionRatios,types,theCounter,dynamicSpeedup,otherInfo,EPSILON)
+
         if(currentPartition == 'continue'):
             continue
 
@@ -78,14 +81,22 @@ def calcSum(types,EPSILON=0.0):
         if(ans != 0):
             totalNonZero += 1
 
-        zeroRatio = '%4d / %4d -> %.4f'%(otherInfo['nonZeroMult'],otherInfo['totalMult'],float(otherInfo['nonZeroMult'])/float(otherInfo['totalMult']))
 
-        if(PRINT_RATIO):
-            total = getTotal(productCounter)
-            print(str(total[0])+' / '+str(total[1])+' -> '+str(float(total[0])/total[1])+' : '+zeroRatio)
+        if(PRINT):
+            total = theCounter.getTotal()
+            percentCompleted = float(total[0])/float(total[1])
 
-        if(PRINT_PARTITION):
-            print('productCounter: '+str(productCounter)+' ans: '+str(ans)+' : '+zeroRatio)
+            if(percentCompleted > checkpoint):
+                checkpoint += d_checkpoint
+
+                printString = '%.4f | '%(percentCompleted)+str(theCounter.productCounter)+' -> '+str(totalAns)
+                if(PRINT_ZERO_RATIO):
+                    zeroRatio = '%4d / %4d -> %.4f'%(otherInfo['nonZeroMult'],otherInfo['totalMult'],float(otherInfo['nonZeroMult'])/float(otherInfo['totalMult']))
+                    printString += ' || Zero Ratio: '+zeroRatio
+                
+                print(printString)
+
+
 
         totalAns += ans
     

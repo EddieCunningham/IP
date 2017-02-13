@@ -22,48 +22,18 @@ from generateTypes import *
 from model import *
 from bruteForce import *
 import time
-# from toCheckProbabilityThing import *
 
-# SET RANDOM SEED TO A KNOWN NUMBER SO THAT WE CAN REPLICATE THE RESULTS!!!!!
 
 jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'
 
-BRUTE_FORCE = False
-USE_TEST = False
+BRUTE_FORCE = True
+USE_TEST = True
+PRINT_TYPES = False
 
-def cleanRun():
-    def shadingAD(person):
-        if(len(person.diagnoses) > 0):
-            return 'yes'
-        else:
-            return 'no'
-
-    funcToUse = shadingAD
-
-    allPedigrees = []
-    for filename in os.listdir(jsonFolderPath):
-        if('.json' in filename):
-            if(USE_TEST):
-                filename = 'test.json'
-            print('The current filename is: '+str(filename))
-            with open(os.path.join(jsonFolderPath, filename)) as data_file:
-                data = json.loads(json.load(data_file))
-                pedigreeAdding = Pedigree(data)
-                pedigreeAdding.setAffectedFunctions(funcToUse)
-                allPedigrees.append(pedigreeAdding)
-                break
-
-    pedigree = allPedigrees[0]
-    types,setMappings = getTypes(pedigree)
-    print('\ntypes:')
-    for t in types:
-        print(t)
-    print('\n')
-
-    if(BRUTE_FORCE):
-        finalAns = bruteForce(types)
-    else:
-        finalAns = calcSum(types,EPSILON=0.0)
+CHECKPOINT = 10000
+STOCHASTIC = True
+WRITE_RESULTS = True
+NUM_SAMPLES = 2000000
 
 
 def runThisFunction():
@@ -79,7 +49,7 @@ def runThisFunction():
     for filename in os.listdir(jsonFolderPath):
         if('.json' in filename):
             if(USE_TEST):
-                filename = 'test.json'
+                filename = 'test_7.json'
             print('The current filename is: '+str(filename))
             with open(os.path.join(jsonFolderPath, filename)) as data_file:
                 data = json.loads(json.load(data_file))
@@ -97,23 +67,25 @@ def runThisFunction():
     # which determine what its value will be
     types,setMappings = getTypes(pedigree)
 
-    # print('Final types:')
-    # for t in types:
-    #     descriptiveString = ''
-    #     for _t in t[1]:
-    #         for k,v in setMappings.items():
-    #             if(v[0] == _t[0]):
-    #                 if(_t != t[1][-1]):
-    #                     descriptiveString += str(k.split(',')[0])+' '
-    #                 else:
-    #                     descriptiveString += str(k.split(',')[0])
+    if(PRINT_TYPES):
+        print('Final types:')
+        for t in types:
+            descriptiveString = ''
+            for _t in t[1]:
+                for k,v in setMappings.items():
+                    if(v[0] == _t[0]):
+                        if(_t != t[1][-1]):
+                            descriptiveString += str(k.split(',')[0])+' '
+                        else:
+                            descriptiveString += str(k.split(',')[0])
 
-    #     print(str(t)+' (In terms of person id: ['+str(descriptiveString))+'])'
+            print(str(t)+' (In terms of person id: ['+str(descriptiveString))+'])'
 
     print('\ntypes:')
     for t in types:
         print(t)
     print('\n')
+    assert 0
     # print('All set mappings:')
     # for k,v in setMappings.items():
     #     print(str(k)+' -> '+str(v))
@@ -121,23 +93,19 @@ def runThisFunction():
     # calcSum will calculate the sum over all of the possible types
     # types = customTypes()
 
-    finalAns = calcSum(types,EPSILON=0.0)
-    # finalAns = bruteForce(types)
 
-    # P.hist(np.array(allRatios), bins = 20)
-    # P.show()
 
-    # numbIters = 7
-    # _min = 0.0
-    # _max = 0.5
-    # allAns = []
-    # for EPSILON in range(0,numbIters):
-    #     EPSILON = float(EPSILON)*(_max-_min)/(numbIters-1)+_min
-    #     ans,iterations = calcSum(types,EPSILON)
-    #     allAns.append([EPSILON,ans,iterations])
+    if(BRUTE_FORCE):
+        data = bruteForce(types,d_checkpoint=CHECKPOINT,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
+    else:
+        finalAns = calcSum(types,d_checkpoint=CHECKPOINT,EPSILON=0.0,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
 
-    # for a in allAns:
-    #     print a
+    if(data):
+        data['name'] = 'data_'+filename
+        data['types'] = types
+
+        with open('./stochasticData/'+data['name'], 'w') as file:
+            json.dump(data, file)
 
 
 def customTypes():
@@ -149,8 +117,7 @@ def customTypes():
     return buckets
 
 start = time.time()
-# runThisFunction()
-cleanRun()
+runThisFunction()
 
 end = time.time()
 print('\n\nTotal time: '+str(end - start))
