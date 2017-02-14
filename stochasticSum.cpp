@@ -1,19 +1,17 @@
 #include "stochasticSum.h"
 #include <stdlib.h>
-#include <unordered_map>
 #include <cassert>
 
 
 namespace std {
-    
     // srand(1);
 
-    unordered_map<unsigned,double> valsG({{0,1.0},{1,0.5},{2,0.0},{3,0.5},{4,0.25},{5,0.0},{6,0.0},{7,0.0},{8,0.0},{9,0.0},{10,0.5},{11,1.0},{12,0.5},{13,0.5},{14,0.5},{15,1.0},{16,0.5},{17,0.0},{18,0.0},{19,0.0},{20,0.0},{21,0.0},{22,0.25},{23,0.5},{24,0.0},{25,0.5},{26,1.0}});
-    unordered_map<unsigned,double> valsS({{0,1.0},{1,1.0},{2,1.0},{3,1.0},{4,0.75},{5,0.5},{6,1.0},{7,0.5},{8,0.0}});
-    unordered_map<unsigned,double> valsN({{0,0.0},{1,0.0},{2,0.0},{3,0.0},{4,0.25},{5,0.5},{6,0.0},{7,0.5},{8,1.0}});
-    unordered_map<unsigned,double> valsP({{0,0.5},{1,0.5},{2,0.5},{3,0.5},{4,0.5},{5,0.25},{6,0.5},{7,0.25},{8,0.5}});
+    unordered_map<int,double> valsG({{0,1.0},{1,0.5},{2,0.0},{3,0.5},{4,0.25},{5,0.0},{6,0.0},{7,0.0},{8,0.0},{9,0.0},{10,0.5},{11,1.0},{12,0.5},{13,0.5},{14,0.5},{15,1.0},{16,0.5},{17,0.0},{18,0.0},{19,0.0},{20,0.0},{21,0.0},{22,0.25},{23,0.5},{24,0.0},{25,0.5},{26,1.0}});
+    unordered_map<int,double> valsS({{0,1.0},{1,1.0},{2,1.0},{3,1.0},{4,0.75},{5,0.5},{6,1.0},{7,0.5},{8,0.0}});
+    unordered_map<int,double> valsN({{0,0.0},{1,0.0},{2,0.0},{3,0.0},{4,0.25},{5,0.5},{6,0.0},{7,0.5},{8,1.0}});
+    unordered_map<int,double> valsP({{0,0.5},{1,0.5},{2,0.5},{3,0.5},{4,0.5},{5,0.25},{6,0.5},{7,0.25},{8,0.5}});
 
-    Counter::Counter(vector<pair<unsigned,unsigned>> initialCounter,unsigned maxSamples) {
+    Counter::Counter(vector<pair<int,int>> initialCounter,int maxSamples) {
         this->counter = initialCounter;
         this->numSamples = 0;
         this->totalSamples = maxSamples;
@@ -21,17 +19,17 @@ namespace std {
 
     bool Counter::stochasticChoice() {
         for(auto it=this->counter.begin(); it!=this->counter.end(); ++it) {
-            unsigned maxVal = it->second;
+            int maxVal = it->second;
             it->first = rand()%maxVal;
         }
         this->numSamples += 1;
         return this->numSamples < this->totalSamples;
     }
 
-    double getVal(string name, const vector<unsigned> & indices) {
+    double getVal(string name, const vector<int> & indices) {
 
-        unsigned value = 0;
-        unsigned i=0;
+        int value = 0;
+        int i=0;
         for(auto it=indices.rbegin(); it!=indices.rend(); ++it) {
             value += (*it)*pow(3,i);
             ++i;
@@ -50,12 +48,15 @@ namespace std {
         }
     }
 
-    void c_bruteForce(vector<pair<string,vector<pair<unsigned,unsigned>>>> types,unsigned checkpoint,unsigned numSamples) {
-        unsigned numbUniqueIndices = 0;
-        unordered_map<unsigned,unsigned> uniqueMapping;
+    unordered_map<int,double> c_bruteForce(vector<pair<string,vector<pair<int,int>>>> types,int checkpoint,int numSamples) {
+
+        unordered_map<int,double> toReturn;
+
+        int numbUniqueIndices = 0;
+        unordered_map<int,int> uniqueMapping;
         
         for(auto it=types.begin(); it!=types.end(); ++it) {
-            vector<pair<unsigned,unsigned>> indices = it->second;
+            vector<pair<int,int>> indices = it->second;
             
             for(auto it2=indices.begin(); it2!=indices.end(); ++it2) {
                 
@@ -66,22 +67,22 @@ namespace std {
             }
         }
 
-        Counter counter(vector<pair<unsigned,unsigned>>(numbUniqueIndices,pair<unsigned,unsigned>(0,3)),numSamples);
+        Counter counter(vector<pair<int,int>>(numbUniqueIndices,pair<int,int>(0,3)),numSamples);
 
         double ans = 0;
-        double projectedAns = 0;
+        // double projectedAns = 0;
 
-        unsigned iters = 1;
+        int iters = 1;
         while(counter.stochasticChoice()) {
 
             double val = 1;
             
             for(auto it=types.begin(); it!=types.end(); ++it) {
-                vector<unsigned> indices(it->second.size(),0);
+                vector<int> indices(it->second.size(),0);
                 
-                unsigned i=0;
+                int i=0;
                 for(auto it2=it->second.begin(); it2!=it->second.end(); ++it2) {
-                    unsigned index = uniqueMapping[it2->second];
+                    int index = uniqueMapping[it2->second];
                     indices[i] = counter.counter[index].first;
                     ++i;
                 }
@@ -97,18 +98,19 @@ namespace std {
             iters += 1;
 
             if(iters%checkpoint == 0) {
-                cout << iters << endl;
-                cout << ans << endl;
-                projectedAns = ans*pow(3,numbUniqueIndices)/iters;
-                cout << projectedAns << endl;
+                // cout << iters << endl;
+                // cout << ans << endl;
+                // projectedAns = ans*pow(3,numbUniqueIndices)/iters;
+                // cout << projectedAns << endl;
+                toReturn.insert({iters,ans});
             }
-
         }
-        cout << iters << endl;
-        cout << ans << endl;
-        projectedAns = ans*pow(3,numbUniqueIndices)/iters;
-        cout << projectedAns << endl;
-
+        // cout << iters << endl;
+        // cout << ans << endl;
+        // projectedAns = ans*pow(3,numbUniqueIndices)/iters;
+        // cout << projectedAns << endl;
+        // cout << "THE TOTAL NUMBER OF TERMS IS: " << pow(3,numbUniqueIndices) << endl;
+        return toReturn;
     }
 };
 
@@ -116,19 +118,19 @@ namespace std {
 
 // int main() {
 
-//     vector<pair<string,vector<pair<unsigned,unsigned>>>> types({
-//         pair<string,vector<pair<unsigned,unsigned>>>("n",vector<pair<unsigned,unsigned>>({pair<unsigned,unsigned>(0,0),pair<unsigned,unsigned>(1,3)})),
-//         pair<string,vector<pair<unsigned,unsigned>>>("n",vector<pair<unsigned,unsigned>>({pair<unsigned,unsigned>(2,6),pair<unsigned,unsigned>(3,9)})),
-//         pair<string,vector<pair<unsigned,unsigned>>>("n",vector<pair<unsigned,unsigned>>({pair<unsigned,unsigned>(4,12),pair<unsigned,unsigned>(5,15)})),
-//         pair<string,vector<pair<unsigned,unsigned>>>("g",vector<pair<unsigned,unsigned>>({pair<unsigned,unsigned>(4,12),pair<unsigned,unsigned>(0,1),pair<unsigned,unsigned>(1,4)})),
-//         pair<string,vector<pair<unsigned,unsigned>>>("g",vector<pair<unsigned,unsigned>>({pair<unsigned,unsigned>(5,15),pair<unsigned,unsigned>(2,7),pair<unsigned,unsigned>(3,10)})),
-//         pair<string,vector<pair<unsigned,unsigned>>>("n",vector<pair<unsigned,unsigned>>({pair<unsigned,unsigned>(6,18),pair<unsigned,unsigned>(7,21)})),
-//         pair<string,vector<pair<unsigned,unsigned>>>("g",vector<pair<unsigned,unsigned>>({pair<unsigned,unsigned>(6,18),pair<unsigned,unsigned>(0,2),pair<unsigned,unsigned>(1,5)})),
-//         pair<string,vector<pair<unsigned,unsigned>>>("g",vector<pair<unsigned,unsigned>>({pair<unsigned,unsigned>(7,21),pair<unsigned,unsigned>(2,8),pair<unsigned,unsigned>(3,11)}))
+//     vector<pair<string,vector<pair<int,int>>>> types({
+//         pair<string,vector<pair<int,int>>>("n",vector<pair<int,int>>({pair<int,int>(0,0),pair<int,int>(1,3)})),
+//         pair<string,vector<pair<int,int>>>("n",vector<pair<int,int>>({pair<int,int>(2,6),pair<int,int>(3,9)})),
+//         pair<string,vector<pair<int,int>>>("n",vector<pair<int,int>>({pair<int,int>(4,12),pair<int,int>(5,15)})),
+//         pair<string,vector<pair<int,int>>>("g",vector<pair<int,int>>({pair<int,int>(4,12),pair<int,int>(0,1),pair<int,int>(1,4)})),
+//         pair<string,vector<pair<int,int>>>("g",vector<pair<int,int>>({pair<int,int>(5,15),pair<int,int>(2,7),pair<int,int>(3,10)})),
+//         pair<string,vector<pair<int,int>>>("n",vector<pair<int,int>>({pair<int,int>(6,18),pair<int,int>(7,21)})),
+//         pair<string,vector<pair<int,int>>>("g",vector<pair<int,int>>({pair<int,int>(6,18),pair<int,int>(0,2),pair<int,int>(1,5)})),
+//         pair<string,vector<pair<int,int>>>("g",vector<pair<int,int>>({pair<int,int>(7,21),pair<int,int>(2,8),pair<int,int>(3,11)}))
 //     });
 
-//     unsigned checkpoint = 2;
-//     unsigned numSamples = 5000000;
+//     int checkpoint = 2;
+//     int numSamples = 5000000;
 //     c_bruteForce(types,checkpoint,numSamples);
 // }
 

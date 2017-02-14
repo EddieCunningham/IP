@@ -1,19 +1,30 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <unordered_map>
 
 
 namespace std {
 
+    class Type {
+    public:
+        string name;
+        int setNumb;
+        Type* parent1;
+        Type* parent2;
+        vector<vector<double>> possibleVals;
+        double takenVal;
+    }
+
     class Counter {
     public:
-        Counter(vector<pair<unsigned,unsigned>> initialCounter,unsigned maxSamples);
-        vector<pair<unsigned,unsigned>> counter;
+        Counter(vector<pair<int,int>> initialCounter,int maxSamples);
+        vector<pair<int,int>> counter;
         bool stochasticChoice();
     private:
-        unsigned numbSamples,totalSamples;
+        int numSamples,totalSamples;
     };
 
-    void c_bruteForce(vector<pair<string,vector<pair<unsigned,unsigned>>>> types,unsigned checkpoint,unsigned numbSamples);
+    unordered_map<int,double> c_bruteForce(vector<pair<string,vector<pair<int,int>>>> types,int checkpoint,int numSamples);
 
 }

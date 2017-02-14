@@ -28,12 +28,12 @@ jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'
 
 BRUTE_FORCE = True
 USE_TEST = True
-PRINT_TYPES = False
+PRINT_TYPES = True
 
 CHECKPOINT = 10000
-STOCHASTIC = True
+STOCHASTIC = False
 WRITE_RESULTS = True
-NUM_SAMPLES = 2000000
+NUM_SAMPLES = 1000000
 
 
 def runThisFunction():
@@ -49,7 +49,7 @@ def runThisFunction():
     for filename in os.listdir(jsonFolderPath):
         if('.json' in filename):
             if(USE_TEST):
-                filename = 'test_7.json'
+                filename = 'test_10.json'
             print('The current filename is: '+str(filename))
             with open(os.path.join(jsonFolderPath, filename)) as data_file:
                 data = json.loads(json.load(data_file))
@@ -85,7 +85,8 @@ def runThisFunction():
     for t in types:
         print(t)
     print('\n')
-    assert 0
+
+    # assert 0
     # print('All set mappings:')
     # for k,v in setMappings.items():
     #     print(str(k)+' -> '+str(v))

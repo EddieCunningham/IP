@@ -6,7 +6,7 @@ import random
 from generateSum import *
 
 
-def goUpPedigree(person,last,originatedFrom,currentSets,maxVal):
+def goUpPedigree(person,originatedFrom,currentSets,maxVal):
     # figure out what g terms to add
 
     if(len(person.parents) == 0):
@@ -14,11 +14,10 @@ def goUpPedigree(person,last,originatedFrom,currentSets,maxVal):
         return []
 
     # these are going to be the indices of g
-    # t1 is self, t2 is parent 0, t3 is parent 3
+    # t1 is self, t2 is parent 0, t3 is parent 1
     t1 = list(currentSets[str(person.Id)+','+str(originatedFrom.Id)])
     t2 = -1
     t3 = -1
-
 
     # check to see if the parents are roots
     if(len(person.parents[0].parents) == 0):
@@ -40,8 +39,8 @@ def goUpPedigree(person,last,originatedFrom,currentSets,maxVal):
         currentSets[str(person.parents[1].Id)+','+str(originatedFrom.Id)] = t3
 
     termsToAdd = [['g',[t1,t2,t3]]]
-    termsToAdd.extend(goUpPedigree(person.parents[0],person,originatedFrom,currentSets,maxVal))
-    termsToAdd.extend(goUpPedigree(person.parents[1],person,originatedFrom,currentSets,maxVal))
+    termsToAdd.extend(goUpPedigree(person.parents[0],originatedFrom,currentSets,maxVal))
+    termsToAdd.extend(goUpPedigree(person.parents[1],originatedFrom,currentSets,maxVal))
     return termsToAdd
 
 def getTypes(pedigree):
@@ -102,8 +101,8 @@ def getTypes(pedigree):
 
         # now branch up the tree to all of the roots and accumulate
         # the new terms to add to types
-        parent0Branch = goUpPedigree(p.parents[0],p,p,currentSets,maxVal)
-        parent1Branch = goUpPedigree(p.parents[1],p,p,currentSets,maxVal)
+        parent0Branch = goUpPedigree(p.parents[0],p,currentSets,maxVal)
+        parent1Branch = goUpPedigree(p.parents[1],p,currentSets,maxVal)
 
         types.extend([zetaTerm])
         types.extend(parent0Branch)

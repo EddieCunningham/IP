@@ -121,9 +121,9 @@ def bruteForce(types,d_checkpoint=0.1,stochastic=False,writeResults=False,numSam
     print('Total terms: '+str(total))
 
     if(writeResults):
-        data['totalCount'] = count['count']
-        data['totalSum'] = ans
-        data['allSum'] = total
+        # data['totalCount'] = count['count']
+        # data['totalSum'] = ans
+        data['totalNumTerms'] = total
         return data
     return None
 
