@@ -13,6 +13,19 @@ PRINT_ZERO_RATIO = False
 
 def calcSum(types,d_checkpoint=0.1,EPSILON=0.0,stochastic=False,writeResults=False,numSamples=1000,random_seed=1):
 
+
+    numUniqueIndices = 0
+    uniqueMapping = {}
+    for t in types:
+        for _t in t[1]:
+            if(_t[1] not in uniqueMapping):
+                uniqueMapping[_t[1]] = numUniqueIndices
+                numUniqueIndices += 1
+    total = 3**numUniqueIndices
+
+    if(d_checkpoint > 1):
+        d_checkpoint = d_checkpoint/float(total)
+
     # first we build the information needed for the sets
     # that we pull indices from
     uniqueSets = []

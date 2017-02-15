@@ -57,7 +57,7 @@ def bruteForce(types,d_checkpoint=0.1,stochastic=False,writeResults=False,numSam
     total = 3**numUniqueIndices
     print('Total terms: '+str(total))
 
-    count = {'count':0}
+    count = 0
     checkpoint = 0.0
     if(d_checkpoint > 1):
         d_checkpoint = d_checkpoint/float(total)
@@ -75,15 +75,15 @@ def bruteForce(types,d_checkpoint=0.1,stochastic=False,writeResults=False,numSam
 
     iters = 0
     while(theCounter.incrementCounter(-1)):
-        count['count'] += 1
-        percentCompleted = count['count']/float(total)
+        count += 1
+        percentCompleted = count/float(total)
         flag = False
         if(percentCompleted > checkpoint):
             print('%.4f | '%(percentCompleted)+str(theCounter.productCounter)+' -> '+str(ans))
             checkpoint += d_checkpoint
             flag = True
         if(writeResults):
-            data[count['count']] = ans
+            data[count] = ans
 
         val = 1
         for t in types:
@@ -117,11 +117,11 @@ def bruteForce(types,d_checkpoint=0.1,stochastic=False,writeResults=False,numSam
 
 
     print('ans: '+str(ans))
-    print('count: '+str(count['count']))
+    print('count: '+str(count))
     print('Total terms: '+str(total))
 
     if(writeResults):
-        # data['totalCount'] = count['count']
+        # data['totalCount'] = count
         # data['totalSum'] = ans
         data['totalNumTerms'] = total
         return data

@@ -21,13 +21,16 @@ import random
 from generateTypes import *
 from model import *
 from bruteForce import *
+from smartWay import *
 import time
 
 
 jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'
 
+SMART_WAY = True
+
 BRUTE_FORCE = True
-USE_TEST = True
+USE_TEST = False
 PRINT_TYPES = True
 
 CHECKPOINT = 10000
@@ -49,7 +52,7 @@ def runThisFunction():
     for filename in os.listdir(jsonFolderPath):
         if('.json' in filename):
             if(USE_TEST):
-                filename = 'test_10.json'
+                filename = 'test_3.json'
             print('The current filename is: '+str(filename))
             with open(os.path.join(jsonFolderPath, filename)) as data_file:
                 data = json.loads(json.load(data_file))
@@ -94,28 +97,23 @@ def runThisFunction():
     # calcSum will calculate the sum over all of the possible types
     # types = customTypes()
 
+    writeData = None
 
-
-    if(BRUTE_FORCE):
-        data = bruteForce(types,d_checkpoint=CHECKPOINT,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
+    if(SMART_WAY):
+        findAns(types)
     else:
-        finalAns = calcSum(types,d_checkpoint=CHECKPOINT,EPSILON=0.0,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
+        if(BRUTE_FORCE):
+            writeData = bruteForce(types,d_checkpoint=CHECKPOINT,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
+        else:
+            finalAns = calcSum(types,d_checkpoint=CHECKPOINT,EPSILON=0.0,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
 
-    if(data):
-        data['name'] = 'data_'+filename
-        data['types'] = types
+    if(writeData):
+        writeData['name'] = 'data_'+filename
+        writeData['types'] = types
 
-        with open('./stochasticData/'+data['name'], 'w') as file:
-            json.dump(data, file)
+        with open('./stochasticData/'+writeData['name'], 'w') as file:
+            json.dump(writeData, file)
 
-
-def customTypes():
-    buckets = [
-            ['g',[[0,0],[0,1],[1,2]]],
-            ['g',[[1,3],[1,4],[2,5]]],
-            ['g',[[0,1],[1,4],[2,6]]]
-            ]
-    return buckets
 
 start = time.time()
 runThisFunction()
