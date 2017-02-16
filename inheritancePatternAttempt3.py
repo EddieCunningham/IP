@@ -100,7 +100,7 @@ def runThisFunction():
     writeData = None
 
     if(SMART_WAY):
-        findAns(types)
+        finalAns = findAns(types)
     else:
         if(BRUTE_FORCE):
             writeData = bruteForce(types,d_checkpoint=CHECKPOINT,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)

@@ -85,7 +85,6 @@ class typeWrapper:
             left = ['one','twoZero'][counter%2]
             right = ['one','twoZero'][int(counter/2)%2]
             val = self.vals[valIndex][counter]
-            # counter += 1
             return [[left,right],val]
 
     def __repr__(self):
@@ -102,9 +101,6 @@ class typeWrapper:
 
 
 def findAnsHelper(currentType,whichBranch,depth):
-    # tabs = ''
-    # for t in range(depth):
-    #     tabs += '\t'
 
     if(currentType.left == None and currentType.right == None):
         currentType.resetCounters()
@@ -116,7 +112,6 @@ def findAnsHelper(currentType,whichBranch,depth):
         else:
             ans = currentType.totalSum
 
-        # print('\n'+tabs+'|||||||||||||||||||||||||||||||\n'+str(currentType)+'\n '+str(whichBranch)+' -> '+str(ans)+'\n'+tabs+'|||||||||||||||||||||||||||||||\n')
 
         return ans
 
@@ -137,13 +132,10 @@ def findAnsHelper(currentType,whichBranch,depth):
 
     currentType.resetCounters()
 
-    # print('\n'+tabs+'|||||||||||||||||||||||||||||||\n'+str(currentType)+'\n '+str(whichBranch)+' -> '+str(ans)+'\n'+tabs+'|||||||||||||||||||||||||||||||\n')
     return ans
 
 def findAns(types):
 
-    # first have to find way to connect types
-    # use a shitty algorithm for this
     allTypes = [typeWrapper(t) for t in types]
     for a in allTypes:
         uVals = [_t[1] for _t in a.t[1]]
@@ -165,18 +157,15 @@ def findAns(types):
                             a.left = _a
                         elif(i == 1):
                             a.right = _a
-    # for a in allTypes:
-    #     print('\n--------------------------\n'+str(a))
 
     roots = [a for a in allTypes if a.isRoot()]
     ans = 1
     for r in roots:
         _ans = findAnsHelper(r,-1,0)
-        # print('\n=========================================\nroot: '+str(r)+'\n -> '+str(_ans))
         ans *= _ans
 
     print(ans)
 
 
 
-    assert 0
+    return ans
