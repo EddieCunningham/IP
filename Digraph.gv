@@ -1,0 +1,30 @@
+// This pedigree
+digraph {
+	node [shape=circle]
+	"2_A" [label=""]
+	"2_B" [label=""]
+	"2_C" [label=""]
+	"2_D" [label="1/4"]
+	"2_E" [label="1/2"]
+	"2_F" [label="1/2"]
+	"2_G" [label=1]
+	node [shape=point]
+	"2_1*" [label=""]
+	"2_2*" [label=""]
+	"2_11" [label=""]
+	"2_12" [label=""]
+	"2_21" [label=""]
+	"2_22" [label=""]
+		"2_A" -> "2_1*" [label="1,D-0"]
+		"2_1*" -> "2_B"
+		"2_A" -> "2_2*" [label="2,D-0"]
+		"2_2*" -> "2_C"
+		"2_B" -> "2_11" [label="1,D-1"]
+		"2_11" -> "2_D"
+		"2_B" -> "2_12" [label="2,D-1"]
+		"2_12" -> "2_E"
+		"2_C" -> "2_21" [label="1,D-1"]
+		"2_21" -> "2_F"
+		"2_C" -> "2_22" [label="2,D-1"]
+		"2_22" -> "2_G"
+}

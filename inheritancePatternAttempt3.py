@@ -22,20 +22,21 @@ from generateTypes import *
 from model import *
 from bruteForce import *
 from smartWay import *
+from visualizeTree import *
 import time
 
 
 jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'
 
-SMART_WAY = True
+SMART_WAY = False
 
 BRUTE_FORCE = True
-USE_TEST = False
+USE_TEST = True
 PRINT_TYPES = True
 
-CHECKPOINT = 10000
+CHECKPOINT = 0.0
 STOCHASTIC = False
-WRITE_RESULTS = True
+WRITE_RESULTS = False
 NUM_SAMPLES = 1000000
 
 
@@ -52,7 +53,7 @@ def runThisFunction():
     for filename in os.listdir(jsonFolderPath):
         if('.json' in filename):
             if(USE_TEST):
-                filename = 'test_3.json'
+                filename = 'test.json'
             print('The current filename is: '+str(filename))
             with open(os.path.join(jsonFolderPath, filename)) as data_file:
                 data = json.loads(json.load(data_file))
@@ -62,6 +63,8 @@ def runThisFunction():
                 break
 
     pedigree = allPedigrees[0]
+
+    familySize = len(pedigree.family)
 
     # get the types for the pedigree
     # types are the terms that we need to sum over
@@ -89,6 +92,9 @@ def runThisFunction():
         print(t)
     print('\n')
 
+    visualize(types)
+    return
+
     # assert 0
     # print('All set mappings:')
     # for k,v in setMappings.items():
@@ -103,7 +109,7 @@ def runThisFunction():
         finalAns = findAns(types)
     else:
         if(BRUTE_FORCE):
-            writeData = bruteForce(types,d_checkpoint=CHECKPOINT,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
+            writeData = bruteForce(familySize,types,d_checkpoint=CHECKPOINT,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
         else:
             finalAns = calcSum(types,d_checkpoint=CHECKPOINT,EPSILON=0.0,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
 

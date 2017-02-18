@@ -2424,7 +2424,7 @@ static PyObject *__pyx_pf_12ipStochastic_4getApproxSum(CYTHON_UNUSED PyObject *_
  *     with open('./stochasticData/'+data['name'], 'w') as file:
  *         json.dump(data, file)             # <<<<<<<<<<<<<<
  * 
- * # start = time.time()
+ * 
  */
           __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_json); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 96, __pyx_L12_error)
           __Pyx_GOTREF(__pyx_t_3);

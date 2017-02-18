@@ -1,6 +1,7 @@
 #include "stochasticSum.h"
 #include <stdlib.h>
 #include <cassert>
+#include <math.h>
 
 
 namespace std {
@@ -48,17 +49,41 @@ namespace std {
         }
     }
 
+    double individualIntegral(double t, double a, double b, double c) {
+        return (2*t*(a+b)+2*c*(1-t)+t+1)*tgamma(a+0.5)*tgamma(b+0.5)*tgamma(c+0.5)/tgamma(a+b+c+2.5);
+    }
+
+    double integralPart(unordered_map<int,vector<int>> setVals) {
+        double ans = 1.0;
+        for(auto it=setVals.begin(); it!=setVals.end(); ++it) {
+            double t = 1.0;
+            vector<int> indices = it->second;
+            double integral = individualIntegral(t,indices.at(0),indices.at(1),indices.at(2));
+            ans *= integral;//(2*pow(M_PI,2)); FOR THE SAKE OF NUMERICAL STABILITY KEEP THIS OUT
+                            // HOWEVER THIS MEANS THAT PROBABILITY ISNT THE SAME FOR EVERYTHING
+                            // MAYBE AT END FACTOR IN THING THAT TAKES INTO ACCOUNT NUBMER OF ROOTS?
+        }
+        return ans;
+    }
+
     unordered_map<int,double> c_bruteForce(vector<pair<string,vector<pair<int,int>>>> types,int checkpoint,int numSamples) {
 
         unordered_map<int,double> toReturn;
 
         int numbUniqueIndices = 0;
         unordered_map<int,int> uniqueMapping;
+        unordered_map<int,vector<int>> setVals;
         
         for(auto it=types.begin(); it!=types.end(); ++it) {
             vector<pair<int,int>> indices = it->second;
-            
+
+
             for(auto it2=indices.begin(); it2!=indices.end(); ++it2) {
+
+                if(setVals.find(it2->first) == setVals.end()) {
+                    setVals.insert({it2->first,vector<int>(3,0)});
+                }
+
                 
                 if(uniqueMapping.find(it2->second) == uniqueMapping.end()) {
                     uniqueMapping.insert({it2->second,numbUniqueIndices});
@@ -76,6 +101,10 @@ namespace std {
         while(counter.stochasticChoice()) {
 
             double val = 1;
+
+            for(auto it=setVals.begin(); it!=setVals.end(); ++it) {
+                fill(it->second.begin(),it->second.end(),0);
+            }
             
             for(auto it=types.begin(); it!=types.end(); ++it) {
                 vector<int> indices(it->second.size(),0);
@@ -84,6 +113,7 @@ namespace std {
                 for(auto it2=it->second.begin(); it2!=it->second.end(); ++it2) {
                     int index = uniqueMapping[it2->second];
                     indices[i] = counter.counter[index].first;
+                    setVals[it2->first][indices[i]] += 1;
                     ++i;
                 }
 
@@ -94,7 +124,7 @@ namespace std {
                 }
                 val *= currentVal;
             }
-            ans += val;
+            ans += val*integralPart(setVals);
             iters += 1;
 
             if(iters%checkpoint == 0) {

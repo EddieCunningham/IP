@@ -67,9 +67,59 @@ def myDoubleInt2(t,a,b,c):
     p1 = gamma(a+0.5)*gamma(b+0.5)*gamma(c+0.5)/gamma(a+b+c+2.5)
     p2 = 2*t*(a+b)+2*c*(1-t)+t+1
     ans = p1*p2
-    # print(ans)
 
     return ans
+
+def myAddIndex(oldAns,index,t,oldA,oldB,oldC):
+    if(index == 'a'):
+        top = oldA+0.5
+        other = 3*t+1.0
+    elif(index == 'b'):
+        top = oldB+0.5
+        other = 3*t+1.0
+    else:
+        top = oldC+0.5
+        other = -t+3.0
+
+    p1 = oldAns*top/(oldA+oldB+oldC+2.5)
+    p2 = (2*t*(oldA+oldB)+2*oldC*(1-t)+other)
+    p3 = (2*t*(oldA+oldB)+2*oldC*(1-t)+t+1)
+    return p1*p2/p3
+
+def incrementalInt(t,a,b,c):
+
+    PRINT = False
+
+    currentAns = 4.0/3.0*scipy.pi*(t+1.0)
+
+    _a = 0.0
+    _b = 0.0
+    _c = 0.0
+
+    if(PRINT):
+        print('a: '+str(_a)+' b: '+str(_b)+' c: '+str(_c)+' actual: '+str(myDoubleInt2(t,_a,_b,_c))+' myyAns: '+str(currentAns))
+
+    while(_a < a):
+        currentAns = myAddIndex(currentAns,'a',t,_a,_b,_c)
+        _a += 1
+        if(PRINT):
+            print('a: '+str(_a)+' b: '+str(_b)+' c: '+str(_c)+' actual: '+str(myDoubleInt2(t,_a,_b,_c))+' myyAns: '+str(currentAns))
+
+    while(_b < b):
+        currentAns = myAddIndex(currentAns,'b',t,_a,_b,_c)
+        _b += 1
+        if(PRINT):
+            print('a: '+str(_a)+' b: '+str(_b)+' c: '+str(_c)+' actual: '+str(myDoubleInt2(t,_a,_b,_c))+' myyAns: '+str(currentAns))
+
+    while(_c < c):
+        currentAns = myAddIndex(currentAns,'c',t,_a,_b,_c)
+        _c += 1
+        if(PRINT):
+            print('a: '+str(_a)+' b: '+str(_b)+' c: '+str(_c)+' actual: '+str(myDoubleInt2(t,_a,_b,_c))+' myyAns: '+str(currentAns))
+
+
+    return currentAns
+
 
 # def partOfInt(b):
 #     def toInt(x):
@@ -81,35 +131,59 @@ def myDoubleInt2(t,a,b,c):
 #     ans = 2*sqrt(pi)*scipy.special.gamma(b+0.5)/scipy.special.gamma(b+1.0)
 #     print(ans)
 
-# t = 1.0
-# a = 3.0
-# b = 1.0
-# c = 2.0
+
 
 # testInt(a,b)
 
 # doubleInt(t,a,b,c)
 
-# myDoubleInt(t,a,b,c)
-# print(myDoubleInt2(t,a,b,c))
+t = 1.0
+a = 3.0
+b = 2.0
+c = 5.0
+incrementalInt(t,a,b,c)
 
-allT = [1.0]
-allA = [x for x in range(0,5)]
-allB = [x for x in range(0,5)]
-allC = [x for x in range(0,5)]
+# print('\n\n--------\n\n')
 
-allAns = {}
+# t = 1.0
+# a = 0.0
+# b = 0.0
+# c = 0.0
+# ans = myAddIndex(myDoubleInt2(t,a,b,c),'a',t,a,b,c)
 
-for t,a,b,c in itertools.product(allT,allA,allB,allC):
-    ans = round(myDoubleInt2(t,a,b,c),105)
-    toPutIn = [a+b+c,sorted([a,b,c])]
-    if(ans not in allAns):
-        allAns[ans] = [[a+b+c,[a,b,c]]]
-    elif(toPutIn not in allAns[ans]):
-        allAns[ans].append([a+b+c,[a,b,c]])
+# a += 1
+# print('a: '+str(a)+' b: '+str(b)+' c: '+str(c)+' actual: '+str(myDoubleInt2(t,a,b,c))+' myyAns: '+str(ans))
 
-for k,v in sorted(allAns.items(),key=lambda x: x[1][0]):
-    print(str(k)+' -> '+str(v))
+# print('\n')
+
+# factor2 = myAddIndex('b',t,a+1,b,c)
+# print(ans0*factor1*factor2)
+# print(myDoubleInt2(t,a+1,b+1,c))
+# print('\n')
+
+# factor3 = myAddIndex('c',t,a+1,b+1,c)
+# print(ans0*factor1*factor2*factor3)
+# print(myDoubleInt2(t,a+1,b+1,c+1))
+# print('\n')
+
+
+# allT = [1.0]
+# allA = [x for x in range(0,5)]
+# allB = [x for x in range(0,5)]
+# allC = [x for x in range(0,5)]
+
+# allAns = {}
+
+# for t,a,b,c in itertools.product(allT,allA,allB,allC):
+#     ans = round(myDoubleInt2(t,a,b,c),105)
+#     toPutIn = [a+b+c,sorted([a,b,c])]
+#     if(ans not in allAns):
+#         allAns[ans] = [[a+b+c,[a,b,c]]]
+#     elif(toPutIn not in allAns[ans]):
+#         allAns[ans].append([a+b+c,[a,b,c]])
+
+# for k,v in sorted(allAns.items(),key=lambda x: x[1][0]):
+#     print(str(k)+' -> '+str(v))
 
 
 

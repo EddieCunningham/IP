@@ -6,16 +6,6 @@
 
 namespace std {
 
-    class Type {
-    public:
-        string name;
-        int setNumb;
-        Type* parent1;
-        Type* parent2;
-        vector<vector<double>> possibleVals;
-        double takenVal;
-    }
-
     class Counter {
     public:
         Counter(vector<pair<int,int>> initialCounter,int maxSamples);

@@ -13,6 +13,7 @@ Flask-MySQLdb==0.2.0
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.1
 Flask-WTF==0.12
+graphviz==0.5.2
 gunicorn==18.0
 itsdangerous==0.24
 Jinja2==2.8
