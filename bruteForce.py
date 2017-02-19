@@ -61,6 +61,28 @@ def bruteForce(familySize,types,d_checkpoint=0.1,stochastic=False,writeResults=F
     for t in types:
         for _t in t[1]:
 
+            ##################################################
+
+
+
+
+
+
+
+
+            # THE SET VALS THAT WE NEED TO WORRY ABOUT ARE ONLY THE ROOTS!!!
+            # DON'T NEED TO WORRY ABOUT ANYTHING ELSE!!! THEY DON'T MEAN ANYTHING TO THE INTEGRAL!!!
+            # ALL INDICES THAT ARE USED TO CONNECT G TERMS HAVE NOTHING TO DO WITH THE INTEGRAL!!!!!
+            # ONLY THE END OF THE TYPE TREES ARE RELEVANT!!
+
+
+
+
+
+
+
+
+            ##################################################
             if(USE_INTEGRALS):
                 if(_t[0] not in setVals):
                     setVals[_t[0]] = [0,0,0]
