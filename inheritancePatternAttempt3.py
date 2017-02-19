@@ -53,7 +53,7 @@ def runThisFunction():
     for filename in os.listdir(jsonFolderPath):
         if('.json' in filename):
             if(USE_TEST):
-                filename = 'test.json'
+                filename = 'test_10.json'
             print('The current filename is: '+str(filename))
             with open(os.path.join(jsonFolderPath, filename)) as data_file:
                 data = json.loads(json.load(data_file))

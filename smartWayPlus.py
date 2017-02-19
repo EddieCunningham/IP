@@ -22,6 +22,16 @@ class gType:
         self.indices = theType[1]
         self.vals = self.getVals()
         self.isRoot = False
+        # self.bottomIndices = [[[0,1],[0,1]],[[1,2],[0,1,2],[0,1]],[[1,2],[1,2]]]
+
+    # def getBottomIndices(self,whichBranch):
+    #     if(whichBranch == 'zero'):
+    #         return self.bottomIndices[0]
+    #     if(whichBranch == 'one'):
+    #         return self.bottomIndices[1]
+    #     if(whichBranch == 'two'):
+    #         return self.bottomIndices[2]
+
 
     def resetCounters(self):
         self.counterLeft = 0
@@ -114,6 +124,10 @@ class nType:
         self.indices = theType[1]
         self.vals = self.getVals()
         self.isRoot = True
+        # self.bottomIndices = [[],[1,2],[1,2]]
+
+    # def getBottomIndices(self,whichBranch):
+    #     return self.bottomIndices
 
     def resetCounters(self):
         self.counterLeft = 0
@@ -151,6 +165,11 @@ class pType:
         self.indices = theType[1]
         self.vals = self.getVals()
         self.isRoot = True
+        # self.bottomIndices = [[0,1,2],[0,1,2],[0,1,2]]
+
+    # def getBottomIndices(self,whichBranch):
+    #     return self.bottomIndices
+
 
     def resetCounters(self):
         self.counterLeft = 0
@@ -193,6 +212,10 @@ class sType:
         self.indices = theType[1]
         self.vals = self.getVals()
         self.isRoot = True
+        # self.bottomIndices = [[0,1,2],[0,1,2],[0,1]]
+
+    # def getBottomIndices(self,whichBranch):
+    #     return self.bottomIndices
 
     def resetCounters(self):
         self.counterLeft = 0
@@ -294,7 +317,7 @@ def generateAllTypesAndSets(types):
         for _a in allTypes:
             if(a == _a):
                 continue
-            valToWorryAbout = a.indices[0][1]
+            valToWorryAbout = _a.indices[0][1]
             for i,u in enumerate(uVals):
                 if(u == valToWorryAbout):
                     if(a.name == 'g'):
@@ -314,7 +337,7 @@ def generateAllTypesAndSets(types):
 def findAns(types):
 
     allTypes,allSets = generateAllTypesAndSets(types)
-    roots = [a for a in allTypes if a]
+    roots = [a for a in allTypes if a.root]
     ans = 1
     for r in roots:
         _ans = findAnsHelper(r,-1)
