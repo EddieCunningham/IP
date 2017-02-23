@@ -50,10 +50,10 @@ def getIntegralPart(setVals):
         a,b,c = v
         t = 1.0
         theInt = theIntegral(t,a,b,c)
-        ans *= theInt/(2*np.pi**2)
+        ans *= theInt#/(2*np.pi**2)
     return ans
 
-def bruteForce(familySize,types,d_checkpoint=0.1,stochastic=False,writeResults=False,numSamples=1000,random_seed=1):
+def bruteForce(numbRoots,types,d_checkpoint=0.1,stochastic=False,writeResults=False,numSamples=1000,random_seed=1):
     numUniqueIndices = 0
     uniqueMapping = {}
     if(USE_INTEGRALS):
@@ -84,7 +84,7 @@ def bruteForce(familySize,types,d_checkpoint=0.1,stochastic=False,writeResults=F
 
             ##################################################
             if(USE_INTEGRALS):
-                if(_t[0] not in setVals):
+                if(_t[0] < numbRoots and _t[0] not in setVals):
                     setVals[_t[0]] = [0,0,0]
 
             if(_t[1] not in uniqueMapping):
@@ -115,6 +115,7 @@ def bruteForce(familySize,types,d_checkpoint=0.1,stochastic=False,writeResults=F
     stopCriteria = ansChecker(WINDOW,THRESHOLD)
 
     iters = 0
+    numbNonZero = 0
     while(theCounter.incrementCounter(-1)):
         count += 1
         percentCompleted = count/float(total)
@@ -137,7 +138,8 @@ def bruteForce(familySize,types,d_checkpoint=0.1,stochastic=False,writeResults=F
 
             if(USE_INTEGRALS):
                 for i,_t in zip(indices,t[1]):
-                    setVals[_t[0]][i] += 1
+                    if(_t[0] < numbRoots):
+                        setVals[_t[0]][i] += 1
 
             if(t[0] == 'g'):
                 valsDict = valsGDict
@@ -158,8 +160,12 @@ def bruteForce(familySize,types,d_checkpoint=0.1,stochastic=False,writeResults=F
 
         if(USE_INTEGRALS):
             intPart = getIntegralPart(setVals)
-            print('val: '+str(val)+' after: '+str(val*intPart))
+            # print('val: '+str(val)+' after: '+str(val*intPart))
             val *= intPart
+
+        if(val != 0):
+            numbNonZero += 1
+
         ans += val
         iters += 1
 
@@ -174,9 +180,9 @@ def bruteForce(familySize,types,d_checkpoint=0.1,stochastic=False,writeResults=F
 
 
     print('ans: '+str(ans))
-    # print('ans: '+str(ans**(1.0/familySize)))
     print('count: '+str(count))
     print('Total terms: '+str(total))
+    print('Total non zero terms: '+str(numbNonZero))
 
     if(writeResults):
         # data['totalCount'] = count

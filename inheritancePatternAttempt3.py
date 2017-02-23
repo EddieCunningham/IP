@@ -28,13 +28,15 @@ import time
 
 jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'
 
+VISUALIZE = True
+
 SMART_WAY = False
 
 BRUTE_FORCE = True
 USE_TEST = True
 PRINT_TYPES = True
 
-CHECKPOINT = 0.0
+CHECKPOINT = 0.1
 STOCHASTIC = False
 WRITE_RESULTS = False
 NUM_SAMPLES = 1000000
@@ -53,7 +55,7 @@ def runThisFunction():
     for filename in os.listdir(jsonFolderPath):
         if('.json' in filename):
             if(USE_TEST):
-                filename = 'test_10.json'
+                filename = 'test_5.json'
             print('The current filename is: '+str(filename))
             with open(os.path.join(jsonFolderPath, filename)) as data_file:
                 data = json.loads(json.load(data_file))
@@ -63,6 +65,7 @@ def runThisFunction():
                 break
 
     pedigree = allPedigrees[0]
+
 
     familySize = len(pedigree.family)
 
@@ -92,8 +95,9 @@ def runThisFunction():
         print(t)
     print('\n')
 
-    visualize(types)
-    return
+    if(VISUALIZE):
+        visualize(types,len(pedigree.roots))
+        return
 
     # assert 0
     # print('All set mappings:')
@@ -109,7 +113,7 @@ def runThisFunction():
         finalAns = findAns(types)
     else:
         if(BRUTE_FORCE):
-            writeData = bruteForce(familySize,types,d_checkpoint=CHECKPOINT,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
+            writeData = bruteForce(len(pedigree.roots),types,d_checkpoint=CHECKPOINT,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
         else:
             finalAns = calcSum(types,d_checkpoint=CHECKPOINT,EPSILON=0.0,stochastic=STOCHASTIC,writeResults=WRITE_RESULTS,numSamples=NUM_SAMPLES,random_seed=RANDOM_SEED)
 

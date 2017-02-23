@@ -59,14 +59,15 @@ namespace std {
             double t = 1.0;
             vector<int> indices = it->second;
             double integral = individualIntegral(t,indices.at(0),indices.at(1),indices.at(2));
-            ans *= integral;//(2*pow(M_PI,2)); FOR THE SAKE OF NUMERICAL STABILITY KEEP THIS OUT
+            ans *= integral;// /(2*pow(M_PI,2)); 
+                            //FOR THE SAKE OF NUMERICAL STABILITY KEEP THIS OUT
                             // HOWEVER THIS MEANS THAT PROBABILITY ISNT THE SAME FOR EVERYTHING
                             // MAYBE AT END FACTOR IN THING THAT TAKES INTO ACCOUNT NUBMER OF ROOTS?
         }
         return ans;
     }
 
-    unordered_map<int,double> c_bruteForce(vector<pair<string,vector<pair<int,int>>>> types,int checkpoint,int numSamples) {
+    unordered_map<int,double> c_bruteForce(int numbRoots,vector<pair<string,vector<pair<int,int>>>> types,int checkpoint,int numSamples) {
 
         unordered_map<int,double> toReturn;
 
@@ -80,11 +81,10 @@ namespace std {
 
             for(auto it2=indices.begin(); it2!=indices.end(); ++it2) {
 
-                if(setVals.find(it2->first) == setVals.end()) {
+                if(it2->first < numbRoots and setVals.find(it2->first) == setVals.end()) {
                     setVals.insert({it2->first,vector<int>(3,0)});
                 }
 
-                
                 if(uniqueMapping.find(it2->second) == uniqueMapping.end()) {
                     uniqueMapping.insert({it2->second,numbUniqueIndices});
                     numbUniqueIndices += 1;
@@ -113,7 +113,10 @@ namespace std {
                 for(auto it2=it->second.begin(); it2!=it->second.end(); ++it2) {
                     int index = uniqueMapping[it2->second];
                     indices[i] = counter.counter[index].first;
-                    setVals[it2->first][indices[i]] += 1;
+
+                    if(it2->first < numbRoots) {
+                        setVals[it2->first][indices[i]] += 1;
+                    }
                     ++i;
                 }
 

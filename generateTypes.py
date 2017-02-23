@@ -6,7 +6,7 @@ import random
 from generateSum import *
 
 
-def goUpPedigree(person,originatedFrom,currentSets,maxVal):
+def goUpPedigree(person,originatedFrom,currentSets,maxVal,useT):
     # figure out what g terms to add
 
     if(len(person.parents) == 0):
@@ -38,12 +38,15 @@ def goUpPedigree(person,originatedFrom,currentSets,maxVal):
         maxVal['val'] += 1
         currentSets[str(person.parents[1].Id)+','+str(originatedFrom.Id)] = t3
 
-    termsToAdd = [['g',[t1,t2,t3]]]
-    termsToAdd.extend(goUpPedigree(person.parents[0],originatedFrom,currentSets,maxVal))
-    termsToAdd.extend(goUpPedigree(person.parents[1],originatedFrom,currentSets,maxVal))
+    if(useT):
+        termsToAdd = [[-1.0,[t1,t2,t3]]]
+    else:
+        termsToAdd = [['g',[t1,t2,t3]]]
+    termsToAdd.extend(goUpPedigree(person.parents[0],originatedFrom,currentSets,maxVal,useT))
+    termsToAdd.extend(goUpPedigree(person.parents[1],originatedFrom,currentSets,maxVal,useT))
     return termsToAdd
 
-def getTypes(pedigree):
+def getTypes(pedigree,useT=False):
     # goal is to recreate the types thing
     # there are going to be a ton of sets,
     # some are only going to have a single 0,1,2
@@ -89,20 +92,29 @@ def getTypes(pedigree):
 
         if(p.affected == 'yes'):
             # then add an 's' term
-            zetaTerm = ['s',[t1,t2]]
+            if(useT):
+                zetaTerm = [1.0,[t1,t2]]
+            else:
+                zetaTerm = ['s',[t1,t2]]
         elif(p.affected == 'no'):
             # then add a 'n' term
-            zetaTerm = ['n',[t1,t2]]
+            if(useT):
+                zetaTerm = [0.0,[t1,t2]]
+            else:
+                zetaTerm = ['n',[t1,t2]]
         elif(p.affected == 'possibly'):
             # then add a 'p' term
-            zetaTerm = ['p',[t1,t2]]
+            if(useT):
+                zetaTerm = [0.5,[t1,t2]]
+            else:
+                zetaTerm = ['p',[t1,t2]]
         else:
             assert 0,'Invalid affected outcome'
 
         # now branch up the tree to all of the roots and accumulate
         # the new terms to add to types
-        parent0Branch = goUpPedigree(p.parents[0],p,currentSets,maxVal)
-        parent1Branch = goUpPedigree(p.parents[1],p,currentSets,maxVal)
+        parent0Branch = goUpPedigree(p.parents[0],p,currentSets,maxVal,useT)
+        parent1Branch = goUpPedigree(p.parents[1],p,currentSets,maxVal,useT)
 
         types.extend([zetaTerm])
         types.extend(parent0Branch)

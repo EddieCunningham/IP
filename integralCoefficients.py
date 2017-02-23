@@ -7,22 +7,38 @@ import scipy.special
 import scipy.integrate
 from scipy import *
 
-# def myInt(a,b):
-#     print(2/(a+1)*scipy.special.hyp2f1((a+1)/2.0,(1-b)/2.0,(a+3)/2.0,1))
+def myInt(a,b,oneOrTwo):
+    gamma = scipy.special.gamma
+    ans = oneOrTwo*gamma((a+1.0)/2.0)*gamma((b+1.0)/2.0)/gamma((a+b+2.0)/2.0)
+    print(ans)
 
-# def definiteIntegral(a,b):
-#     def actual(a,b,x):
-#         return scipy.cos(x)**a*scipy.sin(x)**b
-#     ans = scipy.integrate.quad(lambda x: actual(a,b,x),0,scipy.pi)
-#     print(ans)
+def definiteIntegral(a,b,oneOrTwo):
+    def actual(a,b,x):
+        return scipy.sin(x)**a*scipy.cos(x)**b
+    ans = scipy.integrate.quad(lambda x: actual(a,b,x),0,oneOrTwo*scipy.pi)
+    print(ans)
 
-# def testInt(a,b):
-#     myInt(a,b)
-#     definiteIntegral(a,b)
+def testInt(a,b,oneOrTwo):
+    myInt(a,b,oneOrTwo)
+    definiteIntegral(a,b,oneOrTwo)
+
+def tripleIntegral(t,a,b,c):
+    def toInt(x,y,z):
+        return x+y
+
+    ans = scipy.integrate.tplquad(toInt,0,1,lambda x: 0, lambda x:1-x, lambda x,y:0, lambda x,y: 1-x-y)
+    print(ans)
+
+def doubleIntPls(t,a,b,c):
+    def toInt(x,y):
+        return (sin(x)**2*sin(y)**2 + sin(x)**2*cos(y)**2)*sin(x)/(4*pi)
+
+    ans = scipy.integrate.dblquad(toInt, 0, 2*pi, lambda x: 0, lambda x: pi)
+    print(ans)
 
 def doubleInt(t,a,b,c):
     def toInt(x,y):
-        return (t*(sin(x)**2*sin(y)**2 + sin(x)**2*cos(y)**2) + (1-t)*cos(x)**2)*sin(x)**(2*(a+b)+1)*sin(y)**(2*a)*cos(x)**(2*c)*cos(y)**(2*b)
+        return (t*(sin(x)**2*sin(y)**2 + sin(x)**2*cos(y)**2) + (1-t)*cos(x)**2)*sin(x)**(2*(a+b)+1)*sin(y)**(2*a)*cos(x)**(2*c)*cos(y)**(2*b)/4/pi
 
     ans = scipy.integrate.dblquad(toInt, 0, 2*pi, lambda x: 0, lambda x: pi)
     print(ans)
@@ -135,13 +151,22 @@ def incrementalInt(t,a,b,c):
 
 # testInt(a,b)
 
-# doubleInt(t,a,b,c)
-
+# RE WRITE EVERYTHING WITH 4 COMPONENTS!!!!!! DONT LET Aa = aA!!!!!!!
 t = 1.0
-a = 3.0
+a = 1.0
 b = 2.0
-c = 5.0
-incrementalInt(t,a,b,c)
+c = 3.0
+# doubleInt(t,a,b,c)
+# doubleIntPls(t,a,b,c)
+# tripleIntegral(t,a,b,c)
+
+testInt(a,c,1)
+
+# t = 1.0
+# a = 3.0
+# b = 2.0
+# c = 5.0
+# incrementalInt(t,a,b,c)
 
 # print('\n\n--------\n\n')
 

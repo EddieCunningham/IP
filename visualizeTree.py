@@ -10,7 +10,8 @@ def drawN(f,theType,colorMapping):
     g = Digraph('n')
     g.body.append('color=lightgrey')
     g.attr('node', shape='circle', color='lightblue', style='filled')
-    g.node(name+'_A',label=str(theType._id))
+    g.node(name+'_A',label=str(theType.name))
+    # g.node(name+'_A',label=str(theType._id))
     g.node(name+'_B',label='')
     g.node(name+'_C',label='')
     g.node(name+'_D',label='1/4')
@@ -27,20 +28,26 @@ def drawN(f,theType,colorMapping):
     g.node(name+'_22',label='')
 
 
-    g.edge(name+'_A',name+'_1*',label='1,D['+str(index0Set)+']',color=colorMapping[index0Set])
+    g.edge(name+'_A',name+'_1*',label='1',color=colorMapping[index0Set])
+    # g.edge(name+'_A',name+'_1*',label='1,D['+str(index0Set)+']',color=colorMapping[index0Set])
     g.edge(name+'_1*',name+'_B',color=colorMapping[index0Set])
 
-    g.edge(name+'_A',name+'_2*',label='2,D['+str(index0Set)+']',color=colorMapping[index0Set])
+    g.edge(name+'_A',name+'_2*',label='2',color=colorMapping[index0Set])
+    # g.edge(name+'_A',name+'_2*',label='2,D['+str(index0Set)+']',color=colorMapping[index0Set])
     g.edge(name+'_2*',name+'_C',color=colorMapping[index0Set])
 
-    g.edge(name+'_B',name+'_11',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_B',name+'_11',label='1',color=colorMapping[index1Set])
+    # g.edge(name+'_B',name+'_11',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_11',name+'_D',color=colorMapping[index1Set])
-    g.edge(name+'_B',name+'_12',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_B',name+'_12',label='2',color=colorMapping[index1Set])
+    # g.edge(name+'_B',name+'_12',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_12',name+'_E',color=colorMapping[index1Set])
 
-    g.edge(name+'_C',name+'_21',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_C',name+'_21',label='1',color=colorMapping[index1Set])
+    # g.edge(name+'_C',name+'_21',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_21',name+'_F',color=colorMapping[index1Set])
-    g.edge(name+'_C',name+'_22',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_C',name+'_22',label='2',color=colorMapping[index1Set])
+    # g.edge(name+'_C',name+'_22',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_22',name+'_G',color=colorMapping[index1Set])
 
     f.subgraph(g)
@@ -52,8 +59,9 @@ def drawS(f,theType,colorMapping):
 
     g = Digraph('n')
 
-    g.attr('node', shape='circle', color='lightred', style='filled')
-    g.node(name+'_A',label=str(theType._id))
+    g.attr('node', shape='circle', color='darksalmon', style='filled')
+    g.node(name+'_A',label=str(theType.name))
+    # g.node(name+'_A',label=str(theType._id))
     g.node(name+'_B',label='')
     g.node(name+'_C',label='')
     g.node(name+'_D',label='')
@@ -79,33 +87,44 @@ def drawS(f,theType,colorMapping):
     g.node(name+'_20',label='')
     g.node(name+'_21',label='')
 
-    g.edge(name+'_A',name+'_0*',label='0,D['+str(index0Set)+']',color=colorMapping[index0Set])
+    g.edge(name+'_A',name+'_0*',label='0',color=colorMapping[index0Set])
+    # g.edge(name+'_A',name+'_0*',label='0,D['+str(index0Set)+']',color=colorMapping[index0Set])
     g.edge(name+'_0*',name+'_B',color=colorMapping[index0Set])
-    g.edge(name+'_A',name+'_1*',label='1,D['+str(index0Set)+']',color=colorMapping[index0Set])
+    g.edge(name+'_A',name+'_1*',label='1',color=colorMapping[index0Set])
+    # g.edge(name+'_A',name+'_1*',label='1,D['+str(index0Set)+']',color=colorMapping[index0Set])
     g.edge(name+'_1*',name+'_C',color=colorMapping[index0Set])
-    g.edge(name+'_A',name+'_2*',label='2,D['+str(index0Set)+']',color=colorMapping[index0Set])
+    g.edge(name+'_A',name+'_2*',label='2',color=colorMapping[index0Set])
+    # g.edge(name+'_A',name+'_2*',label='2,D['+str(index0Set)+']',color=colorMapping[index0Set])
     g.edge(name+'_2*',name+'_D',color=colorMapping[index0Set])
 
 
-    g.edge(name+'_B',name+'_00',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_B',name+'_00',label='0',color=colorMapping[index1Set])
+    # g.edge(name+'_B',name+'_00',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_00',name+'_E',color=colorMapping[index1Set])
-    g.edge(name+'_B',name+'_01',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_B',name+'_01',label='1',color=colorMapping[index1Set])
+    # g.edge(name+'_B',name+'_01',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_01',name+'_F',color=colorMapping[index1Set])
-    g.edge(name+'_B',name+'_02',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_B',name+'_02',label='2',color=colorMapping[index1Set])
+    # g.edge(name+'_B',name+'_02',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_02',name+'_G',color=colorMapping[index1Set])
 
 
-    g.edge(name+'_C',name+'_10',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_C',name+'_10',label='0',color=colorMapping[index1Set])
+    # g.edge(name+'_C',name+'_10',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_10',name+'_H',color=colorMapping[index1Set])
-    g.edge(name+'_C',name+'_11',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_C',name+'_11',label='1',color=colorMapping[index1Set])
+    # g.edge(name+'_C',name+'_11',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_11',name+'_I',color=colorMapping[index1Set])
-    g.edge(name+'_C',name+'_12',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_C',name+'_12',label='2',color=colorMapping[index1Set])
+    # g.edge(name+'_C',name+'_12',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_12',name+'_J',color=colorMapping[index1Set])
 
 
-    g.edge(name+'_D',name+'_20',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_D',name+'_20',label='0',color=colorMapping[index1Set])
+    # g.edge(name+'_D',name+'_20',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_20',name+'_K',color=colorMapping[index1Set])
-    g.edge(name+'_D',name+'_21',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_D',name+'_21',label='1',color=colorMapping[index1Set])
+    # g.edge(name+'_D',name+'_21',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_21',name+'_L',color=colorMapping[index1Set])
 
     f.subgraph(g)
@@ -117,7 +136,8 @@ def drawP(f,theType,colorMapping):
 
     g = Digraph('n')
     g.attr('node', shape='circle', color='lightgreen', style='filled')
-    g.node(name+'_A',label=str(theType._id))
+    g.node(name+'_A',label=str(theType.name))
+    # g.node(name+'_A',label=str(theType._id))
     g.node(name+'_B',label='')
     g.node(name+'_C',label='')
     g.node(name+'_D',label='')
@@ -144,35 +164,47 @@ def drawP(f,theType,colorMapping):
     g.node(name+'_20',label='')
     g.node(name+'_21',label='')
 
-    g.edge(name+'_A',name+'_0*',label='0,D['+str(index0Set)+']',color=colorMapping[index0Set])
+    g.edge(name+'_A',name+'_0*',label='0',color=colorMapping[index0Set])
+    # g.edge(name+'_A',name+'_0*',label='0,D['+str(index0Set)+']',color=colorMapping[index0Set])
     g.edge(name+'_0*',name+'_B',color=colorMapping[index0Set])
-    g.edge(name+'_A',name+'_1*',label='1,D['+str(index0Set)+']',color=colorMapping[index0Set])
+    g.edge(name+'_A',name+'_1*',label='1',color=colorMapping[index0Set])
+    # g.edge(name+'_A',name+'_1*',label='1,D['+str(index0Set)+']',color=colorMapping[index0Set])
     g.edge(name+'_1*',name+'_C',color=colorMapping[index0Set])
-    g.edge(name+'_A',name+'_2*',label='2,D['+str(index0Set)+']',color=colorMapping[index0Set])
+    g.edge(name+'_A',name+'_2*',label='2',color=colorMapping[index0Set])
+    # g.edge(name+'_A',name+'_2*',label='2,D['+str(index0Set)+']',color=colorMapping[index0Set])
     g.edge(name+'_2*',name+'_D',color=colorMapping[index0Set])
 
 
-    g.edge(name+'_B',name+'_00',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_B',name+'_00',label='0',color=colorMapping[index1Set])
+    # g.edge(name+'_B',name+'_00',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_00',name+'_E',color=colorMapping[index1Set])
-    g.edge(name+'_B',name+'_01',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_B',name+'_01',label='1',color=colorMapping[index1Set])
+    # g.edge(name+'_B',name+'_01',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_01',name+'_F',color=colorMapping[index1Set])
-    g.edge(name+'_B',name+'_02',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_B',name+'_02',label='2',color=colorMapping[index1Set])
+    # g.edge(name+'_B',name+'_02',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_02',name+'_G',color=colorMapping[index1Set])
 
 
-    g.edge(name+'_C',name+'_10',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_C',name+'_10',label='0',color=colorMapping[index1Set])
+    # g.edge(name+'_C',name+'_10',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_10',name+'_H',color=colorMapping[index1Set])
-    g.edge(name+'_C',name+'_11',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_C',name+'_11',label='1',color=colorMapping[index1Set])
+    # g.edge(name+'_C',name+'_11',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_11',name+'_I',color=colorMapping[index1Set])
-    g.edge(name+'_C',name+'_12',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_C',name+'_12',label='2',color=colorMapping[index1Set])
+    # g.edge(name+'_C',name+'_12',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_12',name+'_J',color=colorMapping[index1Set])
 
 
-    g.edge(name+'_D',name+'_20',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_D',name+'_20',label='0',color=colorMapping[index1Set])
+    # g.edge(name+'_D',name+'_20',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_20',name+'_K',color=colorMapping[index1Set])
-    g.edge(name+'_D',name+'_21',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_D',name+'_21',label='1',color=colorMapping[index1Set])
+    # g.edge(name+'_D',name+'_21',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_21',name+'_L',color=colorMapping[index1Set])
-    g.edge(name+'_D',name+'_22',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_D',name+'_22',label='2',color=colorMapping[index1Set])
+    # g.edge(name+'_D',name+'_22',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_22',name+'_M',color=colorMapping[index1Set])
 
     f.subgraph(g)
@@ -184,7 +216,8 @@ def drawG_0(f,theType,colorMapping):
 
     g = Digraph('n')
     g.attr('node', shape='circle', color='greenyellow', style='filled')
-    g.node(name+'_0_A',label=str(theType._id))
+    g.node(name+'_0_A',label=str(theType.name))
+    # g.node(name+'_0_A',label=str(theType._id))
     g.node(name+'_0_B',label='')
     g.node(name+'_0_C',label='')
     g.node(name+'_0_D',label='1')
@@ -200,21 +233,27 @@ def drawG_0(f,theType,colorMapping):
     g.node(name+'_0_10',label='')
     g.node(name+'_0_11',label='')
 
-    g.edge(name+'_0_A',name+'_0_0*',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_0_A',name+'_0_0*',label='0',color=colorMapping[index1Set])
+    # g.edge(name+'_0_A',name+'_0_0*',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_0_0*',name+'_0_B',color=colorMapping[index1Set])
-    g.edge(name+'_0_A',name+'_0_1*',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_0_A',name+'_0_1*',label='1',color=colorMapping[index1Set])
+    # g.edge(name+'_0_A',name+'_0_1*',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_0_1*',name+'_0_C',color=colorMapping[index1Set])
 
 
-    g.edge(name+'_0_B',name+'_0_00',label='0,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_0_B',name+'_0_00',label='0',color=colorMapping[index2Set])
+    # g.edge(name+'_0_B',name+'_0_00',label='0,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_0_00',name+'_0_D',color=colorMapping[index2Set])
-    g.edge(name+'_0_B',name+'_0_01',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_0_B',name+'_0_01',label='1',color=colorMapping[index2Set])
+    # g.edge(name+'_0_B',name+'_0_01',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_0_01',name+'_0_E',color=colorMapping[index2Set])
 
 
-    g.edge(name+'_0_C',name+'_0_10',label='0,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_0_C',name+'_0_10',label='0',color=colorMapping[index2Set])
+    # g.edge(name+'_0_C',name+'_0_10',label='0,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_0_10',name+'_0_F',color=colorMapping[index2Set])
-    g.edge(name+'_0_C',name+'_0_11',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_0_C',name+'_0_11',label='1',color=colorMapping[index2Set])
+    # g.edge(name+'_0_C',name+'_0_11',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_0_11',name+'_0_G',color=colorMapping[index2Set])
 
     f.subgraph(g)
@@ -226,7 +265,8 @@ def drawG_1(f,theType,colorMapping):
 
     g = Digraph('n')
     g.attr('node', shape='circle', color='orange', style='filled')
-    g.node(name+'_1_A',label=str(theType._id))
+    g.node(name+'_1_A',label=str(theType.name))
+    # g.node(name+'_1_A',label=str(theType._id))
     g.node(name+'_1_B',label='')
     g.node(name+'_1_C',label='')
     g.node(name+'_1_D',label='')
@@ -250,31 +290,41 @@ def drawG_1(f,theType,colorMapping):
     g.node(name+'_1_20',label='')
     g.node(name+'_1_21',label='')
 
-    g.edge(name+'_1_A',name+'_1_0*',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_1_A',name+'_1_0*',label='0',color=colorMapping[index1Set])
+    # g.edge(name+'_1_A',name+'_1_0*',label='0,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_1_0*',name+'_1_B',color=colorMapping[index1Set])
-    g.edge(name+'_1_A',name+'_1_1*',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_1_A',name+'_1_1*',label='1',color=colorMapping[index1Set])
+    # g.edge(name+'_1_A',name+'_1_1*',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_1_1*',name+'_1_C',color=colorMapping[index1Set])
-    g.edge(name+'_1_A',name+'_1_2*',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_1_A',name+'_1_2*',label='2',color=colorMapping[index1Set])
+    # g.edge(name+'_1_A',name+'_1_2*',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_1_2*',name+'_1_D',color=colorMapping[index1Set])
 
 
-    g.edge(name+'_1_B',name+'_1_01',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_1_B',name+'_1_01',label='1',color=colorMapping[index2Set])
+    # g.edge(name+'_1_B',name+'_1_01',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_1_01',name+'_1_E',color=colorMapping[index2Set])
-    g.edge(name+'_1_B',name+'_1_02',label='2,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_1_B',name+'_1_02',label='2',color=colorMapping[index2Set])
+    # g.edge(name+'_1_B',name+'_1_02',label='2,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_1_02',name+'_1_F',color=colorMapping[index2Set])
 
 
-    g.edge(name+'_1_C',name+'_1_10',label='0,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_1_C',name+'_1_10',label='0',color=colorMapping[index2Set])
+    # g.edge(name+'_1_C',name+'_1_10',label='0,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_1_10',name+'_1_G',color=colorMapping[index2Set])
-    g.edge(name+'_1_C',name+'_1_11',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_1_C',name+'_1_11',label='1',color=colorMapping[index2Set])
+    # g.edge(name+'_1_C',name+'_1_11',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_1_11',name+'_1_H',color=colorMapping[index2Set])
-    g.edge(name+'_1_C',name+'_1_12',label='2,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_1_C',name+'_1_12',label='2',color=colorMapping[index2Set])
+    # g.edge(name+'_1_C',name+'_1_12',label='2,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_1_12',name+'_1_I',color=colorMapping[index2Set])
 
 
-    g.edge(name+'_1_D',name+'_1_20',label='0,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_1_D',name+'_1_20',label='0',color=colorMapping[index2Set])
+    # g.edge(name+'_1_D',name+'_1_20',label='0,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_1_20',name+'_1_J',color=colorMapping[index2Set])
-    g.edge(name+'_1_D',name+'_1_21',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_1_D',name+'_1_21',label='1',color=colorMapping[index2Set])
+    # g.edge(name+'_1_D',name+'_1_21',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_1_21',name+'_1_K',color=colorMapping[index2Set])
 
     f.subgraph(g)
@@ -286,7 +336,8 @@ def drawG_2(f,theType,colorMapping):
 
     g = Digraph('n')
     g.attr('node', shape='circle', color='lightyellow', style='filled')
-    g.node(name+'_2_A',label=str(theType._id))
+    g.node(name+'_2_A',label=str(theType.name))
+    # g.node(name+'_2_A',label=str(theType._id))
     g.node(name+'_2_B',label='')
     g.node(name+'_2_C',label='')
     g.node(name+'_2_D',label='1/4')
@@ -302,22 +353,28 @@ def drawG_2(f,theType,colorMapping):
     g.node(name+'_2_21',label='')
     g.node(name+'_2_22',label='')
 
-    g.edge(name+'_2_A',name+'_2_1*',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_2_A',name+'_2_1*',label='1',color=colorMapping[index1Set])
+    # g.edge(name+'_2_A',name+'_2_1*',label='1,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_2_1*',name+'_2_B',color=colorMapping[index1Set])
 
-    g.edge(name+'_2_A',name+'_2_2*',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
+    g.edge(name+'_2_A',name+'_2_2*',label='2',color=colorMapping[index1Set])
+    # g.edge(name+'_2_A',name+'_2_2*',label='2,D['+str(index1Set)+']',color=colorMapping[index1Set])
     g.edge(name+'_2_2*',name+'_2_C',color=colorMapping[index1Set])
 
-    g.edge(name+'_2_B',name+'_2_11',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_2_B',name+'_2_11',label='1',color=colorMapping[index2Set])
+    # g.edge(name+'_2_B',name+'_2_11',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_2_11',name+'_2_D',color=colorMapping[index2Set])
 
-    g.edge(name+'_2_B',name+'_2_12',label='2,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_2_B',name+'_2_12',label='2',color=colorMapping[index2Set])
+    # g.edge(name+'_2_B',name+'_2_12',label='2,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_2_12',name+'_2_E',color=colorMapping[index2Set])
 
-    g.edge(name+'_2_C',name+'_2_21',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_2_C',name+'_2_21',label='1',color=colorMapping[index2Set])
+    # g.edge(name+'_2_C',name+'_2_21',label='1,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_2_21',name+'_2_F',color=colorMapping[index2Set])
 
-    g.edge(name+'_2_C',name+'_2_22',label='2,D['+str(index2Set)+']',color=colorMapping[index2Set])
+    g.edge(name+'_2_C',name+'_2_22',label='2',color=colorMapping[index2Set])
+    # g.edge(name+'_2_C',name+'_2_22',label='2,D['+str(index2Set)+']',color=colorMapping[index2Set])
     g.edge(name+'_2_22',name+'_2_G',color=colorMapping[index2Set])
 
     f.subgraph(g)
@@ -405,19 +462,24 @@ def printTree(r,depth):
         printTree(r.right,depth+1)
 
 
-def visualize(types):
-    allTypes,allSets = generateAllTypesAndSets(types)
+def visualize(types,numbRoots):
+    allTypes,_ = generateAllTypesAndSets(types)
 
     colorMapping = {}
     for a in allTypes:
         indices = a.indices
         for i in indices:
             if(i[0] not in colorMapping):
-                colorMapping[i[0]] = 1
+                colorMapping[i[0]] = 1            
 
     colors = getColors(len(colorMapping))
     for i,k in enumerate(colorMapping):
-        colorMapping[k] = colors[i]
+        if(k < numbRoots):
+            colorMapping[k] = colors[i]
+        else:
+            colorMapping[k] = 'black'
+
+
 
     f = Digraph(comment='Pedigree Computation')
 

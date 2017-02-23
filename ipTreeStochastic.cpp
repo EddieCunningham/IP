@@ -4,7 +4,7 @@
 {
     "distutils": {
         "depends": [
-            "stochasticSum.h"
+            "treeStochasticSum.h"
         ], 
         "extra_compile_args": [
             "-std=c++11"
@@ -14,7 +14,7 @@
         ], 
         "language": "c++"
     }, 
-    "module_name": "ipStochastic"
+    "module_name": "ipTreeStochastic"
 }
 END: Cython Metadata */
 
@@ -293,8 +293,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__ipStochastic
-#define __PYX_HAVE_API__ipStochastic
+#define __PYX_HAVE__ipTreeStochastic
+#define __PYX_HAVE_API__ipTreeStochastic
 #include <vector>
 #include "ios"
 #include "new"
@@ -304,7 +304,7 @@ static CYTHON_INLINE float __PYX_NAN() {
 #include "string.h"
 #include <string>
 #include <unordered_map>
-#include "stochasticSum.h"
+#include "treeStochasticSum.h"
 #ifdef _OPENMP
 #include <omp.h>
 #endif /* _OPENMP */
@@ -520,27 +520,27 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "ipStochastic.pyx",
+  "ipTreeStochastic.pyx",
   "stringsource",
 };
 
 /*--- Type declarations ---*/
-struct __pyx_obj_12ipStochastic_PyStochasticSum;
+struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum;
 
-/* "ipStochastic.pyx":22
+/* "ipTreeStochastic.pyx":22
  * 
  * 
- * cdef class PyStochasticSum:             # <<<<<<<<<<<<<<
+ * cdef class PyTreeStochasticSum:             # <<<<<<<<<<<<<<
  *     cdef vector[pair[string,vector[pair[int,int]]]] types
  *     cdef int checkpoint,numSamples,numbRoots
  */
-struct __pyx_obj_12ipStochastic_PyStochasticSum {
+struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum {
   PyObject_HEAD
   std::vector<std::pair<std::string,std::vector<std::pair<int,int> > > >  types;
   int checkpoint;
   int numSamples;
   int numbRoots;
-  std::unordered_map<int,double>  returnDict;
+  std::pair<int,std::unordered_map<int,double> >  returnDict;
 };
 
 
@@ -748,42 +748,6 @@ static CYTHON_INLINE int __Pyx_IterFinish(void);
 /* UnpackItemEndCheck.proto */
 static int __Pyx_IternextUnpackEndCheck(PyObject *retval, Py_ssize_t expected);
 
-/* GetItemInt.proto */
-#define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
-    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
-    __Pyx_GetItemInt_Fast(o, (Py_ssize_t)i, is_list, wraparound, boundscheck) :\
-    (is_list ? (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL) :\
-               __Pyx_GetItemInt_Generic(o, to_py_func(i))))
-#define __Pyx_GetItemInt_List(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
-    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
-    __Pyx_GetItemInt_List_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
-    (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL))
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
-                                                              int wraparound, int boundscheck);
-#define __Pyx_GetItemInt_Tuple(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
-    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
-    __Pyx_GetItemInt_Tuple_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
-    (PyErr_SetString(PyExc_IndexError, "tuple index out of range"), (PyObject*)NULL))
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
-                                                              int wraparound, int boundscheck);
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j);
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i,
-                                                     int is_list, int wraparound, int boundscheck);
-
-/* PyDictContains.proto */
-static CYTHON_INLINE int __Pyx_PyDict_ContainsTF(PyObject* item, PyObject* dict, int eq) {
-    int result = PyDict_Contains(dict, item);
-    return unlikely(result < 0) ? result : (result == (eq == Py_EQ));
-}
-
-/* PyIntBinop.proto */
-#if CYTHON_COMPILING_IN_CPYTHON
-static PyObject* __Pyx_PyInt_AddObjC(PyObject *op1, PyObject *op2, long intval, int inplace);
-#else
-#define __Pyx_PyInt_AddObjC(op1, op2, intval, inplace)\
-    (inplace ? PyNumber_InPlaceAdd(op1, op2) : PyNumber_Add(op1, op2))
-#endif
-
 /* Import.proto */
 static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level);
 
@@ -812,11 +776,11 @@ static void __Pyx_AddTraceback(const char *funcname, int c_line,
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
-/* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
-
 /* CIntFromPy.proto */
 static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
+
+/* CIntToPy.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
 /* CIntFromPy.proto */
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
@@ -843,26 +807,24 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
 /* Module declarations from 'libcpp.unordered_map' */
 
-/* Module declarations from 'ipStochastic' */
-static PyTypeObject *__pyx_ptype_12ipStochastic_PyStochasticSum = 0;
+/* Module declarations from 'ipTreeStochastic' */
+static PyTypeObject *__pyx_ptype_16ipTreeStochastic_PyTreeStochasticSum = 0;
 static std::string __pyx_convert_string_from_py_std__in_string(PyObject *); /*proto*/
 static std::pair<int,int>  __pyx_convert_pair_from_py_int__and_int(PyObject *); /*proto*/
 static std::vector<std::pair<int,int> >  __pyx_convert_vector_from_py_std_3a__3a_pair_3c_int_2c_int_3e___(PyObject *); /*proto*/
 static std::pair<std::string,std::vector<std::pair<int,int> > >  __pyx_convert_pair_from_py_std_3a__3a_string__and_std_3a__3a_vector_3c_std_3a__3a_pair_3c_int_2c_int_3e____3e___(PyObject *); /*proto*/
 static std::vector<std::pair<std::string,std::vector<std::pair<int,int> > > >  __pyx_convert_vector_from_py_std_3a__3a_pair_3c_std_3a__3a_string_2c_std_3a__3a_vector_3c_std_3a__3a_pair_3c_int_2c_int_3e____3e____3e___(PyObject *); /*proto*/
 static PyObject *__pyx_convert_unordered_map_to_py_int____double(std::unordered_map<int,double>  const &); /*proto*/
-#define __Pyx_MODULE_NAME "ipStochastic"
-int __pyx_module_is_main_ipStochastic = 0;
+#define __Pyx_MODULE_NAME "ipTreeStochastic"
+int __pyx_module_is_main_ipTreeStochastic = 0;
 
-/* Implementation of 'ipStochastic' */
+/* Implementation of 'ipTreeStochastic' */
 static PyObject *__pyx_builtin_open;
-static const char __pyx_k_t[] = "t";
 static const char __pyx_k_w[] = "w";
 static const char __pyx_k__3[] = "*";
 static const char __pyx_k_no[] = "no";
 static const char __pyx_k_os[] = "os";
 static const char __pyx_k_run[] = "run";
-static const char __pyx_k_t_2[] = "_t";
 static const char __pyx_k_yes[] = "yes";
 static const char __pyx_k_data[] = "data_";
 static const char __pyx_k_dump[] = "dump";
@@ -907,20 +869,18 @@ static const char __pyx_k_numbRoots_2[] = "numbRoots";
 static const char __pyx_k_setMappings[] = "setMappings";
 static const char __pyx_k_checkpoint_2[] = "checkpoint";
 static const char __pyx_k_getApproxSum[] = "getApproxSum";
-static const char __pyx_k_ipStochastic[] = "ipStochastic";
 static const char __pyx_k_numSamples_2[] = "numSamples";
 static const char __pyx_k_generateTypes[] = "generateTypes";
 static const char __pyx_k_getSumForFile[] = "getSumForFile";
 static const char __pyx_k_totalNumTerms[] = "totalNumTerms";
-static const char __pyx_k_uniqueMapping[] = "uniqueMapping";
 static const char __pyx_k_jsonFolderPath[] = "jsonFolderPath";
 static const char __pyx_k_stochasticData[] = "./stochasticData/";
-static const char __pyx_k_numUniqueIndices[] = "numUniqueIndices";
+static const char __pyx_k_ipTreeStochastic[] = "ipTreeStochastic";
 static const char __pyx_k_setAffectedFunctions[] = "setAffectedFunctions";
-static const char __pyx_k_Users_Eddie_IP_ipStochastic_pyx[] = "/Users/Eddie/IP/ipStochastic.pyx";
+static const char __pyx_k_Users_Eddie_IP_ipTreeStochastic[] = "/Users/Eddie/IP/ipTreeStochastic.pyx";
 static const char __pyx_k_Users_Eddie_kec_bot_app_pedigre[] = "/Users/Eddie/kec-bot/app/pedigreeData";
 static PyObject *__pyx_n_s_Pedigree;
-static PyObject *__pyx_kp_s_Users_Eddie_IP_ipStochastic_pyx;
+static PyObject *__pyx_kp_s_Users_Eddie_IP_ipTreeStochastic;
 static PyObject *__pyx_kp_s_Users_Eddie_kec_bot_app_pedigre;
 static PyObject *__pyx_n_s__3;
 static PyObject *__pyx_n_s_checkpoint;
@@ -941,7 +901,7 @@ static PyObject *__pyx_n_s_getOutput;
 static PyObject *__pyx_n_s_getSumForFile;
 static PyObject *__pyx_n_s_getTypes;
 static PyObject *__pyx_n_s_import;
-static PyObject *__pyx_n_s_ipStochastic;
+static PyObject *__pyx_n_s_ipTreeStochastic;
 static PyObject *__pyx_n_s_itertools;
 static PyObject *__pyx_n_s_join;
 static PyObject *__pyx_n_s_json;
@@ -955,7 +915,6 @@ static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_no;
 static PyObject *__pyx_n_s_numSamples;
 static PyObject *__pyx_n_s_numSamples_2;
-static PyObject *__pyx_n_s_numUniqueIndices;
 static PyObject *__pyx_n_s_numbRoots;
 static PyObject *__pyx_n_s_numbRoots_2;
 static PyObject *__pyx_n_s_open;
@@ -971,27 +930,21 @@ static PyObject *__pyx_n_s_setAffectedFunctions;
 static PyObject *__pyx_n_s_setMappings;
 static PyObject *__pyx_n_s_shadingAD;
 static PyObject *__pyx_kp_s_stochasticData;
-static PyObject *__pyx_n_s_t;
-static PyObject *__pyx_n_s_t_2;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_theSumFunc;
 static PyObject *__pyx_n_s_time;
 static PyObject *__pyx_n_s_totalNumTerms;
 static PyObject *__pyx_n_s_types;
 static PyObject *__pyx_n_s_types_2;
-static PyObject *__pyx_n_s_uniqueMapping;
 static PyObject *__pyx_n_s_w;
 static PyObject *__pyx_n_s_yes;
-static int __pyx_pf_12ipStochastic_15PyStochasticSum___cinit__(struct __pyx_obj_12ipStochastic_PyStochasticSum *__pyx_v_self, PyObject *__pyx_v_numbRoots_, PyObject *__pyx_v_types_, int __pyx_v_checkpoint_, int __pyx_v_numSamples_); /* proto */
-static PyObject *__pyx_pf_12ipStochastic_15PyStochasticSum_2run(struct __pyx_obj_12ipStochastic_PyStochasticSum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_12ipStochastic_15PyStochasticSum_4getOutput(struct __pyx_obj_12ipStochastic_PyStochasticSum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_12ipStochastic_shadingAD(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_person); /* proto */
-static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename, PyObject *__pyx_v_checkpoint, PyObject *__pyx_v_numSamples); /* proto */
-static PyObject *__pyx_pf_12ipStochastic_4getApproxSum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_numbRoots, PyObject *__pyx_v_types, PyObject *__pyx_v_checkpoint, PyObject *__pyx_v_numSamples, PyObject *__pyx_v_filename); /* proto */
-static PyObject *__pyx_tp_new_12ipStochastic_PyStochasticSum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
-static PyObject *__pyx_int_0;
-static PyObject *__pyx_int_1;
-static PyObject *__pyx_int_3;
+static int __pyx_pf_16ipTreeStochastic_19PyTreeStochasticSum___cinit__(struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *__pyx_v_self, PyObject *__pyx_v_numbRoots_, PyObject *__pyx_v_types_, int __pyx_v_checkpoint_, int __pyx_v_numSamples_); /* proto */
+static PyObject *__pyx_pf_16ipTreeStochastic_19PyTreeStochasticSum_2run(struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16ipTreeStochastic_19PyTreeStochasticSum_4getOutput(struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16ipTreeStochastic_shadingAD(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_person); /* proto */
+static PyObject *__pyx_pf_16ipTreeStochastic_2getSumForFile(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename, PyObject *__pyx_v_checkpoint, PyObject *__pyx_v_numSamples); /* proto */
+static PyObject *__pyx_pf_16ipTreeStochastic_4getApproxSum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_numbRoots, PyObject *__pyx_v_types, PyObject *__pyx_v_checkpoint, PyObject *__pyx_v_numSamples, PyObject *__pyx_v_filename); /* proto */
+static PyObject *__pyx_tp_new_16ipTreeStochastic_PyTreeStochasticSum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
 static PyObject *__pyx_tuple__4;
@@ -1001,8 +954,8 @@ static PyObject *__pyx_codeobj__5;
 static PyObject *__pyx_codeobj__7;
 static PyObject *__pyx_codeobj__9;
 
-/* "ipStochastic.pyx":27
- *     cdef unordered_map[int,double] returnDict
+/* "ipTreeStochastic.pyx":27
+ *     cdef pair[int,unordered_map[int,double]] returnDict
  * 
  *     def __cinit__(self,numbRoots_,types_,int checkpoint_,int numSamples_):             # <<<<<<<<<<<<<<
  *         self.numbRoots = numbRoots_
@@ -1010,8 +963,8 @@ static PyObject *__pyx_codeobj__9;
  */
 
 /* Python wrapper */
-static int __pyx_pw_12ipStochastic_15PyStochasticSum_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_12ipStochastic_15PyStochasticSum_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_16ipTreeStochastic_19PyTreeStochasticSum_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_16ipTreeStochastic_19PyTreeStochasticSum_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_numbRoots_ = 0;
   PyObject *__pyx_v_types_ = 0;
   int __pyx_v_checkpoint_;
@@ -1074,25 +1027,25 @@ static int __pyx_pw_12ipStochastic_15PyStochasticSum_1__cinit__(PyObject *__pyx_
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 27, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("ipStochastic.PyStochasticSum.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("ipTreeStochastic.PyTreeStochasticSum.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_12ipStochastic_15PyStochasticSum___cinit__(((struct __pyx_obj_12ipStochastic_PyStochasticSum *)__pyx_v_self), __pyx_v_numbRoots_, __pyx_v_types_, __pyx_v_checkpoint_, __pyx_v_numSamples_);
+  __pyx_r = __pyx_pf_16ipTreeStochastic_19PyTreeStochasticSum___cinit__(((struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *)__pyx_v_self), __pyx_v_numbRoots_, __pyx_v_types_, __pyx_v_checkpoint_, __pyx_v_numSamples_);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_12ipStochastic_15PyStochasticSum___cinit__(struct __pyx_obj_12ipStochastic_PyStochasticSum *__pyx_v_self, PyObject *__pyx_v_numbRoots_, PyObject *__pyx_v_types_, int __pyx_v_checkpoint_, int __pyx_v_numSamples_) {
+static int __pyx_pf_16ipTreeStochastic_19PyTreeStochasticSum___cinit__(struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *__pyx_v_self, PyObject *__pyx_v_numbRoots_, PyObject *__pyx_v_types_, int __pyx_v_checkpoint_, int __pyx_v_numSamples_) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   std::vector<std::pair<std::string,std::vector<std::pair<int,int> > > >  __pyx_t_2;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "ipStochastic.pyx":28
+  /* "ipTreeStochastic.pyx":28
  * 
  *     def __cinit__(self,numbRoots_,types_,int checkpoint_,int numSamples_):
  *         self.numbRoots = numbRoots_             # <<<<<<<<<<<<<<
@@ -1102,7 +1055,7 @@ static int __pyx_pf_12ipStochastic_15PyStochasticSum___cinit__(struct __pyx_obj_
   __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_numbRoots_); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
   __pyx_v_self->numbRoots = __pyx_t_1;
 
-  /* "ipStochastic.pyx":29
+  /* "ipTreeStochastic.pyx":29
  *     def __cinit__(self,numbRoots_,types_,int checkpoint_,int numSamples_):
  *         self.numbRoots = numbRoots_
  *         self.checkpoint = checkpoint_             # <<<<<<<<<<<<<<
@@ -1111,7 +1064,7 @@ static int __pyx_pf_12ipStochastic_15PyStochasticSum___cinit__(struct __pyx_obj_
  */
   __pyx_v_self->checkpoint = __pyx_v_checkpoint_;
 
-  /* "ipStochastic.pyx":30
+  /* "ipTreeStochastic.pyx":30
  *         self.numbRoots = numbRoots_
  *         self.checkpoint = checkpoint_
  *         self.numSamples = numSamples_             # <<<<<<<<<<<<<<
@@ -1120,7 +1073,7 @@ static int __pyx_pf_12ipStochastic_15PyStochasticSum___cinit__(struct __pyx_obj_
  */
   __pyx_v_self->numSamples = __pyx_v_numSamples_;
 
-  /* "ipStochastic.pyx":31
+  /* "ipTreeStochastic.pyx":31
  *         self.checkpoint = checkpoint_
  *         self.numSamples = numSamples_
  *         self.types = types_             # <<<<<<<<<<<<<<
@@ -1130,8 +1083,8 @@ static int __pyx_pf_12ipStochastic_15PyStochasticSum___cinit__(struct __pyx_obj_
   __pyx_t_2 = __pyx_convert_vector_from_py_std_3a__3a_pair_3c_std_3a__3a_string_2c_std_3a__3a_vector_3c_std_3a__3a_pair_3c_int_2c_int_3e____3e____3e___(__pyx_v_types_); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 31, __pyx_L1_error)
   __pyx_v_self->types = __pyx_t_2;
 
-  /* "ipStochastic.pyx":27
- *     cdef unordered_map[int,double] returnDict
+  /* "ipTreeStochastic.pyx":27
+ *     cdef pair[int,unordered_map[int,double]] returnDict
  * 
  *     def __cinit__(self,numbRoots_,types_,int checkpoint_,int numSamples_):             # <<<<<<<<<<<<<<
  *         self.numbRoots = numbRoots_
@@ -1142,53 +1095,53 @@ static int __pyx_pf_12ipStochastic_15PyStochasticSum___cinit__(struct __pyx_obj_
   __pyx_r = 0;
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("ipStochastic.PyStochasticSum.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("ipTreeStochastic.PyTreeStochasticSum.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "ipStochastic.pyx":33
+/* "ipTreeStochastic.pyx":33
  *         self.types = types_
  * 
  *     def run(self):             # <<<<<<<<<<<<<<
- *         self.returnDict = c_bruteForce(self.numbRoots,self.types,self.checkpoint,self.numSamples)
+ *         self.returnDict = getValues(self.numbRoots,self.types,self.numSamples,self.checkpoint)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_12ipStochastic_15PyStochasticSum_3run(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_12ipStochastic_15PyStochasticSum_3run(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_16ipTreeStochastic_19PyTreeStochasticSum_3run(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_16ipTreeStochastic_19PyTreeStochasticSum_3run(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("run (wrapper)", 0);
-  __pyx_r = __pyx_pf_12ipStochastic_15PyStochasticSum_2run(((struct __pyx_obj_12ipStochastic_PyStochasticSum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16ipTreeStochastic_19PyTreeStochasticSum_2run(((struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_12ipStochastic_15PyStochasticSum_2run(struct __pyx_obj_12ipStochastic_PyStochasticSum *__pyx_v_self) {
+static PyObject *__pyx_pf_16ipTreeStochastic_19PyTreeStochasticSum_2run(struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("run", 0);
 
-  /* "ipStochastic.pyx":34
+  /* "ipTreeStochastic.pyx":34
  * 
  *     def run(self):
- *         self.returnDict = c_bruteForce(self.numbRoots,self.types,self.checkpoint,self.numSamples)             # <<<<<<<<<<<<<<
+ *         self.returnDict = getValues(self.numbRoots,self.types,self.numSamples,self.checkpoint)             # <<<<<<<<<<<<<<
  * 
  *     def getOutput(self):
  */
-  __pyx_v_self->returnDict = std::c_bruteForce(__pyx_v_self->numbRoots, __pyx_v_self->types, __pyx_v_self->checkpoint, __pyx_v_self->numSamples);
+  __pyx_v_self->returnDict = std::getValues(__pyx_v_self->numbRoots, __pyx_v_self->types, __pyx_v_self->numSamples, __pyx_v_self->checkpoint);
 
-  /* "ipStochastic.pyx":33
+  /* "ipTreeStochastic.pyx":33
  *         self.types = types_
  * 
  *     def run(self):             # <<<<<<<<<<<<<<
- *         self.returnDict = c_bruteForce(self.numbRoots,self.types,self.checkpoint,self.numSamples)
+ *         self.returnDict = getValues(self.numbRoots,self.types,self.numSamples,self.checkpoint)
  * 
  */
 
@@ -1199,78 +1152,112 @@ static PyObject *__pyx_pf_12ipStochastic_15PyStochasticSum_2run(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "ipStochastic.pyx":36
- *         self.returnDict = c_bruteForce(self.numbRoots,self.types,self.checkpoint,self.numSamples)
+/* "ipTreeStochastic.pyx":36
+ *         self.returnDict = getValues(self.numbRoots,self.types,self.numSamples,self.checkpoint)
  * 
  *     def getOutput(self):             # <<<<<<<<<<<<<<
- *         return dict(self.returnDict)
- * 
+ *         totalNumTerms = self.returnDict.first
+ *         theDict = dict(self.returnDict.second)
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_12ipStochastic_15PyStochasticSum_5getOutput(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_12ipStochastic_15PyStochasticSum_5getOutput(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_16ipTreeStochastic_19PyTreeStochasticSum_5getOutput(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_16ipTreeStochastic_19PyTreeStochasticSum_5getOutput(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("getOutput (wrapper)", 0);
-  __pyx_r = __pyx_pf_12ipStochastic_15PyStochasticSum_4getOutput(((struct __pyx_obj_12ipStochastic_PyStochasticSum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16ipTreeStochastic_19PyTreeStochasticSum_4getOutput(((struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_12ipStochastic_15PyStochasticSum_4getOutput(struct __pyx_obj_12ipStochastic_PyStochasticSum *__pyx_v_self) {
+static PyObject *__pyx_pf_16ipTreeStochastic_19PyTreeStochasticSum_4getOutput(struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *__pyx_v_self) {
+  int __pyx_v_totalNumTerms;
+  PyObject *__pyx_v_theDict = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_1;
   PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("getOutput", 0);
 
-  /* "ipStochastic.pyx":37
+  /* "ipTreeStochastic.pyx":37
  * 
  *     def getOutput(self):
- *         return dict(self.returnDict)             # <<<<<<<<<<<<<<
+ *         totalNumTerms = self.returnDict.first             # <<<<<<<<<<<<<<
+ *         theDict = dict(self.returnDict.second)
+ *         return [totalNumTerms,theDict]
+ */
+  __pyx_t_1 = __pyx_v_self->returnDict.first;
+  __pyx_v_totalNumTerms = __pyx_t_1;
+
+  /* "ipTreeStochastic.pyx":38
+ *     def getOutput(self):
+ *         totalNumTerms = self.returnDict.first
+ *         theDict = dict(self.returnDict.second)             # <<<<<<<<<<<<<<
+ *         return [totalNumTerms,theDict]
+ * 
+ */
+  __pyx_t_2 = __pyx_convert_unordered_map_to_py_int____double(__pyx_v_self->returnDict.second); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
+  __pyx_t_2 = 0;
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&PyDict_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_v_theDict = ((PyObject*)__pyx_t_2);
+  __pyx_t_2 = 0;
+
+  /* "ipTreeStochastic.pyx":39
+ *         totalNumTerms = self.returnDict.first
+ *         theDict = dict(self.returnDict.second)
+ *         return [totalNumTerms,theDict]             # <<<<<<<<<<<<<<
  * 
  * def shadingAD(person):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_unordered_map_to_py_int____double(__pyx_v_self->returnDict); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_totalNumTerms); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
-  __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyDict_Type)), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
+  __pyx_t_3 = PyList_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyList_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
+  __Pyx_INCREF(__pyx_v_theDict);
+  __Pyx_GIVEREF(__pyx_v_theDict);
+  PyList_SET_ITEM(__pyx_t_3, 1, __pyx_v_theDict);
+  __pyx_t_2 = 0;
+  __pyx_r = __pyx_t_3;
+  __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "ipStochastic.pyx":36
- *         self.returnDict = c_bruteForce(self.numbRoots,self.types,self.checkpoint,self.numSamples)
+  /* "ipTreeStochastic.pyx":36
+ *         self.returnDict = getValues(self.numbRoots,self.types,self.numSamples,self.checkpoint)
  * 
  *     def getOutput(self):             # <<<<<<<<<<<<<<
- *         return dict(self.returnDict)
- * 
+ *         totalNumTerms = self.returnDict.first
+ *         theDict = dict(self.returnDict.second)
  */
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("ipStochastic.PyStochasticSum.getOutput", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_AddTraceback("ipTreeStochastic.PyTreeStochasticSum.getOutput", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_theDict);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "ipStochastic.pyx":39
- *         return dict(self.returnDict)
+/* "ipTreeStochastic.pyx":41
+ *         return [totalNumTerms,theDict]
  * 
  * def shadingAD(person):             # <<<<<<<<<<<<<<
  *     if(len(person.diagnoses) > 0):
@@ -1278,20 +1265,20 @@ static PyObject *__pyx_pf_12ipStochastic_15PyStochasticSum_4getOutput(struct __p
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_12ipStochastic_1shadingAD(PyObject *__pyx_self, PyObject *__pyx_v_person); /*proto*/
-static PyMethodDef __pyx_mdef_12ipStochastic_1shadingAD = {"shadingAD", (PyCFunction)__pyx_pw_12ipStochastic_1shadingAD, METH_O, 0};
-static PyObject *__pyx_pw_12ipStochastic_1shadingAD(PyObject *__pyx_self, PyObject *__pyx_v_person) {
+static PyObject *__pyx_pw_16ipTreeStochastic_1shadingAD(PyObject *__pyx_self, PyObject *__pyx_v_person); /*proto*/
+static PyMethodDef __pyx_mdef_16ipTreeStochastic_1shadingAD = {"shadingAD", (PyCFunction)__pyx_pw_16ipTreeStochastic_1shadingAD, METH_O, 0};
+static PyObject *__pyx_pw_16ipTreeStochastic_1shadingAD(PyObject *__pyx_self, PyObject *__pyx_v_person) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("shadingAD (wrapper)", 0);
-  __pyx_r = __pyx_pf_12ipStochastic_shadingAD(__pyx_self, ((PyObject *)__pyx_v_person));
+  __pyx_r = __pyx_pf_16ipTreeStochastic_shadingAD(__pyx_self, ((PyObject *)__pyx_v_person));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_12ipStochastic_shadingAD(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_person) {
+static PyObject *__pyx_pf_16ipTreeStochastic_shadingAD(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_person) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1299,21 +1286,21 @@ static PyObject *__pyx_pf_12ipStochastic_shadingAD(CYTHON_UNUSED PyObject *__pyx
   int __pyx_t_3;
   __Pyx_RefNannySetupContext("shadingAD", 0);
 
-  /* "ipStochastic.pyx":40
+  /* "ipTreeStochastic.pyx":42
  * 
  * def shadingAD(person):
  *     if(len(person.diagnoses) > 0):             # <<<<<<<<<<<<<<
  *         return 'yes'
  *     else:
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_person, __pyx_n_s_diagnoses); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_person, __pyx_n_s_diagnoses); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 42, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_2 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(0, 42, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_3 = ((__pyx_t_2 > 0) != 0);
   if (__pyx_t_3) {
 
-    /* "ipStochastic.pyx":41
+    /* "ipTreeStochastic.pyx":43
  * def shadingAD(person):
  *     if(len(person.diagnoses) > 0):
  *         return 'yes'             # <<<<<<<<<<<<<<
@@ -1325,7 +1312,7 @@ static PyObject *__pyx_pf_12ipStochastic_shadingAD(CYTHON_UNUSED PyObject *__pyx
     __pyx_r = __pyx_n_s_yes;
     goto __pyx_L0;
 
-    /* "ipStochastic.pyx":40
+    /* "ipTreeStochastic.pyx":42
  * 
  * def shadingAD(person):
  *     if(len(person.diagnoses) > 0):             # <<<<<<<<<<<<<<
@@ -1334,7 +1321,7 @@ static PyObject *__pyx_pf_12ipStochastic_shadingAD(CYTHON_UNUSED PyObject *__pyx
  */
   }
 
-  /* "ipStochastic.pyx":43
+  /* "ipTreeStochastic.pyx":45
  *         return 'yes'
  *     else:
  *         return 'no'             # <<<<<<<<<<<<<<
@@ -1348,8 +1335,8 @@ static PyObject *__pyx_pf_12ipStochastic_shadingAD(CYTHON_UNUSED PyObject *__pyx
     goto __pyx_L0;
   }
 
-  /* "ipStochastic.pyx":39
- *         return dict(self.returnDict)
+  /* "ipTreeStochastic.pyx":41
+ *         return [totalNumTerms,theDict]
  * 
  * def shadingAD(person):             # <<<<<<<<<<<<<<
  *     if(len(person.diagnoses) > 0):
@@ -1359,7 +1346,7 @@ static PyObject *__pyx_pf_12ipStochastic_shadingAD(CYTHON_UNUSED PyObject *__pyx
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("ipStochastic.shadingAD", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("ipTreeStochastic.shadingAD", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -1367,7 +1354,7 @@ static PyObject *__pyx_pf_12ipStochastic_shadingAD(CYTHON_UNUSED PyObject *__pyx
   return __pyx_r;
 }
 
-/* "ipStochastic.pyx":45
+/* "ipTreeStochastic.pyx":47
  *         return 'no'
  * 
  * def getSumForFile(filename,checkpoint,numSamples):             # <<<<<<<<<<<<<<
@@ -1376,9 +1363,9 @@ static PyObject *__pyx_pf_12ipStochastic_shadingAD(CYTHON_UNUSED PyObject *__pyx
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_12ipStochastic_3getSumForFile(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_12ipStochastic_3getSumForFile = {"getSumForFile", (PyCFunction)__pyx_pw_12ipStochastic_3getSumForFile, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_12ipStochastic_3getSumForFile(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16ipTreeStochastic_3getSumForFile(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_16ipTreeStochastic_3getSumForFile = {"getSumForFile", (PyCFunction)__pyx_pw_16ipTreeStochastic_3getSumForFile, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_16ipTreeStochastic_3getSumForFile(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_filename = 0;
   PyObject *__pyx_v_checkpoint = 0;
   PyObject *__pyx_v_numSamples = 0;
@@ -1406,16 +1393,16 @@ static PyObject *__pyx_pw_12ipStochastic_3getSumForFile(PyObject *__pyx_self, Py
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_checkpoint_2)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("getSumForFile", 1, 3, 3, 1); __PYX_ERR(0, 45, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("getSumForFile", 1, 3, 3, 1); __PYX_ERR(0, 47, __pyx_L3_error)
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_numSamples_2)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("getSumForFile", 1, 3, 3, 2); __PYX_ERR(0, 45, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("getSumForFile", 1, 3, 3, 2); __PYX_ERR(0, 47, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getSumForFile") < 0)) __PYX_ERR(0, 45, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getSumForFile") < 0)) __PYX_ERR(0, 47, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -1430,20 +1417,20 @@ static PyObject *__pyx_pw_12ipStochastic_3getSumForFile(PyObject *__pyx_self, Py
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getSumForFile", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 45, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("getSumForFile", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 47, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("ipStochastic.getSumForFile", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("ipTreeStochastic.getSumForFile", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_12ipStochastic_2getSumForFile(__pyx_self, __pyx_v_filename, __pyx_v_checkpoint, __pyx_v_numSamples);
+  __pyx_r = __pyx_pf_16ipTreeStochastic_2getSumForFile(__pyx_self, __pyx_v_filename, __pyx_v_checkpoint, __pyx_v_numSamples);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename, PyObject *__pyx_v_checkpoint, PyObject *__pyx_v_numSamples) {
+static PyObject *__pyx_pf_16ipTreeStochastic_2getSumForFile(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename, PyObject *__pyx_v_checkpoint, PyObject *__pyx_v_numSamples) {
   PyObject *__pyx_v_funcToUse = NULL;
   PyObject *__pyx_v_data_file = NULL;
   PyObject *__pyx_v_data = NULL;
@@ -1469,19 +1456,19 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
   PyObject *(*__pyx_t_15)(PyObject *);
   __Pyx_RefNannySetupContext("getSumForFile", 0);
 
-  /* "ipStochastic.pyx":47
+  /* "ipTreeStochastic.pyx":49
  * def getSumForFile(filename,checkpoint,numSamples):
  * 
  *     funcToUse = shadingAD             # <<<<<<<<<<<<<<
  * 
  *     with open(os.path.join(jsonFolderPath, filename)) as data_file:
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_shadingAD); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_shadingAD); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 49, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_funcToUse = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":49
+  /* "ipTreeStochastic.pyx":51
  *     funcToUse = shadingAD
  * 
  *     with open(os.path.join(jsonFolderPath, filename)) as data_file:             # <<<<<<<<<<<<<<
@@ -1489,15 +1476,15 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
  *         pedigree = Pedigree(data)
  */
   /*with:*/ {
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_os); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_os); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_path); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_path); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_join); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_join); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_jsonFolderPath); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_jsonFolderPath); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     __pyx_t_5 = 0;
@@ -1511,7 +1498,7 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
         __pyx_t_5 = 1;
       }
     }
-    __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     if (__pyx_t_4) {
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -1522,21 +1509,21 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
     __Pyx_GIVEREF(__pyx_v_filename);
     PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_5, __pyx_v_filename);
     __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_1);
     PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
     __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_7 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_exit); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_exit); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_6 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_enter); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 49, __pyx_L3_error)
+    __pyx_t_6 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_enter); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 51, __pyx_L3_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_3 = NULL;
     if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_6))) {
@@ -1549,10 +1536,10 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
       }
     }
     if (__pyx_t_3) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L3_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L3_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     } else {
-      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L3_error)
+      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L3_error)
     }
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -1571,21 +1558,21 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
           __pyx_v_data_file = __pyx_t_6;
           __pyx_t_6 = 0;
 
-          /* "ipStochastic.pyx":50
+          /* "ipTreeStochastic.pyx":52
  * 
  *     with open(os.path.join(jsonFolderPath, filename)) as data_file:
  *         data = json.loads(json.load(data_file))             # <<<<<<<<<<<<<<
  *         pedigree = Pedigree(data)
  *         pedigree.setAffectedFunctions(funcToUse)
  */
-          __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_json); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 50, __pyx_L7_error)
+          __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_json); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 52, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_loads); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 50, __pyx_L7_error)
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_loads); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 52, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_json); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 50, __pyx_L7_error)
+          __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_json); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 52, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_3);
-          __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_load); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 50, __pyx_L7_error)
+          __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_load); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 52, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __pyx_t_3 = NULL;
@@ -1599,16 +1586,16 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
             }
           }
           if (!__pyx_t_3) {
-            __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_data_file); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 50, __pyx_L7_error)
+            __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_data_file); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 52, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_1);
           } else {
-            __pyx_t_11 = PyTuple_New(1+1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 50, __pyx_L7_error)
+            __pyx_t_11 = PyTuple_New(1+1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 52, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_11);
             __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_3); __pyx_t_3 = NULL;
             __Pyx_INCREF(__pyx_v_data_file);
             __Pyx_GIVEREF(__pyx_v_data_file);
             PyTuple_SET_ITEM(__pyx_t_11, 0+1, __pyx_v_data_file);
-            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_11, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 50, __pyx_L7_error)
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_11, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 52, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_1);
             __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
           }
@@ -1624,17 +1611,17 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
             }
           }
           if (!__pyx_t_4) {
-            __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 50, __pyx_L7_error)
+            __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 52, __pyx_L7_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __Pyx_GOTREF(__pyx_t_6);
           } else {
-            __pyx_t_11 = PyTuple_New(1+1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 50, __pyx_L7_error)
+            __pyx_t_11 = PyTuple_New(1+1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 52, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_11);
             __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_4); __pyx_t_4 = NULL;
             __Pyx_GIVEREF(__pyx_t_1);
             PyTuple_SET_ITEM(__pyx_t_11, 0+1, __pyx_t_1);
             __pyx_t_1 = 0;
-            __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_11, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 50, __pyx_L7_error)
+            __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_11, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 52, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_6);
             __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
           }
@@ -1642,14 +1629,14 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
           __pyx_v_data = __pyx_t_6;
           __pyx_t_6 = 0;
 
-          /* "ipStochastic.pyx":51
+          /* "ipTreeStochastic.pyx":53
  *     with open(os.path.join(jsonFolderPath, filename)) as data_file:
  *         data = json.loads(json.load(data_file))
  *         pedigree = Pedigree(data)             # <<<<<<<<<<<<<<
  *         pedigree.setAffectedFunctions(funcToUse)
  * 
  */
-          __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_Pedigree); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L7_error)
+          __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_Pedigree); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_2);
           __pyx_t_11 = NULL;
           if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -1662,16 +1649,16 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
             }
           }
           if (!__pyx_t_11) {
-            __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_data); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 51, __pyx_L7_error)
+            __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_data); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 53, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_6);
           } else {
-            __pyx_t_1 = PyTuple_New(1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L7_error)
+            __pyx_t_1 = PyTuple_New(1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_1);
             __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_11); __pyx_t_11 = NULL;
             __Pyx_INCREF(__pyx_v_data);
             __Pyx_GIVEREF(__pyx_v_data);
             PyTuple_SET_ITEM(__pyx_t_1, 0+1, __pyx_v_data);
-            __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 51, __pyx_L7_error)
+            __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 53, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_6);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           }
@@ -1679,14 +1666,14 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
           __pyx_v_pedigree = __pyx_t_6;
           __pyx_t_6 = 0;
 
-          /* "ipStochastic.pyx":52
+          /* "ipTreeStochastic.pyx":54
  *         data = json.loads(json.load(data_file))
  *         pedigree = Pedigree(data)
  *         pedigree.setAffectedFunctions(funcToUse)             # <<<<<<<<<<<<<<
  * 
  *     types,setMappings = getTypes(pedigree)
  */
-          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_pedigree, __pyx_n_s_setAffectedFunctions); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 52, __pyx_L7_error)
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_pedigree, __pyx_n_s_setAffectedFunctions); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_2);
           __pyx_t_1 = NULL;
           if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -1699,23 +1686,23 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
             }
           }
           if (!__pyx_t_1) {
-            __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_funcToUse); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 52, __pyx_L7_error)
+            __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_funcToUse); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 54, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_6);
           } else {
-            __pyx_t_11 = PyTuple_New(1+1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 52, __pyx_L7_error)
+            __pyx_t_11 = PyTuple_New(1+1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 54, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_11);
             __Pyx_GIVEREF(__pyx_t_1); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_1); __pyx_t_1 = NULL;
             __Pyx_INCREF(__pyx_v_funcToUse);
             __Pyx_GIVEREF(__pyx_v_funcToUse);
             PyTuple_SET_ITEM(__pyx_t_11, 0+1, __pyx_v_funcToUse);
-            __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_11, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 52, __pyx_L7_error)
+            __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_11, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 54, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_6);
             __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
           }
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-          /* "ipStochastic.pyx":49
+          /* "ipTreeStochastic.pyx":51
  *     funcToUse = shadingAD
  * 
  *     with open(os.path.join(jsonFolderPath, filename)) as data_file:             # <<<<<<<<<<<<<<
@@ -1736,21 +1723,21 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         /*except:*/ {
-          __Pyx_AddTraceback("ipStochastic.getSumForFile", __pyx_clineno, __pyx_lineno, __pyx_filename);
-          if (__Pyx_GetException(&__pyx_t_6, &__pyx_t_2, &__pyx_t_11) < 0) __PYX_ERR(0, 49, __pyx_L9_except_error)
+          __Pyx_AddTraceback("ipTreeStochastic.getSumForFile", __pyx_clineno, __pyx_lineno, __pyx_filename);
+          if (__Pyx_GetException(&__pyx_t_6, &__pyx_t_2, &__pyx_t_11) < 0) __PYX_ERR(0, 51, __pyx_L9_except_error)
           __Pyx_GOTREF(__pyx_t_6);
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_GOTREF(__pyx_t_11);
-          __pyx_t_1 = PyTuple_Pack(3, __pyx_t_6, __pyx_t_2, __pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 49, __pyx_L9_except_error)
+          __pyx_t_1 = PyTuple_Pack(3, __pyx_t_6, __pyx_t_2, __pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L9_except_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_1, NULL);
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 49, __pyx_L9_except_error)
+          if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 51, __pyx_L9_except_error)
           __Pyx_GOTREF(__pyx_t_12);
           __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_12);
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-          if (__pyx_t_13 < 0) __PYX_ERR(0, 49, __pyx_L9_except_error)
+          if (__pyx_t_13 < 0) __PYX_ERR(0, 51, __pyx_L9_except_error)
           __pyx_t_14 = ((!(__pyx_t_13 != 0)) != 0);
           if (__pyx_t_14) {
             __Pyx_GIVEREF(__pyx_t_6);
@@ -1758,7 +1745,7 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
             __Pyx_XGIVEREF(__pyx_t_11);
             __Pyx_ErrRestoreWithState(__pyx_t_6, __pyx_t_2, __pyx_t_11);
             __pyx_t_6 = 0; __pyx_t_2 = 0; __pyx_t_11 = 0; 
-            __PYX_ERR(0, 49, __pyx_L9_except_error)
+            __PYX_ERR(0, 51, __pyx_L9_except_error)
           }
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -1786,7 +1773,7 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
         if (__pyx_t_7) {
           __pyx_t_10 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_tuple_, NULL);
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 49, __pyx_L1_error)
+          if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 51, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         }
@@ -1801,16 +1788,16 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
     __pyx_L18:;
   }
 
-  /* "ipStochastic.pyx":54
+  /* "ipTreeStochastic.pyx":56
  *         pedigree.setAffectedFunctions(funcToUse)
  * 
  *     types,setMappings = getTypes(pedigree)             # <<<<<<<<<<<<<<
  *     getApproxSum(len(pedigree.roots),types,checkpoint,numSamples,filename)
  * 
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_getTypes); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_getTypes); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (unlikely(!__pyx_v_pedigree)) { __Pyx_RaiseUnboundLocalError("pedigree"); __PYX_ERR(0, 54, __pyx_L1_error) }
+  if (unlikely(!__pyx_v_pedigree)) { __Pyx_RaiseUnboundLocalError("pedigree"); __PYX_ERR(0, 56, __pyx_L1_error) }
   __pyx_t_6 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_2))) {
     __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_2);
@@ -1822,16 +1809,16 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
     }
   }
   if (!__pyx_t_6) {
-    __pyx_t_11 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_pedigree); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_pedigree); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
   } else {
-    __pyx_t_1 = PyTuple_New(1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_1 = PyTuple_New(1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_6); __pyx_t_6 = NULL;
     __Pyx_INCREF(__pyx_v_pedigree);
     __Pyx_GIVEREF(__pyx_v_pedigree);
     PyTuple_SET_ITEM(__pyx_t_1, 0+1, __pyx_v_pedigree);
-    __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
@@ -1846,7 +1833,7 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 54, __pyx_L1_error)
+      __PYX_ERR(0, 56, __pyx_L1_error)
     }
     #if CYTHON_COMPILING_IN_CPYTHON
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -1859,15 +1846,15 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
     __Pyx_INCREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_t_1);
     #else
-    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_1 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     #endif
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_6 = PyObject_GetIter(__pyx_t_11); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_6 = PyObject_GetIter(__pyx_t_11); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __pyx_t_15 = Py_TYPE(__pyx_t_6)->tp_iternext;
@@ -1875,7 +1862,7 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
     __Pyx_GOTREF(__pyx_t_2);
     index = 1; __pyx_t_1 = __pyx_t_15(__pyx_t_6); if (unlikely(!__pyx_t_1)) goto __pyx_L19_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_1);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_15(__pyx_t_6), 2) < 0) __PYX_ERR(0, 54, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_15(__pyx_t_6), 2) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
     __pyx_t_15 = NULL;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     goto __pyx_L20_unpacking_done;
@@ -1883,7 +1870,7 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_t_15 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 54, __pyx_L1_error)
+    __PYX_ERR(0, 56, __pyx_L1_error)
     __pyx_L20_unpacking_done:;
   }
   __pyx_v_types = __pyx_t_2;
@@ -1891,21 +1878,21 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
   __pyx_v_setMappings = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":55
+  /* "ipTreeStochastic.pyx":57
  * 
  *     types,setMappings = getTypes(pedigree)
  *     getApproxSum(len(pedigree.roots),types,checkpoint,numSamples,filename)             # <<<<<<<<<<<<<<
  * 
  * def getApproxSum(numbRoots,types,checkpoint,numSamples,filename):
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_getApproxSum); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_getApproxSum); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (unlikely(!__pyx_v_pedigree)) { __Pyx_RaiseUnboundLocalError("pedigree"); __PYX_ERR(0, 55, __pyx_L1_error) }
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_pedigree, __pyx_n_s_roots); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
+  if (unlikely(!__pyx_v_pedigree)) { __Pyx_RaiseUnboundLocalError("pedigree"); __PYX_ERR(0, 57, __pyx_L1_error) }
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_pedigree, __pyx_n_s_roots); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_5 = PyObject_Length(__pyx_t_2); if (unlikely(__pyx_t_5 == -1)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_5 = PyObject_Length(__pyx_t_2); if (unlikely(__pyx_t_5 == -1)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_6 = NULL;
   __pyx_t_5 = 0;
@@ -1919,7 +1906,7 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
       __pyx_t_5 = 1;
     }
   }
-  __pyx_t_4 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   if (__pyx_t_6) {
     __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -1939,13 +1926,13 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
   __Pyx_GIVEREF(__pyx_v_filename);
   PyTuple_SET_ITEM(__pyx_t_4, 4+__pyx_t_5, __pyx_v_filename);
   __pyx_t_2 = 0;
-  __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_4, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_4, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-  /* "ipStochastic.pyx":45
+  /* "ipTreeStochastic.pyx":47
  *         return 'no'
  * 
  * def getSumForFile(filename,checkpoint,numSamples):             # <<<<<<<<<<<<<<
@@ -1963,7 +1950,7 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_11);
-  __Pyx_AddTraceback("ipStochastic.getSumForFile", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("ipTreeStochastic.getSumForFile", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_funcToUse);
@@ -1977,18 +1964,18 @@ static PyObject *__pyx_pf_12ipStochastic_2getSumForFile(CYTHON_UNUSED PyObject *
   return __pyx_r;
 }
 
-/* "ipStochastic.pyx":57
+/* "ipTreeStochastic.pyx":59
  *     getApproxSum(len(pedigree.roots),types,checkpoint,numSamples,filename)
  * 
  * def getApproxSum(numbRoots,types,checkpoint,numSamples,filename):             # <<<<<<<<<<<<<<
  * 
- *     theSumFunc = PyStochasticSum(numbRoots,types,checkpoint,numSamples)
+ *     theSumFunc = PyTreeStochasticSum(numbRoots,types,checkpoint,numSamples)
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_12ipStochastic_5getApproxSum(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_12ipStochastic_5getApproxSum = {"getApproxSum", (PyCFunction)__pyx_pw_12ipStochastic_5getApproxSum, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_12ipStochastic_5getApproxSum(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16ipTreeStochastic_5getApproxSum(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_16ipTreeStochastic_5getApproxSum = {"getApproxSum", (PyCFunction)__pyx_pw_16ipTreeStochastic_5getApproxSum, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_16ipTreeStochastic_5getApproxSum(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_numbRoots = 0;
   PyObject *__pyx_v_types = 0;
   PyObject *__pyx_v_checkpoint = 0;
@@ -2020,26 +2007,26 @@ static PyObject *__pyx_pw_12ipStochastic_5getApproxSum(PyObject *__pyx_self, PyO
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_types_2)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("getApproxSum", 1, 5, 5, 1); __PYX_ERR(0, 57, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("getApproxSum", 1, 5, 5, 1); __PYX_ERR(0, 59, __pyx_L3_error)
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_checkpoint_2)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("getApproxSum", 1, 5, 5, 2); __PYX_ERR(0, 57, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("getApproxSum", 1, 5, 5, 2); __PYX_ERR(0, 59, __pyx_L3_error)
         }
         case  3:
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_numSamples_2)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("getApproxSum", 1, 5, 5, 3); __PYX_ERR(0, 57, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("getApproxSum", 1, 5, 5, 3); __PYX_ERR(0, 59, __pyx_L3_error)
         }
         case  4:
         if (likely((values[4] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("getApproxSum", 1, 5, 5, 4); __PYX_ERR(0, 57, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("getApproxSum", 1, 5, 5, 4); __PYX_ERR(0, 59, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getApproxSum") < 0)) __PYX_ERR(0, 57, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getApproxSum") < 0)) __PYX_ERR(0, 59, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 5) {
       goto __pyx_L5_argtuple_error;
@@ -2058,54 +2045,49 @@ static PyObject *__pyx_pw_12ipStochastic_5getApproxSum(PyObject *__pyx_self, PyO
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getApproxSum", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 57, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("getApproxSum", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 59, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("ipStochastic.getApproxSum", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("ipTreeStochastic.getApproxSum", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_12ipStochastic_4getApproxSum(__pyx_self, __pyx_v_numbRoots, __pyx_v_types, __pyx_v_checkpoint, __pyx_v_numSamples, __pyx_v_filename);
+  __pyx_r = __pyx_pf_16ipTreeStochastic_4getApproxSum(__pyx_self, __pyx_v_numbRoots, __pyx_v_types, __pyx_v_checkpoint, __pyx_v_numSamples, __pyx_v_filename);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_12ipStochastic_4getApproxSum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_numbRoots, PyObject *__pyx_v_types, PyObject *__pyx_v_checkpoint, PyObject *__pyx_v_numSamples, PyObject *__pyx_v_filename) {
-  struct __pyx_obj_12ipStochastic_PyStochasticSum *__pyx_v_theSumFunc = NULL;
+static PyObject *__pyx_pf_16ipTreeStochastic_4getApproxSum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_numbRoots, PyObject *__pyx_v_types, PyObject *__pyx_v_checkpoint, PyObject *__pyx_v_numSamples, PyObject *__pyx_v_filename) {
+  struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *__pyx_v_theSumFunc = NULL;
+  PyObject *__pyx_v_totalNumTerms = NULL;
   PyObject *__pyx_v_data = NULL;
-  PyObject *__pyx_v_numUniqueIndices = NULL;
-  PyObject *__pyx_v_uniqueMapping = NULL;
-  PyObject *__pyx_v_t = NULL;
-  PyObject *__pyx_v__t = NULL;
   PyObject *__pyx_v_file = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
-  Py_ssize_t __pyx_t_4;
+  PyObject *__pyx_t_4 = NULL;
   PyObject *(*__pyx_t_5)(PyObject *);
-  Py_ssize_t __pyx_t_6;
-  PyObject *(*__pyx_t_7)(PyObject *);
-  int __pyx_t_8;
-  int __pyx_t_9;
-  PyObject *__pyx_t_10 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  PyObject *__pyx_t_9 = NULL;
+  Py_ssize_t __pyx_t_10;
   PyObject *__pyx_t_11 = NULL;
-  PyObject *__pyx_t_12 = NULL;
-  PyObject *__pyx_t_13 = NULL;
-  PyObject *__pyx_t_14 = NULL;
-  PyObject *__pyx_t_15 = NULL;
+  int __pyx_t_12;
+  int __pyx_t_13;
   __Pyx_RefNannySetupContext("getApproxSum", 0);
 
-  /* "ipStochastic.pyx":59
+  /* "ipTreeStochastic.pyx":61
  * def getApproxSum(numbRoots,types,checkpoint,numSamples,filename):
  * 
- *     theSumFunc = PyStochasticSum(numbRoots,types,checkpoint,numSamples)             # <<<<<<<<<<<<<<
+ *     theSumFunc = PyTreeStochasticSum(numbRoots,types,checkpoint,numSamples)             # <<<<<<<<<<<<<<
  *     theSumFunc.run()
- *     data = theSumFunc.getOutput()
+ *     totalNumTerms,data = theSumFunc.getOutput()
  */
-  __pyx_t_1 = PyTuple_New(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_v_numbRoots);
   __Pyx_GIVEREF(__pyx_v_numbRoots);
@@ -2119,20 +2101,20 @@ static PyObject *__pyx_pf_12ipStochastic_4getApproxSum(CYTHON_UNUSED PyObject *_
   __Pyx_INCREF(__pyx_v_numSamples);
   __Pyx_GIVEREF(__pyx_v_numSamples);
   PyTuple_SET_ITEM(__pyx_t_1, 3, __pyx_v_numSamples);
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_12ipStochastic_PyStochasticSum), __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 59, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_16ipTreeStochastic_PyTreeStochasticSum), __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_theSumFunc = ((struct __pyx_obj_12ipStochastic_PyStochasticSum *)__pyx_t_2);
+  __pyx_v_theSumFunc = ((struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "ipStochastic.pyx":60
+  /* "ipTreeStochastic.pyx":62
  * 
- *     theSumFunc = PyStochasticSum(numbRoots,types,checkpoint,numSamples)
+ *     theSumFunc = PyTreeStochasticSum(numbRoots,types,checkpoint,numSamples)
  *     theSumFunc.run()             # <<<<<<<<<<<<<<
- *     data = theSumFunc.getOutput()
+ *     totalNumTerms,data = theSumFunc.getOutput()
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_theSumFunc), __pyx_n_s_run); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 60, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_theSumFunc), __pyx_n_s_run); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2145,282 +2127,141 @@ static PyObject *__pyx_pf_12ipStochastic_4getApproxSum(CYTHON_UNUSED PyObject *_
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 60, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 60, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "ipStochastic.pyx":61
- *     theSumFunc = PyStochasticSum(numbRoots,types,checkpoint,numSamples)
+  /* "ipTreeStochastic.pyx":63
+ *     theSumFunc = PyTreeStochasticSum(numbRoots,types,checkpoint,numSamples)
  *     theSumFunc.run()
- *     data = theSumFunc.getOutput()             # <<<<<<<<<<<<<<
- * 
- *     numUniqueIndices = 0
- */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_theSumFunc), __pyx_n_s_getOutput); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = NULL;
-  if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_1))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_1, function);
-    }
-  }
-  if (__pyx_t_3) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  } else {
-    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
-  }
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_data = __pyx_t_2;
-  __pyx_t_2 = 0;
-
-  /* "ipStochastic.pyx":63
- *     data = theSumFunc.getOutput()
- * 
- *     numUniqueIndices = 0             # <<<<<<<<<<<<<<
- *     uniqueMapping = {}
- *     for t in types:
- */
-  __Pyx_INCREF(__pyx_int_0);
-  __pyx_v_numUniqueIndices = __pyx_int_0;
-
-  /* "ipStochastic.pyx":64
- * 
- *     numUniqueIndices = 0
- *     uniqueMapping = {}             # <<<<<<<<<<<<<<
- *     for t in types:
- *         for _t in t[1]:
- */
-  __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_v_uniqueMapping = ((PyObject*)__pyx_t_2);
-  __pyx_t_2 = 0;
-
-  /* "ipStochastic.pyx":65
- *     numUniqueIndices = 0
- *     uniqueMapping = {}
- *     for t in types:             # <<<<<<<<<<<<<<
- *         for _t in t[1]:
- *             if(_t[1] not in uniqueMapping):
- */
-  if (likely(PyList_CheckExact(__pyx_v_types)) || PyTuple_CheckExact(__pyx_v_types)) {
-    __pyx_t_2 = __pyx_v_types; __Pyx_INCREF(__pyx_t_2); __pyx_t_4 = 0;
-    __pyx_t_5 = NULL;
-  } else {
-    __pyx_t_4 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_v_types); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_5 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 65, __pyx_L1_error)
-  }
-  for (;;) {
-    if (likely(!__pyx_t_5)) {
-      if (likely(PyList_CheckExact(__pyx_t_2))) {
-        if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_2)) break;
-        #if CYTHON_COMPILING_IN_CPYTHON
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
-        #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        #endif
-      } else {
-        if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
-        #if CYTHON_COMPILING_IN_CPYTHON
-        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
-        #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        #endif
-      }
-    } else {
-      __pyx_t_1 = __pyx_t_5(__pyx_t_2);
-      if (unlikely(!__pyx_t_1)) {
-        PyObject* exc_type = PyErr_Occurred();
-        if (exc_type) {
-          if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 65, __pyx_L1_error)
-        }
-        break;
-      }
-      __Pyx_GOTREF(__pyx_t_1);
-    }
-    __Pyx_XDECREF_SET(__pyx_v_t, __pyx_t_1);
-    __pyx_t_1 = 0;
-
-    /* "ipStochastic.pyx":66
- *     uniqueMapping = {}
- *     for t in types:
- *         for _t in t[1]:             # <<<<<<<<<<<<<<
- *             if(_t[1] not in uniqueMapping):
- *                 uniqueMapping[_t[1]] = numUniqueIndices
- */
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_t, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
-      __pyx_t_3 = __pyx_t_1; __Pyx_INCREF(__pyx_t_3); __pyx_t_6 = 0;
-      __pyx_t_7 = NULL;
-    } else {
-      __pyx_t_6 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 66, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_7 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 66, __pyx_L1_error)
-    }
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    for (;;) {
-      if (likely(!__pyx_t_7)) {
-        if (likely(PyList_CheckExact(__pyx_t_3))) {
-          if (__pyx_t_6 >= PyList_GET_SIZE(__pyx_t_3)) break;
-          #if CYTHON_COMPILING_IN_CPYTHON
-          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_6); __Pyx_INCREF(__pyx_t_1); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 66, __pyx_L1_error)
-          #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          #endif
-        } else {
-          if (__pyx_t_6 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
-          #if CYTHON_COMPILING_IN_CPYTHON
-          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_6); __Pyx_INCREF(__pyx_t_1); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 66, __pyx_L1_error)
-          #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          #endif
-        }
-      } else {
-        __pyx_t_1 = __pyx_t_7(__pyx_t_3);
-        if (unlikely(!__pyx_t_1)) {
-          PyObject* exc_type = PyErr_Occurred();
-          if (exc_type) {
-            if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 66, __pyx_L1_error)
-          }
-          break;
-        }
-        __Pyx_GOTREF(__pyx_t_1);
-      }
-      __Pyx_XDECREF_SET(__pyx_v__t, __pyx_t_1);
-      __pyx_t_1 = 0;
-
-      /* "ipStochastic.pyx":67
- *     for t in types:
- *         for _t in t[1]:
- *             if(_t[1] not in uniqueMapping):             # <<<<<<<<<<<<<<
- *                 uniqueMapping[_t[1]] = numUniqueIndices
- *                 numUniqueIndices += 1
- */
-      __pyx_t_1 = __Pyx_GetItemInt(__pyx_v__t, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 67, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_8 = (__Pyx_PyDict_ContainsTF(__pyx_t_1, __pyx_v_uniqueMapping, Py_NE)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 67, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_9 = (__pyx_t_8 != 0);
-      if (__pyx_t_9) {
-
-        /* "ipStochastic.pyx":68
- *         for _t in t[1]:
- *             if(_t[1] not in uniqueMapping):
- *                 uniqueMapping[_t[1]] = numUniqueIndices             # <<<<<<<<<<<<<<
- *                 numUniqueIndices += 1
- * 
- */
-        __pyx_t_1 = __Pyx_GetItemInt(__pyx_v__t, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 68, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        if (unlikely(PyDict_SetItem(__pyx_v_uniqueMapping, __pyx_t_1, __pyx_v_numUniqueIndices) < 0)) __PYX_ERR(0, 68, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-        /* "ipStochastic.pyx":69
- *             if(_t[1] not in uniqueMapping):
- *                 uniqueMapping[_t[1]] = numUniqueIndices
- *                 numUniqueIndices += 1             # <<<<<<<<<<<<<<
+ *     totalNumTerms,data = theSumFunc.getOutput()             # <<<<<<<<<<<<<<
  * 
  *     data['name'] = 'data_'+filename
  */
-        __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_numUniqueIndices, __pyx_int_1, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF_SET(__pyx_v_numUniqueIndices, __pyx_t_1);
-        __pyx_t_1 = 0;
-
-        /* "ipStochastic.pyx":67
- *     for t in types:
- *         for _t in t[1]:
- *             if(_t[1] not in uniqueMapping):             # <<<<<<<<<<<<<<
- *                 uniqueMapping[_t[1]] = numUniqueIndices
- *                 numUniqueIndices += 1
- */
-      }
-
-      /* "ipStochastic.pyx":66
- *     uniqueMapping = {}
- *     for t in types:
- *         for _t in t[1]:             # <<<<<<<<<<<<<<
- *             if(_t[1] not in uniqueMapping):
- *                 uniqueMapping[_t[1]] = numUniqueIndices
- */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_theSumFunc), __pyx_n_s_getOutput); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = NULL;
+  if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_1))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_1, function);
     }
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-    /* "ipStochastic.pyx":65
- *     numUniqueIndices = 0
- *     uniqueMapping = {}
- *     for t in types:             # <<<<<<<<<<<<<<
- *         for _t in t[1]:
- *             if(_t[1] not in uniqueMapping):
- */
   }
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (__pyx_t_3) {
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  } else {
+    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
+  }
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if ((likely(PyTuple_CheckExact(__pyx_t_2))) || (PyList_CheckExact(__pyx_t_2))) {
+    PyObject* sequence = __pyx_t_2;
+    #if CYTHON_COMPILING_IN_CPYTHON
+    Py_ssize_t size = Py_SIZE(sequence);
+    #else
+    Py_ssize_t size = PySequence_Size(sequence);
+    #endif
+    if (unlikely(size != 2)) {
+      if (size > 2) __Pyx_RaiseTooManyValuesError(2);
+      else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
+      __PYX_ERR(0, 63, __pyx_L1_error)
+    }
+    #if CYTHON_COMPILING_IN_CPYTHON
+    if (likely(PyTuple_CheckExact(sequence))) {
+      __pyx_t_1 = PyTuple_GET_ITEM(sequence, 0); 
+      __pyx_t_3 = PyTuple_GET_ITEM(sequence, 1); 
+    } else {
+      __pyx_t_1 = PyList_GET_ITEM(sequence, 0); 
+      __pyx_t_3 = PyList_GET_ITEM(sequence, 1); 
+    }
+    __Pyx_INCREF(__pyx_t_1);
+    __Pyx_INCREF(__pyx_t_3);
+    #else
+    __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    #endif
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  } else {
+    Py_ssize_t index = -1;
+    __pyx_t_4 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_5 = Py_TYPE(__pyx_t_4)->tp_iternext;
+    index = 0; __pyx_t_1 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_1)) goto __pyx_L3_unpacking_failed;
+    __Pyx_GOTREF(__pyx_t_1);
+    index = 1; __pyx_t_3 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_3)) goto __pyx_L3_unpacking_failed;
+    __Pyx_GOTREF(__pyx_t_3);
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 63, __pyx_L1_error)
+    __pyx_t_5 = NULL;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    goto __pyx_L4_unpacking_done;
+    __pyx_L3_unpacking_failed:;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_5 = NULL;
+    if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
+    __PYX_ERR(0, 63, __pyx_L1_error)
+    __pyx_L4_unpacking_done:;
+  }
+  __pyx_v_totalNumTerms = __pyx_t_1;
+  __pyx_t_1 = 0;
+  __pyx_v_data = __pyx_t_3;
+  __pyx_t_3 = 0;
 
-  /* "ipStochastic.pyx":71
- *                 numUniqueIndices += 1
+  /* "ipTreeStochastic.pyx":65
+ *     totalNumTerms,data = theSumFunc.getOutput()
  * 
  *     data['name'] = 'data_'+filename             # <<<<<<<<<<<<<<
  *     data['types'] = types
- *     data['totalNumTerms'] = 3**numUniqueIndices
+ *     data['totalNumTerms'] = totalNumTerms
  */
-  __pyx_t_2 = PyNumber_Add(__pyx_n_s_data, __pyx_v_filename); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Add(__pyx_n_s_data, __pyx_v_filename); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_n_s_name, __pyx_t_2) < 0)) __PYX_ERR(0, 71, __pyx_L1_error)
+  if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_n_s_name, __pyx_t_2) < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "ipStochastic.pyx":72
+  /* "ipTreeStochastic.pyx":66
  * 
  *     data['name'] = 'data_'+filename
  *     data['types'] = types             # <<<<<<<<<<<<<<
- *     data['totalNumTerms'] = 3**numUniqueIndices
+ *     data['totalNumTerms'] = totalNumTerms
  * 
  */
-  if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_n_s_types_2, __pyx_v_types) < 0)) __PYX_ERR(0, 72, __pyx_L1_error)
+  if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_n_s_types_2, __pyx_v_types) < 0)) __PYX_ERR(0, 66, __pyx_L1_error)
 
-  /* "ipStochastic.pyx":73
+  /* "ipTreeStochastic.pyx":67
  *     data['name'] = 'data_'+filename
  *     data['types'] = types
- *     data['totalNumTerms'] = 3**numUniqueIndices             # <<<<<<<<<<<<<<
+ *     data['totalNumTerms'] = totalNumTerms             # <<<<<<<<<<<<<<
  * 
  *     with open('./stochasticData/'+data['name'], 'w') as file:
  */
-  __pyx_t_2 = PyNumber_Power(__pyx_int_3, __pyx_v_numUniqueIndices, Py_None); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_n_s_totalNumTerms, __pyx_t_2) < 0)) __PYX_ERR(0, 73, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_n_s_totalNumTerms, __pyx_v_totalNumTerms) < 0)) __PYX_ERR(0, 67, __pyx_L1_error)
 
-  /* "ipStochastic.pyx":75
- *     data['totalNumTerms'] = 3**numUniqueIndices
+  /* "ipTreeStochastic.pyx":69
+ *     data['totalNumTerms'] = totalNumTerms
  * 
  *     with open('./stochasticData/'+data['name'], 'w') as file:             # <<<<<<<<<<<<<<
  *         json.dump(data, file)
  * 
  */
   /*with:*/ {
-    __pyx_t_2 = PyObject_GetItem(__pyx_v_data, __pyx_n_s_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 75, __pyx_L1_error)
+    __pyx_t_2 = PyObject_GetItem(__pyx_v_data, __pyx_n_s_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyNumber_Add(__pyx_kp_s_stochasticData, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_Add(__pyx_kp_s_stochasticData, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 69, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 75, __pyx_L1_error)
+    __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_3);
@@ -2428,28 +2269,28 @@ static PyObject *__pyx_pf_12ipStochastic_4getApproxSum(CYTHON_UNUSED PyObject *_
     __Pyx_GIVEREF(__pyx_n_s_w);
     PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_n_s_w);
     __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 69, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_10 = __Pyx_PyObject_LookupSpecial(__pyx_t_3, __pyx_n_s_exit); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 75, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_10);
-    __pyx_t_1 = __Pyx_PyObject_LookupSpecial(__pyx_t_3, __pyx_n_s_enter); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 75, __pyx_L8_error)
+    __pyx_t_6 = __Pyx_PyObject_LookupSpecial(__pyx_t_3, __pyx_n_s_exit); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_1 = __Pyx_PyObject_LookupSpecial(__pyx_t_3, __pyx_n_s_enter); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L5_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_11 = NULL;
+    __pyx_t_4 = NULL;
     if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_1))) {
-      __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_1);
-      if (likely(__pyx_t_11)) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_1);
+      if (likely(__pyx_t_4)) {
         PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-        __Pyx_INCREF(__pyx_t_11);
+        __Pyx_INCREF(__pyx_t_4);
         __Pyx_INCREF(function);
         __Pyx_DECREF_SET(__pyx_t_1, function);
       }
     }
-    if (__pyx_t_11) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 75, __pyx_L8_error)
-      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+    if (__pyx_t_4) {
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L5_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
-      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 75, __pyx_L8_error)
+      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L5_error)
     }
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -2460,28 +2301,28 @@ static PyObject *__pyx_pf_12ipStochastic_4getApproxSum(CYTHON_UNUSED PyObject *_
       {
         __Pyx_PyThreadState_declare
         __Pyx_PyThreadState_assign
-        __Pyx_ExceptionSave(&__pyx_t_12, &__pyx_t_13, &__pyx_t_14);
-        __Pyx_XGOTREF(__pyx_t_12);
-        __Pyx_XGOTREF(__pyx_t_13);
-        __Pyx_XGOTREF(__pyx_t_14);
+        __Pyx_ExceptionSave(&__pyx_t_7, &__pyx_t_8, &__pyx_t_9);
+        __Pyx_XGOTREF(__pyx_t_7);
+        __Pyx_XGOTREF(__pyx_t_8);
+        __Pyx_XGOTREF(__pyx_t_9);
         /*try:*/ {
           __pyx_v_file = __pyx_t_1;
           __pyx_t_1 = 0;
 
-          /* "ipStochastic.pyx":76
+          /* "ipTreeStochastic.pyx":70
  * 
  *     with open('./stochasticData/'+data['name'], 'w') as file:
  *         json.dump(data, file)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-          __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_json); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 76, __pyx_L12_error)
+          __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_json); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L9_error)
           __Pyx_GOTREF(__pyx_t_3);
-          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dump); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 76, __pyx_L12_error)
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dump); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 70, __pyx_L9_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __pyx_t_3 = NULL;
-          __pyx_t_4 = 0;
+          __pyx_t_10 = 0;
           if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_2))) {
             __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
             if (likely(__pyx_t_3)) {
@@ -2489,116 +2330,116 @@ static PyObject *__pyx_pf_12ipStochastic_4getApproxSum(CYTHON_UNUSED PyObject *_
               __Pyx_INCREF(__pyx_t_3);
               __Pyx_INCREF(function);
               __Pyx_DECREF_SET(__pyx_t_2, function);
-              __pyx_t_4 = 1;
+              __pyx_t_10 = 1;
             }
           }
-          __pyx_t_11 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 76, __pyx_L12_error)
-          __Pyx_GOTREF(__pyx_t_11);
+          __pyx_t_4 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 70, __pyx_L9_error)
+          __Pyx_GOTREF(__pyx_t_4);
           if (__pyx_t_3) {
-            __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_3); __pyx_t_3 = NULL;
+            __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
           }
           __Pyx_INCREF(__pyx_v_data);
           __Pyx_GIVEREF(__pyx_v_data);
-          PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_4, __pyx_v_data);
+          PyTuple_SET_ITEM(__pyx_t_4, 0+__pyx_t_10, __pyx_v_data);
           __Pyx_INCREF(__pyx_v_file);
           __Pyx_GIVEREF(__pyx_v_file);
-          PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_4, __pyx_v_file);
-          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_11, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 76, __pyx_L12_error)
+          PyTuple_SET_ITEM(__pyx_t_4, 1+__pyx_t_10, __pyx_v_file);
+          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L9_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-          /* "ipStochastic.pyx":75
- *     data['totalNumTerms'] = 3**numUniqueIndices
+          /* "ipTreeStochastic.pyx":69
+ *     data['totalNumTerms'] = totalNumTerms
  * 
  *     with open('./stochasticData/'+data['name'], 'w') as file:             # <<<<<<<<<<<<<<
  *         json.dump(data, file)
  * 
  */
         }
-        __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-        goto __pyx_L19_try_end;
-        __pyx_L12_error:;
+        __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+        goto __pyx_L16_try_end;
+        __pyx_L9_error:;
         __Pyx_PyThreadState_assign
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
         /*except:*/ {
-          __Pyx_AddTraceback("ipStochastic.getApproxSum", __pyx_clineno, __pyx_lineno, __pyx_filename);
-          if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_2, &__pyx_t_11) < 0) __PYX_ERR(0, 75, __pyx_L14_except_error)
+          __Pyx_AddTraceback("ipTreeStochastic.getApproxSum", __pyx_clineno, __pyx_lineno, __pyx_filename);
+          if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_2, &__pyx_t_4) < 0) __PYX_ERR(0, 69, __pyx_L11_except_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_GOTREF(__pyx_t_2);
-          __Pyx_GOTREF(__pyx_t_11);
-          __pyx_t_3 = PyTuple_Pack(3, __pyx_t_1, __pyx_t_2, __pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L14_except_error)
+          __Pyx_GOTREF(__pyx_t_4);
+          __pyx_t_3 = PyTuple_Pack(3, __pyx_t_1, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 69, __pyx_L11_except_error)
           __Pyx_GOTREF(__pyx_t_3);
-          __pyx_t_15 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_t_3, NULL);
-          __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+          __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_3, NULL);
+          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 75, __pyx_L14_except_error)
-          __Pyx_GOTREF(__pyx_t_15);
-          __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_15);
-          __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-          if (__pyx_t_9 < 0) __PYX_ERR(0, 75, __pyx_L14_except_error)
-          __pyx_t_8 = ((!(__pyx_t_9 != 0)) != 0);
-          if (__pyx_t_8) {
+          if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 69, __pyx_L11_except_error)
+          __Pyx_GOTREF(__pyx_t_11);
+          __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_11);
+          __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+          if (__pyx_t_12 < 0) __PYX_ERR(0, 69, __pyx_L11_except_error)
+          __pyx_t_13 = ((!(__pyx_t_12 != 0)) != 0);
+          if (__pyx_t_13) {
             __Pyx_GIVEREF(__pyx_t_1);
             __Pyx_GIVEREF(__pyx_t_2);
-            __Pyx_XGIVEREF(__pyx_t_11);
-            __Pyx_ErrRestoreWithState(__pyx_t_1, __pyx_t_2, __pyx_t_11);
-            __pyx_t_1 = 0; __pyx_t_2 = 0; __pyx_t_11 = 0; 
-            __PYX_ERR(0, 75, __pyx_L14_except_error)
+            __Pyx_XGIVEREF(__pyx_t_4);
+            __Pyx_ErrRestoreWithState(__pyx_t_1, __pyx_t_2, __pyx_t_4);
+            __pyx_t_1 = 0; __pyx_t_2 = 0; __pyx_t_4 = 0; 
+            __PYX_ERR(0, 69, __pyx_L11_except_error)
           }
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-          goto __pyx_L13_exception_handled;
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          goto __pyx_L10_exception_handled;
         }
-        __pyx_L14_except_error:;
+        __pyx_L11_except_error:;
         __Pyx_PyThreadState_assign
-        __Pyx_XGIVEREF(__pyx_t_12);
-        __Pyx_XGIVEREF(__pyx_t_13);
-        __Pyx_XGIVEREF(__pyx_t_14);
-        __Pyx_ExceptionReset(__pyx_t_12, __pyx_t_13, __pyx_t_14);
+        __Pyx_XGIVEREF(__pyx_t_7);
+        __Pyx_XGIVEREF(__pyx_t_8);
+        __Pyx_XGIVEREF(__pyx_t_9);
+        __Pyx_ExceptionReset(__pyx_t_7, __pyx_t_8, __pyx_t_9);
         goto __pyx_L1_error;
-        __pyx_L13_exception_handled:;
+        __pyx_L10_exception_handled:;
         __Pyx_PyThreadState_assign
-        __Pyx_XGIVEREF(__pyx_t_12);
-        __Pyx_XGIVEREF(__pyx_t_13);
-        __Pyx_XGIVEREF(__pyx_t_14);
-        __Pyx_ExceptionReset(__pyx_t_12, __pyx_t_13, __pyx_t_14);
-        __pyx_L19_try_end:;
+        __Pyx_XGIVEREF(__pyx_t_7);
+        __Pyx_XGIVEREF(__pyx_t_8);
+        __Pyx_XGIVEREF(__pyx_t_9);
+        __Pyx_ExceptionReset(__pyx_t_7, __pyx_t_8, __pyx_t_9);
+        __pyx_L16_try_end:;
       }
     }
     /*finally:*/ {
       /*normal exit:*/{
-        if (__pyx_t_10) {
-          __pyx_t_14 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_tuple__2, NULL);
-          __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 75, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_14);
-          __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+        if (__pyx_t_6) {
+          __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__2, NULL);
+          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 69, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_9);
+          __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         }
-        goto __pyx_L11;
+        goto __pyx_L8;
       }
-      __pyx_L11:;
+      __pyx_L8:;
     }
-    goto __pyx_L23;
-    __pyx_L8_error:;
-    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+    goto __pyx_L20;
+    __pyx_L5_error:;
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     goto __pyx_L1_error;
-    __pyx_L23:;
+    __pyx_L20:;
   }
 
-  /* "ipStochastic.pyx":57
+  /* "ipTreeStochastic.pyx":59
  *     getApproxSum(len(pedigree.roots),types,checkpoint,numSamples,filename)
  * 
  * def getApproxSum(numbRoots,types,checkpoint,numSamples,filename):             # <<<<<<<<<<<<<<
  * 
- *     theSumFunc = PyStochasticSum(numbRoots,types,checkpoint,numSamples)
+ *     theSumFunc = PyTreeStochasticSum(numbRoots,types,checkpoint,numSamples)
  */
 
   /* function exit code */
@@ -2608,16 +2449,13 @@ static PyObject *__pyx_pf_12ipStochastic_4getApproxSum(CYTHON_UNUSED PyObject *_
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_11);
-  __Pyx_AddTraceback("ipStochastic.getApproxSum", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("ipTreeStochastic.getApproxSum", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_theSumFunc);
+  __Pyx_XDECREF(__pyx_v_totalNumTerms);
   __Pyx_XDECREF(__pyx_v_data);
-  __Pyx_XDECREF(__pyx_v_numUniqueIndices);
-  __Pyx_XDECREF(__pyx_v_uniqueMapping);
-  __Pyx_XDECREF(__pyx_v_t);
-  __Pyx_XDECREF(__pyx_v__t);
   __Pyx_XDECREF(__pyx_v_file);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -3258,8 +3096,8 @@ static PyObject *__pyx_convert_unordered_map_to_py_int____double(std::unordered_
   return __pyx_r;
 }
 
-static PyObject *__pyx_tp_new_12ipStochastic_PyStochasticSum(PyTypeObject *t, PyObject *a, PyObject *k) {
-  struct __pyx_obj_12ipStochastic_PyStochasticSum *p;
+static PyObject *__pyx_tp_new_16ipTreeStochastic_PyTreeStochasticSum(PyTypeObject *t, PyObject *a, PyObject *k) {
+  struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *p;
   PyObject *o;
   if (likely((t->tp_flags & Py_TPFLAGS_IS_ABSTRACT) == 0)) {
     o = (*t->tp_alloc)(t, 0);
@@ -3267,17 +3105,17 @@ static PyObject *__pyx_tp_new_12ipStochastic_PyStochasticSum(PyTypeObject *t, Py
     o = (PyObject *) PyBaseObject_Type.tp_new(t, __pyx_empty_tuple, 0);
   }
   if (unlikely(!o)) return 0;
-  p = ((struct __pyx_obj_12ipStochastic_PyStochasticSum *)o);
+  p = ((struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *)o);
   new((void*)&(p->types)) std::vector<std::pair<std::string,std::vector<std::pair<int,int> > > > ();
-  new((void*)&(p->returnDict)) std::unordered_map<int,double> ();
-  if (unlikely(__pyx_pw_12ipStochastic_15PyStochasticSum_1__cinit__(o, a, k) < 0)) {
+  new((void*)&(p->returnDict)) std::pair<int,std::unordered_map<int,double> > ();
+  if (unlikely(__pyx_pw_16ipTreeStochastic_19PyTreeStochasticSum_1__cinit__(o, a, k) < 0)) {
     Py_DECREF(o); o = 0;
   }
   return o;
 }
 
-static void __pyx_tp_dealloc_12ipStochastic_PyStochasticSum(PyObject *o) {
-  struct __pyx_obj_12ipStochastic_PyStochasticSum *p = (struct __pyx_obj_12ipStochastic_PyStochasticSum *)o;
+static void __pyx_tp_dealloc_16ipTreeStochastic_PyTreeStochasticSum(PyObject *o) {
+  struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *p = (struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum *)o;
   #if PY_VERSION_HEX >= 0x030400a1
   if (unlikely(Py_TYPE(o)->tp_finalize) && (!PyType_IS_GC(Py_TYPE(o)) || !_PyGC_FINALIZED(o))) {
     if (PyObject_CallFinalizerFromDealloc(o)) return;
@@ -3288,18 +3126,18 @@ static void __pyx_tp_dealloc_12ipStochastic_PyStochasticSum(PyObject *o) {
   (*Py_TYPE(o)->tp_free)(o);
 }
 
-static PyMethodDef __pyx_methods_12ipStochastic_PyStochasticSum[] = {
-  {"run", (PyCFunction)__pyx_pw_12ipStochastic_15PyStochasticSum_3run, METH_NOARGS, 0},
-  {"getOutput", (PyCFunction)__pyx_pw_12ipStochastic_15PyStochasticSum_5getOutput, METH_NOARGS, 0},
+static PyMethodDef __pyx_methods_16ipTreeStochastic_PyTreeStochasticSum[] = {
+  {"run", (PyCFunction)__pyx_pw_16ipTreeStochastic_19PyTreeStochasticSum_3run, METH_NOARGS, 0},
+  {"getOutput", (PyCFunction)__pyx_pw_16ipTreeStochastic_19PyTreeStochasticSum_5getOutput, METH_NOARGS, 0},
   {0, 0, 0, 0}
 };
 
-static PyTypeObject __pyx_type_12ipStochastic_PyStochasticSum = {
+static PyTypeObject __pyx_type_16ipTreeStochastic_PyTreeStochasticSum = {
   PyVarObject_HEAD_INIT(0, 0)
-  "ipStochastic.PyStochasticSum", /*tp_name*/
-  sizeof(struct __pyx_obj_12ipStochastic_PyStochasticSum), /*tp_basicsize*/
+  "ipTreeStochastic.PyTreeStochasticSum", /*tp_name*/
+  sizeof(struct __pyx_obj_16ipTreeStochastic_PyTreeStochasticSum), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_12ipStochastic_PyStochasticSum, /*tp_dealloc*/
+  __pyx_tp_dealloc_16ipTreeStochastic_PyTreeStochasticSum, /*tp_dealloc*/
   0, /*tp_print*/
   0, /*tp_getattr*/
   0, /*tp_setattr*/
@@ -3327,7 +3165,7 @@ static PyTypeObject __pyx_type_12ipStochastic_PyStochasticSum = {
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_12ipStochastic_PyStochasticSum, /*tp_methods*/
+  __pyx_methods_16ipTreeStochastic_PyTreeStochasticSum, /*tp_methods*/
   0, /*tp_members*/
   0, /*tp_getset*/
   0, /*tp_base*/
@@ -3337,7 +3175,7 @@ static PyTypeObject __pyx_type_12ipStochastic_PyStochasticSum = {
   0, /*tp_dictoffset*/
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_12ipStochastic_PyStochasticSum, /*tp_new*/
+  __pyx_tp_new_16ipTreeStochastic_PyTreeStochasticSum, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -3358,7 +3196,7 @@ static PyMethodDef __pyx_methods[] = {
 
 static int __pyx_import_star_set(PyObject *o, PyObject* py_name, char *name) {
   static const char* internal_type_names[] = {
-    "PyStochasticSum",
+    "PyTreeStochasticSum",
     "X",
     "Y",
     "__pyx_ctuple_std__in_unordered_map__lAngint__comma_double__rAng",
@@ -3628,7 +3466,7 @@ static struct PyModuleDef __pyx_moduledef = {
   #else
     PyModuleDef_HEAD_INIT,
   #endif
-    "ipStochastic",
+    "ipTreeStochastic",
     0, /* m_doc */
     -1, /* m_size */
     __pyx_methods /* m_methods */,
@@ -3641,7 +3479,7 @@ static struct PyModuleDef __pyx_moduledef = {
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_Pedigree, __pyx_k_Pedigree, sizeof(__pyx_k_Pedigree), 0, 0, 1, 1},
-  {&__pyx_kp_s_Users_Eddie_IP_ipStochastic_pyx, __pyx_k_Users_Eddie_IP_ipStochastic_pyx, sizeof(__pyx_k_Users_Eddie_IP_ipStochastic_pyx), 0, 0, 1, 0},
+  {&__pyx_kp_s_Users_Eddie_IP_ipTreeStochastic, __pyx_k_Users_Eddie_IP_ipTreeStochastic, sizeof(__pyx_k_Users_Eddie_IP_ipTreeStochastic), 0, 0, 1, 0},
   {&__pyx_kp_s_Users_Eddie_kec_bot_app_pedigre, __pyx_k_Users_Eddie_kec_bot_app_pedigre, sizeof(__pyx_k_Users_Eddie_kec_bot_app_pedigre), 0, 0, 1, 0},
   {&__pyx_n_s__3, __pyx_k__3, sizeof(__pyx_k__3), 0, 0, 1, 1},
   {&__pyx_n_s_checkpoint, __pyx_k_checkpoint, sizeof(__pyx_k_checkpoint), 0, 0, 1, 1},
@@ -3662,7 +3500,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_getSumForFile, __pyx_k_getSumForFile, sizeof(__pyx_k_getSumForFile), 0, 0, 1, 1},
   {&__pyx_n_s_getTypes, __pyx_k_getTypes, sizeof(__pyx_k_getTypes), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
-  {&__pyx_n_s_ipStochastic, __pyx_k_ipStochastic, sizeof(__pyx_k_ipStochastic), 0, 0, 1, 1},
+  {&__pyx_n_s_ipTreeStochastic, __pyx_k_ipTreeStochastic, sizeof(__pyx_k_ipTreeStochastic), 0, 0, 1, 1},
   {&__pyx_n_s_itertools, __pyx_k_itertools, sizeof(__pyx_k_itertools), 0, 0, 1, 1},
   {&__pyx_n_s_join, __pyx_k_join, sizeof(__pyx_k_join), 0, 0, 1, 1},
   {&__pyx_n_s_json, __pyx_k_json, sizeof(__pyx_k_json), 0, 0, 1, 1},
@@ -3676,7 +3514,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_no, __pyx_k_no, sizeof(__pyx_k_no), 0, 0, 1, 1},
   {&__pyx_n_s_numSamples, __pyx_k_numSamples, sizeof(__pyx_k_numSamples), 0, 0, 1, 1},
   {&__pyx_n_s_numSamples_2, __pyx_k_numSamples_2, sizeof(__pyx_k_numSamples_2), 0, 0, 1, 1},
-  {&__pyx_n_s_numUniqueIndices, __pyx_k_numUniqueIndices, sizeof(__pyx_k_numUniqueIndices), 0, 0, 1, 1},
   {&__pyx_n_s_numbRoots, __pyx_k_numbRoots, sizeof(__pyx_k_numbRoots), 0, 0, 1, 1},
   {&__pyx_n_s_numbRoots_2, __pyx_k_numbRoots_2, sizeof(__pyx_k_numbRoots_2), 0, 0, 1, 1},
   {&__pyx_n_s_open, __pyx_k_open, sizeof(__pyx_k_open), 0, 0, 1, 1},
@@ -3692,21 +3529,18 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_setMappings, __pyx_k_setMappings, sizeof(__pyx_k_setMappings), 0, 0, 1, 1},
   {&__pyx_n_s_shadingAD, __pyx_k_shadingAD, sizeof(__pyx_k_shadingAD), 0, 0, 1, 1},
   {&__pyx_kp_s_stochasticData, __pyx_k_stochasticData, sizeof(__pyx_k_stochasticData), 0, 0, 1, 0},
-  {&__pyx_n_s_t, __pyx_k_t, sizeof(__pyx_k_t), 0, 0, 1, 1},
-  {&__pyx_n_s_t_2, __pyx_k_t_2, sizeof(__pyx_k_t_2), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_theSumFunc, __pyx_k_theSumFunc, sizeof(__pyx_k_theSumFunc), 0, 0, 1, 1},
   {&__pyx_n_s_time, __pyx_k_time, sizeof(__pyx_k_time), 0, 0, 1, 1},
   {&__pyx_n_s_totalNumTerms, __pyx_k_totalNumTerms, sizeof(__pyx_k_totalNumTerms), 0, 0, 1, 1},
   {&__pyx_n_s_types, __pyx_k_types, sizeof(__pyx_k_types), 0, 0, 1, 1},
   {&__pyx_n_s_types_2, __pyx_k_types_2, sizeof(__pyx_k_types_2), 0, 0, 1, 1},
-  {&__pyx_n_s_uniqueMapping, __pyx_k_uniqueMapping, sizeof(__pyx_k_uniqueMapping), 0, 0, 1, 1},
   {&__pyx_n_s_w, __pyx_k_w, sizeof(__pyx_k_w), 0, 0, 1, 1},
   {&__pyx_n_s_yes, __pyx_k_yes, sizeof(__pyx_k_yes), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_open = __Pyx_GetBuiltinName(__pyx_n_s_open); if (!__pyx_builtin_open) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_builtin_open = __Pyx_GetBuiltinName(__pyx_n_s_open); if (!__pyx_builtin_open) __PYX_ERR(0, 51, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -3716,63 +3550,63 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "ipStochastic.pyx":49
+  /* "ipTreeStochastic.pyx":51
  *     funcToUse = shadingAD
  * 
  *     with open(os.path.join(jsonFolderPath, filename)) as data_file:             # <<<<<<<<<<<<<<
  *         data = json.loads(json.load(data_file))
  *         pedigree = Pedigree(data)
  */
-  __pyx_tuple_ = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 51, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "ipStochastic.pyx":75
- *     data['totalNumTerms'] = 3**numUniqueIndices
+  /* "ipTreeStochastic.pyx":69
+ *     data['totalNumTerms'] = totalNumTerms
  * 
  *     with open('./stochasticData/'+data['name'], 'w') as file:             # <<<<<<<<<<<<<<
  *         json.dump(data, file)
  * 
  */
-  __pyx_tuple__2 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 75, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 69, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "ipStochastic.pyx":39
- *         return dict(self.returnDict)
+  /* "ipTreeStochastic.pyx":41
+ *         return [totalNumTerms,theDict]
  * 
  * def shadingAD(person):             # <<<<<<<<<<<<<<
  *     if(len(person.diagnoses) > 0):
  *         return 'yes'
  */
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_n_s_person); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_n_s_person); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
-  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_Eddie_IP_ipStochastic_pyx, __pyx_n_s_shadingAD, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_Eddie_IP_ipTreeStochastic, __pyx_n_s_shadingAD, 41, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) __PYX_ERR(0, 41, __pyx_L1_error)
 
-  /* "ipStochastic.pyx":45
+  /* "ipTreeStochastic.pyx":47
  *         return 'no'
  * 
  * def getSumForFile(filename,checkpoint,numSamples):             # <<<<<<<<<<<<<<
  * 
  *     funcToUse = shadingAD
  */
-  __pyx_tuple__6 = PyTuple_Pack(9, __pyx_n_s_filename, __pyx_n_s_checkpoint_2, __pyx_n_s_numSamples_2, __pyx_n_s_funcToUse, __pyx_n_s_data_file, __pyx_n_s_data_2, __pyx_n_s_pedigree, __pyx_n_s_types_2, __pyx_n_s_setMappings); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_tuple__6 = PyTuple_Pack(9, __pyx_n_s_filename, __pyx_n_s_checkpoint_2, __pyx_n_s_numSamples_2, __pyx_n_s_funcToUse, __pyx_n_s_data_file, __pyx_n_s_data_2, __pyx_n_s_pedigree, __pyx_n_s_types_2, __pyx_n_s_setMappings); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
-  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(3, 0, 9, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_Eddie_IP_ipStochastic_pyx, __pyx_n_s_getSumForFile, 45, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(3, 0, 9, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_Eddie_IP_ipTreeStochastic, __pyx_n_s_getSumForFile, 47, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(0, 47, __pyx_L1_error)
 
-  /* "ipStochastic.pyx":57
+  /* "ipTreeStochastic.pyx":59
  *     getApproxSum(len(pedigree.roots),types,checkpoint,numSamples,filename)
  * 
  * def getApproxSum(numbRoots,types,checkpoint,numSamples,filename):             # <<<<<<<<<<<<<<
  * 
- *     theSumFunc = PyStochasticSum(numbRoots,types,checkpoint,numSamples)
+ *     theSumFunc = PyTreeStochasticSum(numbRoots,types,checkpoint,numSamples)
  */
-  __pyx_tuple__8 = PyTuple_Pack(12, __pyx_n_s_numbRoots_2, __pyx_n_s_types_2, __pyx_n_s_checkpoint_2, __pyx_n_s_numSamples_2, __pyx_n_s_filename, __pyx_n_s_theSumFunc, __pyx_n_s_data_2, __pyx_n_s_numUniqueIndices, __pyx_n_s_uniqueMapping, __pyx_n_s_t, __pyx_n_s_t_2, __pyx_n_s_file); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 57, __pyx_L1_error)
+  __pyx_tuple__8 = PyTuple_Pack(9, __pyx_n_s_numbRoots_2, __pyx_n_s_types_2, __pyx_n_s_checkpoint_2, __pyx_n_s_numSamples_2, __pyx_n_s_filename, __pyx_n_s_theSumFunc, __pyx_n_s_totalNumTerms, __pyx_n_s_data_2, __pyx_n_s_file); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
-  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(5, 0, 12, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_Eddie_IP_ipStochastic_pyx, __pyx_n_s_getApproxSum, 57, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(0, 57, __pyx_L1_error)
+  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(5, 0, 9, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_Eddie_IP_ipTreeStochastic, __pyx_n_s_getApproxSum, 59, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -3782,20 +3616,17 @@ static int __Pyx_InitCachedConstants(void) {
 
 static int __Pyx_InitGlobals(void) {
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  __pyx_int_0 = PyInt_FromLong(0); if (unlikely(!__pyx_int_0)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_1 = PyInt_FromLong(1); if (unlikely(!__pyx_int_1)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_3 = PyInt_FromLong(3); if (unlikely(!__pyx_int_3)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
 }
 
 #if PY_MAJOR_VERSION < 3
-PyMODINIT_FUNC initipStochastic(void); /*proto*/
-PyMODINIT_FUNC initipStochastic(void)
+PyMODINIT_FUNC initipTreeStochastic(void); /*proto*/
+PyMODINIT_FUNC initipTreeStochastic(void)
 #else
-PyMODINIT_FUNC PyInit_ipStochastic(void); /*proto*/
-PyMODINIT_FUNC PyInit_ipStochastic(void)
+PyMODINIT_FUNC PyInit_ipTreeStochastic(void); /*proto*/
+PyMODINIT_FUNC PyInit_ipTreeStochastic(void)
 #endif
 {
   PyObject *__pyx_t_1 = NULL;
@@ -3810,7 +3641,7 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
           Py_FatalError("failed to import 'refnanny' module");
   }
   #endif
-  __Pyx_RefNannySetupContext("PyMODINIT_FUNC PyInit_ipStochastic(void)", 0);
+  __Pyx_RefNannySetupContext("PyMODINIT_FUNC PyInit_ipTreeStochastic(void)", 0);
   if (__Pyx_check_binary_version() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_empty_tuple = PyTuple_New(0); if (unlikely(!__pyx_empty_tuple)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_empty_bytes = PyBytes_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_bytes)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -3839,7 +3670,7 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   #endif
   /*--- Module creation code ---*/
   #if PY_MAJOR_VERSION < 3
-  __pyx_m = Py_InitModule4("ipStochastic", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
+  __pyx_m = Py_InitModule4("ipTreeStochastic", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
@@ -3856,14 +3687,14 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_ipStochastic) {
+  if (__pyx_module_is_main_ipTreeStochastic) {
     if (PyObject_SetAttrString(__pyx_m, "__name__", __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "ipStochastic")) {
-      if (unlikely(PyDict_SetItemString(modules, "ipStochastic", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "ipTreeStochastic")) {
+      if (unlikely(PyDict_SetItemString(modules, "ipTreeStochastic", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -3875,10 +3706,10 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   /*--- Variable export code ---*/
   /*--- Function export code ---*/
   /*--- Type init code ---*/
-  if (PyType_Ready(&__pyx_type_12ipStochastic_PyStochasticSum) < 0) __PYX_ERR(0, 22, __pyx_L1_error)
-  __pyx_type_12ipStochastic_PyStochasticSum.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "PyStochasticSum", (PyObject *)&__pyx_type_12ipStochastic_PyStochasticSum) < 0) __PYX_ERR(0, 22, __pyx_L1_error)
-  __pyx_ptype_12ipStochastic_PyStochasticSum = &__pyx_type_12ipStochastic_PyStochasticSum;
+  if (PyType_Ready(&__pyx_type_16ipTreeStochastic_PyTreeStochasticSum) < 0) __PYX_ERR(0, 22, __pyx_L1_error)
+  __pyx_type_16ipTreeStochastic_PyTreeStochasticSum.tp_print = 0;
+  if (PyObject_SetAttrString(__pyx_m, "PyTreeStochasticSum", (PyObject *)&__pyx_type_16ipTreeStochastic_PyTreeStochasticSum) < 0) __PYX_ERR(0, 22, __pyx_L1_error)
+  __pyx_ptype_16ipTreeStochastic_PyTreeStochasticSum = &__pyx_type_16ipTreeStochastic_PyTreeStochasticSum;
   /*--- Type import code ---*/
   /*--- Variable import code ---*/
   /*--- Function import code ---*/
@@ -3887,7 +3718,7 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "ipStochastic.pyx":1
+  /* "ipTreeStochastic.pyx":1
  * import os             # <<<<<<<<<<<<<<
  * import operator
  * import itertools
@@ -3897,7 +3728,7 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_os, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":2
+  /* "ipTreeStochastic.pyx":2
  * import os
  * import operator             # <<<<<<<<<<<<<<
  * import itertools
@@ -3908,7 +3739,7 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_operator, __pyx_t_1) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":3
+  /* "ipTreeStochastic.pyx":3
  * import os
  * import operator
  * import itertools             # <<<<<<<<<<<<<<
@@ -3920,7 +3751,7 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_itertools, __pyx_t_1) < 0) __PYX_ERR(0, 3, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":4
+  /* "ipTreeStochastic.pyx":4
  * import operator
  * import itertools
  * import math             # <<<<<<<<<<<<<<
@@ -3932,7 +3763,7 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_math, __pyx_t_1) < 0) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":5
+  /* "ipTreeStochastic.pyx":5
  * import itertools
  * import math
  * import random             # <<<<<<<<<<<<<<
@@ -3944,7 +3775,7 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_random, __pyx_t_1) < 0) __PYX_ERR(0, 5, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":6
+  /* "ipTreeStochastic.pyx":6
  * import math
  * import random
  * from generateTypes import *             # <<<<<<<<<<<<<<
@@ -3962,7 +3793,7 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   if (__pyx_import_star(__pyx_t_2) < 0) __PYX_ERR(0, 6, __pyx_L1_error);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "ipStochastic.pyx":7
+  /* "ipTreeStochastic.pyx":7
  * import random
  * from generateTypes import *
  * from model import *             # <<<<<<<<<<<<<<
@@ -3980,7 +3811,7 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   if (__pyx_import_star(__pyx_t_1) < 0) __PYX_ERR(0, 7, __pyx_L1_error);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":8
+  /* "ipTreeStochastic.pyx":8
  * from generateTypes import *
  * from model import *
  * import time             # <<<<<<<<<<<<<<
@@ -3992,7 +3823,7 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_time, __pyx_t_1) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":15
+  /* "ipTreeStochastic.pyx":15
  * 
  * 
  * jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'             # <<<<<<<<<<<<<<
@@ -4001,43 +3832,43 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
  */
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_jsonFolderPath, __pyx_kp_s_Users_Eddie_kec_bot_app_pedigre) < 0) __PYX_ERR(0, 15, __pyx_L1_error)
 
-  /* "ipStochastic.pyx":39
- *         return dict(self.returnDict)
+  /* "ipTreeStochastic.pyx":41
+ *         return [totalNumTerms,theDict]
  * 
  * def shadingAD(person):             # <<<<<<<<<<<<<<
  *     if(len(person.diagnoses) > 0):
  *         return 'yes'
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_12ipStochastic_1shadingAD, NULL, __pyx_n_s_ipStochastic); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_16ipTreeStochastic_1shadingAD, NULL, __pyx_n_s_ipTreeStochastic); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_shadingAD, __pyx_t_1) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_shadingAD, __pyx_t_1) < 0) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":45
+  /* "ipTreeStochastic.pyx":47
  *         return 'no'
  * 
  * def getSumForFile(filename,checkpoint,numSamples):             # <<<<<<<<<<<<<<
  * 
  *     funcToUse = shadingAD
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_12ipStochastic_3getSumForFile, NULL, __pyx_n_s_ipStochastic); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_16ipTreeStochastic_3getSumForFile, NULL, __pyx_n_s_ipTreeStochastic); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_getSumForFile, __pyx_t_1) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_getSumForFile, __pyx_t_1) < 0) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":57
+  /* "ipTreeStochastic.pyx":59
  *     getApproxSum(len(pedigree.roots),types,checkpoint,numSamples,filename)
  * 
  * def getApproxSum(numbRoots,types,checkpoint,numSamples,filename):             # <<<<<<<<<<<<<<
  * 
- *     theSumFunc = PyStochasticSum(numbRoots,types,checkpoint,numSamples)
+ *     theSumFunc = PyTreeStochasticSum(numbRoots,types,checkpoint,numSamples)
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_12ipStochastic_5getApproxSum, NULL, __pyx_n_s_ipStochastic); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 57, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_16ipTreeStochastic_5getApproxSum, NULL, __pyx_n_s_ipTreeStochastic); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_getApproxSum, __pyx_t_1) < 0) __PYX_ERR(0, 57, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_getApproxSum, __pyx_t_1) < 0) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "ipStochastic.pyx":1
+  /* "ipTreeStochastic.pyx":1
  * import os             # <<<<<<<<<<<<<<
  * import operator
  * import itertools
@@ -4063,11 +3894,11 @@ PyMODINIT_FUNC PyInit_ipStochastic(void)
   __Pyx_XDECREF(__pyx_t_2);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init ipStochastic", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init ipTreeStochastic", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_DECREF(__pyx_m); __pyx_m = 0;
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init ipStochastic");
+    PyErr_SetString(PyExc_ImportError, "init ipTreeStochastic");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
@@ -4535,185 +4366,6 @@ static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject 
     return 0;
 }
 
-/* GetItemInt */
-        static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
-    PyObject *r;
-    if (!j) return NULL;
-    r = PyObject_GetItem(o, j);
-    Py_DECREF(j);
-    return r;
-}
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
-                                                              CYTHON_NCP_UNUSED int wraparound,
-                                                              CYTHON_NCP_UNUSED int boundscheck) {
-#if CYTHON_COMPILING_IN_CPYTHON
-    if (wraparound & unlikely(i < 0)) i += PyList_GET_SIZE(o);
-    if ((!boundscheck) || likely((0 <= i) & (i < PyList_GET_SIZE(o)))) {
-        PyObject *r = PyList_GET_ITEM(o, i);
-        Py_INCREF(r);
-        return r;
-    }
-    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
-#else
-    return PySequence_GetItem(o, i);
-#endif
-}
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
-                                                              CYTHON_NCP_UNUSED int wraparound,
-                                                              CYTHON_NCP_UNUSED int boundscheck) {
-#if CYTHON_COMPILING_IN_CPYTHON
-    if (wraparound & unlikely(i < 0)) i += PyTuple_GET_SIZE(o);
-    if ((!boundscheck) || likely((0 <= i) & (i < PyTuple_GET_SIZE(o)))) {
-        PyObject *r = PyTuple_GET_ITEM(o, i);
-        Py_INCREF(r);
-        return r;
-    }
-    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
-#else
-    return PySequence_GetItem(o, i);
-#endif
-}
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i, int is_list,
-                                                     CYTHON_NCP_UNUSED int wraparound,
-                                                     CYTHON_NCP_UNUSED int boundscheck) {
-#if CYTHON_COMPILING_IN_CPYTHON
-    if (is_list || PyList_CheckExact(o)) {
-        Py_ssize_t n = ((!wraparound) | likely(i >= 0)) ? i : i + PyList_GET_SIZE(o);
-        if ((!boundscheck) || (likely((n >= 0) & (n < PyList_GET_SIZE(o))))) {
-            PyObject *r = PyList_GET_ITEM(o, n);
-            Py_INCREF(r);
-            return r;
-        }
-    }
-    else if (PyTuple_CheckExact(o)) {
-        Py_ssize_t n = ((!wraparound) | likely(i >= 0)) ? i : i + PyTuple_GET_SIZE(o);
-        if ((!boundscheck) || likely((n >= 0) & (n < PyTuple_GET_SIZE(o)))) {
-            PyObject *r = PyTuple_GET_ITEM(o, n);
-            Py_INCREF(r);
-            return r;
-        }
-    } else {
-        PySequenceMethods *m = Py_TYPE(o)->tp_as_sequence;
-        if (likely(m && m->sq_item)) {
-            if (wraparound && unlikely(i < 0) && likely(m->sq_length)) {
-                Py_ssize_t l = m->sq_length(o);
-                if (likely(l >= 0)) {
-                    i += l;
-                } else {
-                    if (!PyErr_ExceptionMatches(PyExc_OverflowError))
-                        return NULL;
-                    PyErr_Clear();
-                }
-            }
-            return m->sq_item(o, i);
-        }
-    }
-#else
-    if (is_list || PySequence_Check(o)) {
-        return PySequence_GetItem(o, i);
-    }
-#endif
-    return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
-}
-
-/* PyIntBinop */
-        #if CYTHON_COMPILING_IN_CPYTHON
-static PyObject* __Pyx_PyInt_AddObjC(PyObject *op1, PyObject *op2, CYTHON_UNUSED long intval, CYTHON_UNUSED int inplace) {
-    #if PY_MAJOR_VERSION < 3
-    if (likely(PyInt_CheckExact(op1))) {
-        const long b = intval;
-        long x;
-        long a = PyInt_AS_LONG(op1);
-            x = (long)((unsigned long)a + b);
-            if (likely((x^a) >= 0 || (x^b) >= 0))
-                return PyInt_FromLong(x);
-            return PyLong_Type.tp_as_number->nb_add(op1, op2);
-    }
-    #endif
-    #if CYTHON_USE_PYLONG_INTERNALS && PY_MAJOR_VERSION >= 3
-    if (likely(PyLong_CheckExact(op1))) {
-        const long b = intval;
-        long a, x;
-        const PY_LONG_LONG llb = intval;
-        PY_LONG_LONG lla, llx;
-        const digit* digits = ((PyLongObject*)op1)->ob_digit;
-        const Py_ssize_t size = Py_SIZE(op1);
-        if (likely(__Pyx_sst_abs(size) <= 1)) {
-            a = likely(size) ? digits[0] : 0;
-            if (size == -1) a = -a;
-        } else {
-            switch (size) {
-                case -2:
-                    if (8 * sizeof(long) - 1 > 2 * PyLong_SHIFT) {
-                        a = -(long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 2 * PyLong_SHIFT) {
-                        lla = -(PY_LONG_LONG) (((((unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                case 2:
-                    if (8 * sizeof(long) - 1 > 2 * PyLong_SHIFT) {
-                        a = (long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 2 * PyLong_SHIFT) {
-                        lla = (PY_LONG_LONG) (((((unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                case -3:
-                    if (8 * sizeof(long) - 1 > 3 * PyLong_SHIFT) {
-                        a = -(long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 3 * PyLong_SHIFT) {
-                        lla = -(PY_LONG_LONG) (((((((unsigned PY_LONG_LONG)digits[2]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                case 3:
-                    if (8 * sizeof(long) - 1 > 3 * PyLong_SHIFT) {
-                        a = (long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 3 * PyLong_SHIFT) {
-                        lla = (PY_LONG_LONG) (((((((unsigned PY_LONG_LONG)digits[2]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                case -4:
-                    if (8 * sizeof(long) - 1 > 4 * PyLong_SHIFT) {
-                        a = -(long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 4 * PyLong_SHIFT) {
-                        lla = -(PY_LONG_LONG) (((((((((unsigned PY_LONG_LONG)digits[3]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[2]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                case 4:
-                    if (8 * sizeof(long) - 1 > 4 * PyLong_SHIFT) {
-                        a = (long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 4 * PyLong_SHIFT) {
-                        lla = (PY_LONG_LONG) (((((((((unsigned PY_LONG_LONG)digits[3]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[2]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                default: return PyLong_Type.tp_as_number->nb_add(op1, op2);
-            }
-        }
-                x = a + b;
-            return PyLong_FromLong(x);
-        long_long:
-                llx = lla + llb;
-            return PyLong_FromLongLong(llx);
-    }
-    #endif
-    if (PyFloat_CheckExact(op1)) {
-        const long b = intval;
-        double a = PyFloat_AS_DOUBLE(op1);
-            double result;
-            PyFPE_START_PROTECT("add", return NULL)
-            result = ((double)a) + (double)b;
-            PyFPE_END_PROTECT(result)
-            return PyFloat_FromDouble(result);
-    }
-    return (inplace ? PyNumber_InPlaceAdd : PyNumber_Add)(op1, op2);
-}
-#endif
-
 /* Import */
         static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
     PyObject *empty_list = 0;
@@ -4998,33 +4650,6 @@ bad:
     }
 }
 
-/* CIntToPy */
-        static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
-    const long neg_one = (long) -1, const_zero = (long) 0;
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(long) < sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(long) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-        } else if (sizeof(long) <= sizeof(unsigned PY_LONG_LONG)) {
-            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
-        }
-    } else {
-        if (sizeof(long) <= sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(long) <= sizeof(PY_LONG_LONG)) {
-            return PyLong_FromLongLong((PY_LONG_LONG) value);
-        }
-    }
-    {
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(long),
-                                     little, !is_unsigned);
-    }
-}
-
 /* CIntFromPy */
         static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
     const int neg_one = (int) -1, const_zero = (int) 0;
@@ -5208,6 +4833,33 @@ raise_neg_overflow:
     PyErr_SetString(PyExc_OverflowError,
         "can't convert negative value to int");
     return (int) -1;
+}
+
+/* CIntToPy */
+        static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
+    const long neg_one = (long) -1, const_zero = (long) 0;
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(long) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(long) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+        } else if (sizeof(long) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
+        }
+    } else {
+        if (sizeof(long) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(long) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(long),
+                                     little, !is_unsigned);
+    }
 }
 
 /* CIntFromPy */

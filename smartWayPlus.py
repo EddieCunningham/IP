@@ -6,348 +6,274 @@ import random
 import Queue
 import copy
 
-globalId = 0
+    # struct branchInfo {
+    #     int left,right;
+    #     double val;
+    # };
 
-class gType:
-    def __init__(self,theType):
-        global globalId
-        self._id = str(globalId)
-        globalId += 1
-        self.left = None
-        self.right = None
-        self.counterLeft = 0
-        self.counterRight = 0
-        self.counterMiddle = 0
-        self.name = theType[0]
-        self.indices = theType[1]
-        self.vals = self.getVals()
-        self.isRoot = False
-        # self.bottomIndices = [[[0,1],[0,1]],[[1,2],[0,1,2],[0,1]],[[1,2],[1,2]]]
+    # class Type {
+    #     static int globalId;
+    # public:
+    #     int _id,counterLeft,counterMiddle,counter;
+    #     string name;
+    #     vector<pair<int,int>> indices;
+    #     Type* left;
+    #     Type* right;
+    #     vector<vector<branchInfo>> vals;
+    #     bool isRoot;
+    #     vector<vector<double>> termWeights;
 
-    # def getBottomIndices(self,whichBranch):
-    #     if(whichBranch == 'zero'):
-    #         return self.bottomIndices[0]
-    #     if(whichBranch == 'one'):
-    #         return self.bottomIndices[1]
-    #     if(whichBranch == 'two'):
-    #         return self.bottomIndices[2]
+    #     vector<vector<int>> numberTimesSelected;
 
+    #     Type(bool isRoot, const vector<vector<vector<double>>> & initialVals, const pair<string,vector<pair<int,int>>> & theType) {
+    #         this->_id = Type::globalId++;
+    #         this->isRoot = isRoot;
+    #         this->left = nullptr;
+    #         this->right = nullptr;
+    #         this->counter = 0;
+    #         this->name = theType.first;
+    #         this->indices = theType.second;
 
-    def resetCounters(self):
-        self.counterLeft = 0
-        self.counterRight = 0
-        self.counterMiddle = 0
-
-    def getVals(self):
-        return [
-               [1.0,0.5,0.5,0.25], # zero
-               [0.5,1.0,0.5,0.5,0.5,1.0,0.5], # one
-               [0.25,0.5,0.5,1.0]  # two
-               ]
+    #         this->initVals(initialVals);
 
 
-    def getNextVal(self,whichBranch):
-        if(whichBranch == 'zero'):
-            if(self.counterLeft == 4):
-                self.resetCounters()
-                return False
+    #         this->termWeights = vector<vector<double>>(this->vals.size());
+    #         this->numberTimesSelected = vector<vector<int>>(this->vals.size());
+    #         for(int i=0; i<this->vals.size(); ++i) {
+    #             this->termWeights[i] = vector<double>(this->vals[i].size(),0);
+    #             this->numberTimesSelected[i] = vector<int>(this->vals[i].size(),0);
+    #         }
+    #     }
 
-            left = ['zero','one'][self.counterLeft%2]
-            right = ['zero','one'][int(self.counterLeft/2)%2]
-            val = self.vals[0][self.counterLeft]
+    #     void initVals(const vector<vector<vector<double>>> & initialVals) {
+    #         if(!this->isRoot) {
+    #             for(int i=0; i<initialVals.size(); ++i) {
+    #                 vector<branchInfo> inThisBranch = vector<branchInfo>();
+    #                 for(int j=0; j<initialVals[i].size(); ++j) {
+    #                     for(int k=0; k<initialVals[j].size(); ++k) {
+    #                         double val = initialVals[i][j][k];
+    #                         if(val != 0) {
+    #                             branchInfo adding;
+    #                             adding.left = j;
+    #                             adding.right = k;
+    #                             adding.val = val;
+    #                             inThisBranch.push_back(adding);
+    #                         }
+    #                     }
+    #                 }
+    #                 this->vals.push_back(inThisBranch);
+    #             }
+    #         }
+    #         else {
+    #             assert(initialVals.size() == 1);
+    #             vector<branchInfo> inThisBranch = vector<branchInfo>();
+    #             for(int i=0; i<initialVals[0].size(); ++i) {
+    #                 for(int j=0; j<initialVals[0][i].size(); ++j) {
+    #                     double val = initialVals[0][i][j];
+    #                     if(val != 0) {
+    #                         branchInfo adding;
+    #                         adding.left = i;
+    #                         adding.right = j;
+    #                         adding.val = val;
+    #                         inThisBranch.push_back(adding);
+    #                     }
+    #                 }
+    #             }
+    #             this->vals.push_back(inThisBranch);
+    #         }
 
-            self.counterLeft += 1
-        
-        elif(whichBranch == 'one'):
-            if(self.counterMiddle == 7):
-                self.resetCounters()
-                return False
-            if(self.counterMiddle == 0):
-                left = 'zero'
-                right = 'one'
-                val = self.vals[1][0]
-            elif(self.counterMiddle == 1):
-                left = 'zero'
-                right = 'two'
-                val = self.vals[1][1]
-            elif(self.counterMiddle == 2):
-                left = 'one'
-                right = 'zero'
-                val = self.vals[1][2]
-            elif(self.counterMiddle == 3):
-                left = 'one'
-                right = 'one'
-                val = self.vals[1][3]
-            elif(self.counterMiddle == 4):
-                left = 'one'
-                right = 'two'
-                val = self.vals[1][4]
-            elif(self.counterMiddle == 5):
-                left = 'two'
-                right = 'zero'
-                val = self.vals[1][5]
-            elif(self.counterMiddle == 6):
-                left = 'two'
-                right = 'one'
-                val = self.vals[1][6]
+    #     }
 
-            self.counterMiddle += 1
-        
-        elif(whichBranch == 'two'):
-            if(self.counterRight == 4):
-                self.resetCounters()
-                return False
+    #     void accumulateWeights(int whichBranch) {
+    #         int totalWeight = 0;
+    #         for(auto w=this->termWeights[whichBranch].begin(); w!=this->termWeights[whichBranch].end(); ++w) {
+    #             totalWeight += (*w);
+    #             (*w) = totalWeight;
+    #         }
+    #         if(totalWeight > 0) {
+    #             for(auto w=this->termWeights[whichBranch].begin(); w!=this->termWeights[whichBranch].end(); ++w) {
+    #                 (*w) /= (double)totalWeight;
+    #             }
+    #         }
+    #     }
 
-            left = ['one','two'][self.counterRight%2]
-            right = ['one','two'][int(self.counterRight/2)%2]
-            val = self.vals[2][self.counterRight]
+    #     void randomChoice(int &counter, int whichBranch) {
+    #         double randomNumb = rand()/double(RAND_MAX);
+    #         int i=0;
+    #         for(auto w=this->termWeights[whichBranch].begin(); w!=this->termWeights[whichBranch].end(); ++w) {
+    #             if((*w) > randomNumb) {
+    #                 counter = i;
+    #                 numberTimesSelected[whichBranch][i] += 1;
+    #                 break;
+    #             }
+    #             ++i;
+    #         }
+    #     }
 
-            self.counterRight += 1
-        
-        else:
-            assert 0,'Invalid whichBranch'
-        
-        return [left,right,val]
+    #     pair<bool,branchInfo> getNextVal(int whichBranch, bool random) {
 
+    #         branchInfo ans;
+    #         bool keepGoing = true;
 
-class nType:
-    def __init__(self,theType):
-        global globalId
-        self._id = str(globalId)
-        globalId += 1
-        self.left = None
-        self.right = None
-        self.counterLeft = 0
-        self.counterRight = 0
-        self.counterMiddle = 0
-        self.name = theType[0]
-        self.indices = theType[1]
-        self.vals = self.getVals()
-        self.isRoot = True
-        # self.bottomIndices = [[],[1,2],[1,2]]
+    #         if(random) {
+    #             randomChoice(this->counter,whichBranch);
+    #         }
+    #         if(this->counter == this->vals[whichBranch].size()) {
+    #             this->counter = 0;
+    #             keepGoing = false;
+    #         }
+    #         else {
+    #             ans = this->vals[whichBranch][this->counter];
+    #         }
 
-    # def getBottomIndices(self,whichBranch):
-    #     return self.bottomIndices
+    #         this->counter += 1;
 
-    def resetCounters(self):
-        self.counterLeft = 0
-        self.counterRight = 0
-        self.counterMiddle = 0
+    #         return pair<bool,branchInfo>(keepGoing,ans);
+    #     }
+    # };
+    # struct branchInfo {
+    #     int left,right;
+    #     double val;
+    # };
 
-    def getVals(self):
-        return [0.25,0.5,0.5,1.0]
+    # class Type {
+    #     static int globalId;
+    # public:
+    #     int _id,counterLeft,counterMiddle,counter;
+    #     string name;
+    #     vector<pair<int,int>> indices;
+    #     Type* left;
+    #     Type* right;
+    #     vector<vector<branchInfo>> vals;
+    #     bool isRoot;
+    #     vector<vector<double>> termWeights;
 
+    #     vector<vector<int>> numberTimesSelected;
 
-    def getNextVal(self,whichBranch=None):
-        if(self.counterLeft == 4):
-            self.resetCounters()
-            return False
+    #     Type(bool isRoot, const vector<vector<vector<double>>> & initialVals, const pair<string,vector<pair<int,int>>> & theType) {
+    #         this->_id = Type::globalId++;
+    #         this->isRoot = isRoot;
+    #         this->left = nullptr;
+    #         this->right = nullptr;
+    #         this->counter = 0;
+    #         this->name = theType.first;
+    #         this->indices = theType.second;
 
-        left = ['one','two'][self.counterLeft%2]
-        right = ['one','two'][int(self.counterLeft/2)%2]
-        
-        val = self.vals[self.counterLeft]
-        self.counterLeft += 1
-        return [left,right,val]
-
-
-class pType:
-    def __init__(self,theType):
-        global globalId
-        self._id = str(globalId)
-        globalId += 1
-        self.left = None
-        self.right = None
-        self.counterLeft = 0
-        self.counterRight = 0
-        self.counterMiddle = 0
-        self.name = theType[0]
-        self.indices = theType[1]
-        self.vals = self.getVals()
-        self.isRoot = True
-        # self.bottomIndices = [[0,1,2],[0,1,2],[0,1,2]]
-
-    # def getBottomIndices(self,whichBranch):
-    #     return self.bottomIndices
-
-
-    def resetCounters(self):
-        self.counterLeft = 0
-        self.counterRight = 0
-        self.counterMiddle = 0
-
-    def getVals(self):
-        return [1.0,1.0,1.0,1.0,0.75,0.5,1.0,0.5]
-
-    def getNextVal(self,whichBranch=None):
-        if(self.counterLeft == 8):
-            self.resetCounters()
-            return False
-
-        if(self.counterLeft < 6):
-            left = ['zero','one'][self.counterLeft%3]
-            right = ['zero','one','two'][int(self.counterLeft/3)%3]
-        elif(self.counterLeft == 6):
-            left = 'two'
-            right = 'zero'
-        elif(self.counterLeft == 7):
-            left = 'two'
-            right = 'one'
-
-        val = self.vals[self.counterLeft]
-        self.counterLeft += 1
-        return [left,right,val]
-
-class sType:
-    def __init__(self,theType):
-        global globalId
-        self._id = str(globalId)
-        globalId += 1
-        self.left = None
-        self.right = None
-        self.counterLeft = 0
-        self.counterRight = 0
-        self.counterMiddle = 0
-        self.name = theType[0]
-        self.indices = theType[1]
-        self.vals = self.getVals()
-        self.isRoot = True
-        # self.bottomIndices = [[0,1,2],[0,1,2],[0,1]]
-
-    # def getBottomIndices(self,whichBranch):
-    #     return self.bottomIndices
-
-    def resetCounters(self):
-        self.counterLeft = 0
-        self.counterRight = 0
-        self.counterMiddle = 0
-
-    def getVals(self):
-        return [0.5,0.5,0.5,0.5,0.5,0.25,0.5,0.25,0.5]
+    #         this->initVals(initialVals);
 
 
-    def getNextVal(self,whichBranch=None):
-        if(self.counterLeft == 9):
-            self.resetCounters()
-            return False
+    #         this->termWeights = vector<vector<double>>(this->vals.size());
+    #         this->numberTimesSelected = vector<vector<int>>(this->vals.size());
+    #         for(int i=0; i<this->vals.size(); ++i) {
+    #             this->termWeights[i] = vector<double>(this->vals[i].size(),0);
+    #             this->numberTimesSelected[i] = vector<int>(this->vals[i].size(),0);
+    #         }
+    #     }
 
-        left = ['zero','one','two'][self.counterLeft%3]
-        right = ['zero','one','two'][int(self.counterLeft/3)%3]
+    #     void initVals(const vector<vector<vector<double>>> & initialVals) {
+    #         if(!this->isRoot) {
+    #             for(int i=0; i<initialVals.size(); ++i) {
+    #                 vector<branchInfo> inThisBranch = vector<branchInfo>();
+    #                 for(int j=0; j<initialVals[i].size(); ++j) {
+    #                     for(int k=0; k<initialVals[j].size(); ++k) {
+    #                         double val = initialVals[i][j][k];
+    #                         if(val != 0) {
+    #                             branchInfo adding;
+    #                             adding.left = j;
+    #                             adding.right = k;
+    #                             adding.val = val;
+    #                             inThisBranch.push_back(adding);
+    #                         }
+    #                     }
+    #                 }
+    #                 this->vals.push_back(inThisBranch);
+    #             }
+    #         }
+    #         else {
+    #             assert(initialVals.size() == 1);
+    #             vector<branchInfo> inThisBranch = vector<branchInfo>();
+    #             for(int i=0; i<initialVals[0].size(); ++i) {
+    #                 for(int j=0; j<initialVals[0][i].size(); ++j) {
+    #                     double val = initialVals[0][i][j];
+    #                     if(val != 0) {
+    #                         branchInfo adding;
+    #                         adding.left = i;
+    #                         adding.right = j;
+    #                         adding.val = val;
+    #                         inThisBranch.push_back(adding);
+    #                     }
+    #                 }
+    #             }
+    #             this->vals.push_back(inThisBranch);
+    #         }
 
-        val = self.vals[self.counterLeft]
-        self.counterLeft += 1
-        return [left,right,val]
+    #     }
 
-def newSetFactor(index,t,a,b,c):
-    if(index == 0):
-        top = a+0.5
-        other = 3*t+1.0
-    elif(index == 1):
-        top = b+0.5
-        other = 3*t+1.0
-    elif(index == 2):
-        top = c+0.5
-        other = -t+3.0
-    else:
-        assert 0,'Invalid index'
-    p1 = oldAns*top/(a+b+c+2.5)
-    p2 = (2*t*(a+b)+2*c*(1-t)+other)
-    p3 = (2*t*(a+b)+2*c*(1-t)+t+1)
-    return p1*p2/p3
+    #     void accumulateWeights(int whichBranch) {
+    #         int totalWeight = 0;
+    #         for(auto w=this->termWeights[whichBranch].begin(); w!=this->termWeights[whichBranch].end(); ++w) {
+    #             totalWeight += (*w);
+    #             (*w) = totalWeight;
+    #         }
+    #         if(totalWeight > 0) {
+    #             for(auto w=this->termWeights[whichBranch].begin(); w!=this->termWeights[whichBranch].end(); ++w) {
+    #                 (*w) /= (double)totalWeight;
+    #             }
+    #         }
+    #     }
 
-class integralSet():
-    def __init__(self,numb):
-        self.numb = 0
-        self.zero = 0
-        self.one = 1
-        self.two = 2
+    #     void randomChoice(int &counter, int whichBranch) {
+    #         double randomNumb = rand()/double(RAND_MAX);
+    #         int i=0;
+    #         for(auto w=this->termWeights[whichBranch].begin(); w!=this->termWeights[whichBranch].end(); ++w) {
+    #             if((*w) > randomNumb) {
+    #                 counter = i;
+    #                 numberTimesSelected[whichBranch][i] += 1;
+    #                 break;
+    #             }
+    #             ++i;
+    #         }
+    #     }
 
+    #     pair<bool,branchInfo> getNextVal(int whichBranch, bool random) {
 
-def findAnsHelper(currentType,whichBranch,setVals):
+    #         branchInfo ans;
+    #         bool keepGoing = true;
 
-    if(currentType.left == None and currentType.right == None):
-        ans = currentType.baseCaseVal(setVals)
-        currentType.resetCounters()
-        return ans
+    #         if(random) {
+    #             randomChoice(this->counter,whichBranch);
+    #         }
+    #         if(this->counter == this->vals[whichBranch].size()) {
+    #             this->counter = 0;
+    #             keepGoing = false;
+    #         }
+    #         else {
+    #             ans = this->vals[whichBranch][this->counter];
+    #         }
 
-    ans = 0
-    nextVal = currentType.getNextVal(whichBranch)
-    while(nextVal != -1):
-        left = nextVal[0]
-        right = nextVal[1]
-        val = nextVal[2]
-        leftBranch = 1
-        rightBranch = 1
-        if(currentType.left):
-            leftBranch = findAnsHelper(currentType.left,left)
-        if(currentType.right):
-            rightBranch = findAnsHelper(currentType.right,right)
-        ans += val*leftBranch*rightBranch
-        nextVal = currentType.getNextVal(whichBranch)
+    #         this->counter += 1;
 
-    currentType.resetCounters()
+    #         return pair<bool,branchInfo>(keepGoing,ans);
+    #     }
+    # };
 
-    return ans
+    # // pass in generalized types which are similar to before but instead of ['n',[[0,2],[1,3]]] or ['g',[[0,2],[0,2],[1,3]]]
+    # // have the t value included so that different types can be made dynamically. 
+    # // so input would look like [0.5,[[0,2],[1,3]]]  for non g types and [-1,[[0,2],[0,2],[1,3]]] for g types.
 
-def generateAllTypesAndSets(types):
-    allTypes = []
-    for t in types:
-        if(t[0] == 'g'):
-            allTypes.append(gType(t))
-        elif(t[0] == 'n'):
-            allTypes.append(nType(t))
-        elif(t[0] == 'p'):
-            allTypes.append(pType(t))
-        elif(t[0] == 's'):
-            allTypes.append(sType(t))
-        else:
-            assert 0, 'Invalid type'
+    # // also need to pass in all of g so be able to make calculations
 
-    allSets = []
-    setHelper = {}
-
-    for a in allTypes:
-
-        for _t in a.indices:
-            if(_t[0] not in setHelper):
-                allSets.append(integralSet(_t[0]))
-                setHelper[_t[0]] = 1
-
-        uVals = [_t[1] for _t in a.indices]
-        for _a in allTypes:
-            if(a == _a):
-                continue
-            valToWorryAbout = _a.indices[0][1]
-            for i,u in enumerate(uVals):
-                if(u == valToWorryAbout):
-                    if(a.name == 'g'):
-                        if(i == 0):
-                            assert 'This shouldn\'t happen!'
-                        elif(i == 1):
-                            a.left = _a
-                        elif(i == 2):
-                            a.right = _a
-                    else:
-                        if(i == 0):
-                            a.left = _a
-                        elif(i == 1):
-                            a.right = _a
-    return allTypes,allSets
-
-def findAns(types):
-
-    allTypes,allSets = generateAllTypesAndSets(types)
-    roots = [a for a in allTypes if a.root]
-    ans = 1
-    for r in roots:
-        _ans = findAnsHelper(r,-1)
-        ans *= _ans
-
-    print(ans)
+    # pair<int,unordered_map<int,double>> calcProbability(int numbRoots,
+    #                                                     int n,
+    #                                                     vector<vector<vector<double>>> g,
+    #                                                     vector<pair<double,vector<pair<int,int>>>> types,
+    #                                                     int numSamples,int 
+    #                                                     checkpoint);
 
 
 
-    return ans
+
+
 
 
 

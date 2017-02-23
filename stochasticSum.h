@@ -15,6 +15,6 @@ namespace std {
         int numSamples,totalSamples;
     };
 
-    unordered_map<int,double> c_bruteForce(vector<pair<string,vector<pair<int,int>>>> types,int checkpoint,int numSamples);
+    unordered_map<int,double> c_bruteForce(int numbRoots,vector<pair<string,vector<pair<int,int>>>> types,int checkpoint,int numSamples);
 
 }

@@ -15,14 +15,14 @@ from libcpp.unordered_map cimport unordered_map
 jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'
 
 
-cdef extern from "stochasticSum.h" namespace "std":
-    unordered_map[int,double] c_bruteForce(int,vector[pair[string,vector[pair[int,int]]]],int,int)
+cdef extern from "treeStochasticSum.h" namespace "std":
+    pair[int,unordered_map[int,double]] getValues(int,vector[pair[string,vector[pair[int,int]]]],int,int)
 
 
-cdef class PyStochasticSum:
+cdef class PyTreeStochasticSum:
     cdef vector[pair[string,vector[pair[int,int]]]] types
     cdef int checkpoint,numSamples,numbRoots
-    cdef unordered_map[int,double] returnDict
+    cdef pair[int,unordered_map[int,double]] returnDict
 
     def __cinit__(self,numbRoots_,types_,int checkpoint_,int numSamples_):
         self.numbRoots = numbRoots_
@@ -31,10 +31,12 @@ cdef class PyStochasticSum:
         self.types = types_
 
     def run(self):
-        self.returnDict = c_bruteForce(self.numbRoots,self.types,self.checkpoint,self.numSamples)
+        self.returnDict = getValues(self.numbRoots,self.types,self.numSamples,self.checkpoint)
 
     def getOutput(self):
-        return dict(self.returnDict)
+        totalNumTerms = self.returnDict.first
+        theDict = dict(self.returnDict.second)
+        return [totalNumTerms,theDict]
 
 def shadingAD(person):
     if(len(person.diagnoses) > 0):
@@ -56,21 +58,13 @@ def getSumForFile(filename,checkpoint,numSamples):
 
 def getApproxSum(numbRoots,types,checkpoint,numSamples,filename):
 
-    theSumFunc = PyStochasticSum(numbRoots,types,checkpoint,numSamples)
+    theSumFunc = PyTreeStochasticSum(numbRoots,types,checkpoint,numSamples)
     theSumFunc.run()
-    data = theSumFunc.getOutput()
-
-    numUniqueIndices = 0
-    uniqueMapping = {}
-    for t in types:
-        for _t in t[1]:
-            if(_t[1] not in uniqueMapping):
-                uniqueMapping[_t[1]] = numUniqueIndices
-                numUniqueIndices += 1
+    totalNumTerms,data = theSumFunc.getOutput()
 
     data['name'] = 'data_'+filename
     data['types'] = types
-    data['totalNumTerms'] = 3**numUniqueIndices
+    data['totalNumTerms'] = totalNumTerms
 
     with open('./stochasticData/'+data['name'], 'w') as file:
         json.dump(data, file)
