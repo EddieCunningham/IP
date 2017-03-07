@@ -15,7 +15,7 @@ from libcpp cimport bool
 
 ctypedef Type* Type_ptr
 
-cdef extern from "generalizedStochastic.h" namespace "std":
+cdef extern from "generalizedStochasticGMP.h" namespace "std":
 
     cdef cppclass Type:
         Type() except +
@@ -35,9 +35,11 @@ cdef extern from "generalizedStochastic.h" namespace "std":
         int left,right
         double val
 
-    pair[long long,pair[vector[Type_ptr],vector[Type_ptr]]] initializeTypes(int m, vector[vector[vector[double]]] g, vector[pair[double,vector[pair[int,int]]]] types)
+    pair[vector[Type_ptr],vector[Type_ptr]] initializeTypes(int m, vector[vector[vector[double]]] g, vector[pair[double,vector[pair[int,int]]]] types) except +
 
-    unordered_map[int,double] stochasticSum(int n, int m, vector[Type_ptr] roots, long long totalTerms, int numSamples, int checkpoint) except +
+    mpz_class getTotalTerms(vector[Type_ptr] roots) except +
+
+    unordered_map[int,mpf_class] stochasticSum(int n, int m, vector[Type_ptr] roots, int numSamples, int checkpoint) except +
 
 cdef class PyType:
     cdef Type_ptr c_Type
@@ -145,11 +147,10 @@ cdef class PyPedigree:
         cdef vector[Type_ptr] allTypes
 
         ans = initializeTypes(m,g,types)
-        totalNonZeroTerms = ans.first
-        roots = ans.second.first
-        allTypes = ans.second.second
+        roots = ans.first
+        allTypes = ans.second
 
-        self.totalNonZeroTerms = totalNonZeroTerms
+        self.totalNonZeroTerms = getTotalTerms(roots)
         self.roots = roots
         self.allTypes = allTypes
 
@@ -190,8 +191,8 @@ cdef class PyPedigree:
         self.parsedTypes(m,g,types)
 
     cpdef calculateProbability(self,numSamples,checkpoint):
-        cdef unordered_map[int,double] ans
-        ans = stochasticSum(self.n,self.m,self.roots,self.totalNonZeroTerms,numSamples,checkpoint)
+        cdef unordered_map[int,mpf_class] ans
+        ans = stochasticSum(self.n,self.m,self.roots,numSamples,checkpoint)
         return ans
 
 

@@ -3,6 +3,9 @@
 #include <utility>
 #include <unordered_map>
 #include <cassert>
+#include <stdlib.h>
+#include <math.h>
+#include <gmpxx.h>
 
 
 namespace std {
@@ -184,7 +187,9 @@ namespace std {
         }
 
         long double incrementalIntegralPart(int indexChosen, int n, int m, const pair<double,vector<int>> & setValsAndT) {
+            
             return 1;
+
             double t = setValsAndT.first;
             vector<int> setVals = setValsAndT.second;
             int lastK = setVals[indexChosen];
@@ -243,22 +248,12 @@ namespace std {
         }
     };
 
-    unordered_map<int,double> stochasticSum(int n, int m, vector<Type*> roots, long long totalTerms, int numSamples, int checkpoint);
+    mpz_class getTotalTerms(vector<Type*> roots);
 
-    pair<long long,pair<vector<Type*>,vector<Type*>>> initializeTypes(int m, const vector<vector<vector<double>>> & g, const vector<pair<double,vector<pair<int,int>>>> & types);
+    unordered_map<int,mpf_class> stochasticSum(int n, int m, vector<Type*> roots, int numSamples, int checkpoint);
 
-    // pass in generalized types which are similar to before but instead of ['n',[[0,2],[1,3]]] or ['g',[[0,2],[0,2],[1,3]]]
-    // have the t value included so that different types can be made dynamically. 
-    // so input would look like [0.5,[[0,2],[1,3]]]  for non g types and [-1,[[0,2],[0,2],[1,3]]] for g types.
+    pair<vector<Type*>,vector<Type*>> initializeTypes(int m, const vector<vector<vector<double>>> & g, const vector<pair<double,vector<pair<int,int>>>> & types);
 
-    // also need to pass in all of g so be able to make calculations
-
-    pair<int,unordered_map<int,double>> calcProbability(int numbRoots,
-                                                        int n,
-                                                        vector<vector<vector<double>>> g,
-                                                        vector<pair<double,vector<pair<int,int>>>> types,
-                                                        int numSamples,int 
-                                                        checkpoint);
 
 }
 

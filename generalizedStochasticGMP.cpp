@@ -1,48 +1,12 @@
-#include "generalizedStochastic.h"
-#include <stdlib.h>
-// #include <cassert>
-#include <math.h>
+// g++ -I /usr/local/include -L/usr/local/lib generalizedStochasticGMP.cpp -lgmpxx -lgmp -std=c++11
+
+#include "generalizedStochasticGMP.h"
+
 
 
 namespace std {
 
     int Type::globalId = 0;
-
-    long double individualIntegral(double t, int n, int m, const vector<int> & indexCounts) {
-        long double ans = 1.0;
-        long double denominator = n/2.0 + 1.0;
-        long double sumToM = 0.0;
-        long double sumFromM = 0.0;
-        for(int i=0; i<indexCounts.size(); ++i) {
-            int currentVal = indexCounts[i];
-
-            ans *= tgamma(currentVal+0.5);
-            denominator += currentVal;
-            if(i < m) {
-                sumToM += currentVal;
-            }
-            else {
-                sumFromM += currentVal;
-            }
-        }
-        ans /= tgamma(denominator);
-        ans *= (t*sumToM + (1.0 - t)*sumFromM + t*(2*m - n)/2.0 + (m - n)/2.0);
-
-        ans *= tgamma(n/2.0)/pow(M_PI,n/2.0);
-
-        return ans;
-    }
-
-    // add in t parts later
-    long double integralPart(int n, int m, vector<pair<double,vector<int>>> *setVals) {
-        long double ans = 1.0;
-        for(auto it=setVals->begin(); it!=setVals->end(); ++it) {
-            double t = it->first;
-            long double integral = individualIntegral(t,n,m,it->second);
-            ans *= integral;
-        }
-        return ans;
-    }
 
     long double findAnsHelper(Type* currentType, int whichBranch, vector<pair<double,vector<int>>>* setVals, const int n, const int m) {
 
@@ -87,7 +51,7 @@ namespace std {
                     (*setVals)[setNumb].second[left] += 1;
                 }
                 else {
-                    // assert(0);
+                    assert(0);
                 }
             }
             ++j;
@@ -103,9 +67,6 @@ namespace std {
             rightBranch = findAnsHelper(currentType->right, right, setVals, n, m);
         }
 
-        // assert(val > 0);
-        // assert(leftBranch > 0);
-        // assert(rightBranch > 0);
         return val*leftBranch*rightBranch;
     }
 
@@ -129,7 +90,7 @@ namespace std {
 
     }
 
-    int updateTermWeightings(Type *r, int whichBranch) {
+    int updateTermWeightings(Type *r, int whichBranch, bool actuallyUpdateWeights) {
 
         int ans = 0;
 
@@ -145,14 +106,17 @@ namespace std {
             int rightBranch = 1;
 
             if(r->left) {
-                leftBranch = updateTermWeightings(r->left,left);
+                leftBranch = updateTermWeightings(r->left,left,actuallyUpdateWeights);
             }
             if(r->right) {
-                rightBranch = updateTermWeightings(r->right,right);
+                rightBranch = updateTermWeightings(r->right,right,actuallyUpdateWeights);
             }
 
             int termsForThisVal = leftBranch*rightBranch;
-            r->termWeights[whichBranch][i] = termsForThisVal;
+
+            if(actuallyUpdateWeights) {
+                r->termWeights[whichBranch][i] = termsForThisVal;
+            }
 
             ans += termsForThisVal;
 
@@ -165,7 +129,9 @@ namespace std {
 
         }
 
-        r->accumulateWeights(whichBranch);
+        if(actuallyUpdateWeights) {
+            r->accumulateWeights(whichBranch);
+        }
         r->counter = 0;
 
         return ans;
@@ -251,20 +217,35 @@ namespace std {
         return allTypes;
     }
 
-    pair<long long,pair<vector<Type*>,vector<Type*>>> initializeTypes(int m, const vector<vector<vector<double>>> & g, const vector<pair<double,vector<pair<int,int>>>> & types) {
+    mpz_class getTotalTerms(vector<Type*> roots) {
+
+        // this number will be very big!
+        mpz_class totalTerms = 1;
+
+        for(auto r=roots.begin(); r!=roots.end(); ++r) {
+            int currentTerms = updateTermWeightings(*r,0,false);
+            totalTerms *= currentTerms;
+        }
+        return totalTerms;
+    }
+
+    pair<vector<Type*>,vector<Type*>> initializeTypes(int m, const vector<vector<vector<double>>> & g, const vector<pair<double,vector<pair<int,int>>>> & types) {
         // m is the number of dims that go into t
         // n is the total number of dims
         vector<Type*> allTypes = generateAllTypesAndSets(m,g,types);
 
         vector<Type*> roots = vector<Type*>();
-        long long totalTerms = 1;
+
+        // this number will be very big!
+        mpz_class totalTerms = 1;
+
         unordered_map<int,int> numbUniqueTerms = unordered_map<int,int>();
 
         for(auto a=allTypes.begin(); a!=allTypes.end(); ++a) {
             if((*a)->isRoot) {
                 roots.push_back(*a);
                 printTree(*a,0);
-                int currentTerms = updateTermWeightings(*a,0);
+                int currentTerms = updateTermWeightings(*a,0,true);
                 cout << "This branch had " << currentTerms << " terms" << endl << endl;
                 totalTerms *= currentTerms;
             }
@@ -280,10 +261,9 @@ namespace std {
         cout << "The total number of non-zero terms is: " << totalTerms << endl;
         cout << "The total number of terms is: " << pow(g[0].size(),numbUniqueTerms.size()) << endl << endl;
         cout << "The total number of types is: " << allTypes.size() << endl;
-        pair<long long,pair<vector<Type*>,vector<Type*>>> ans = pair<long long,pair<vector<Type*>,vector<Type*>>>(totalTerms,pair<vector<Type*>,vector<Type*>>(roots,allTypes));
+        pair<vector<Type*>,vector<Type*>> ans = pair<vector<Type*>,vector<Type*>>(roots,allTypes);
         return ans;
     }
-
 
 
     void forSanity(Type* r) {
@@ -297,7 +277,7 @@ namespace std {
     }
 
 
-    unordered_map<int,double> stochasticSum(int n, int m, vector<Type*> roots, long long totalTerms, int numSamples, int checkpoint) {
+    unordered_map<int,mpf_class> stochasticSum(int n, int m, vector<Type*> roots, int numSamples, int checkpoint) {
 
         // cout << "n: " << n << endl;
         // cout << "m: " << m << endl;
@@ -309,37 +289,39 @@ namespace std {
         //     forSanity(roots[i]);
         // }
 
-        unordered_map<int,double> toReturn = unordered_map<int,double>();
+        mpz_class totalTerms = getTotalTerms(roots);
 
-        long double totalAns = 0.0;
+        unordered_map<int,mpf_class> toReturn = unordered_map<int,mpf_class>();
+
+        mpf_class totalAns = 0.0;
 
         vector<pair<double,vector<int>>> setVals = vector<pair<double,vector<int>>>();
         for(int i=0; i<roots.size(); ++i) {
             double t = roots[i]->tVal;
-            // assert(t>=0);
+            assert(t>=0);
             setVals.push_back(pair<double,vector<int>>(t,vector<int>(n,0)));
         }
 
 
-        for(long long i=0; i<numSamples; ++i) {
+        for(int i=0; i<numSamples; ++i) {
 
-            long double ans = 1.0;
+            mpf_class ans(1.0);
             for(auto r=roots.begin(); r!=roots.end(); ++r) {
                 double _ans = findAnsHelper(*r, 0, &setVals, n, m);
-                // assert(_ans > 0.0);
+                assert(_ans > 0.0);
                 ans *= _ans;
             }
 
             totalAns += ans;
-            // assert(totalAns > 0);
+            assert(totalAns > 0);
 
             for(auto s=setVals.begin(); s!=setVals.end(); ++s) {
                 fill(s->second.begin(), s->second.end(), 0);
             }
 
             if(i != 0 and i%checkpoint == 0) {
-                long double averageAnswer = totalAns/i;
-                long double projectedAnswer = totalAns/i*totalTerms;
+                mpf_class averageAnswer = totalAns/i;
+                mpf_class projectedAnswer = totalAns/i*totalTerms;
                 cout << "i: " << i << " \n\ttotalAns: " << totalAns << " \n\tprojected answer: " << projectedAnswer << " \n\taverage answer: " << averageAnswer << endl;
                 toReturn.insert({i,totalAns});
             }
@@ -350,7 +332,7 @@ namespace std {
     }
 
 
-    pair<int,unordered_map<int,double>> calcProbability(int numbRoots,
+    unordered_map<int,mpf_class> calcProbability(int numbRoots,
                                                         int n,
                                                         int m,
                                                         const vector<vector<vector<double>>> & g,
@@ -358,20 +340,19 @@ namespace std {
                                                         int numSamples,
                                                         int checkpoint) {
 
-        pair<long long,pair<vector<Type*>,vector<Type*>>> initializedTypes = initializeTypes(m,g,types);
+        pair<vector<Type*>,vector<Type*>> initializedTypes = initializeTypes(m,g,types);
 
-        long long totalTerms = initializedTypes.first;
-        vector<Type*> roots = initializedTypes.second.first;
-        vector<Type*> allTypes = initializedTypes.second.second;
+        vector<Type*> roots = initializedTypes.first;
+        vector<Type*> allTypes = initializedTypes.second;
 
-        unordered_map<int,double> toReturn = stochasticSum(n, m, roots, totalTerms, numSamples, checkpoint);
+        unordered_map<int,mpf_class> toReturn = stochasticSum(n, m, roots, numSamples, checkpoint);
         
 
         for(auto a=allTypes.begin(); a!=allTypes.end(); ++a) {
             delete *a;
         }
 
-        return pair<int,unordered_map<int,double>>(totalTerms,toReturn);
+        return toReturn;
     }
 
 };

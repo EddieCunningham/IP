@@ -134,4 +134,3 @@ def visualize(roots,allTypes,numbRoots,n):
         drawHelper(f,r,0,colorMappingEdges,colorMappingNodes,drawnTypes)
 
     f.view()
-    assert 0
