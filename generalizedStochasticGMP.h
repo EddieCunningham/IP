@@ -188,7 +188,7 @@ namespace std {
 
         long double incrementalIntegralPart(int indexChosen, int n, int m, const pair<double,vector<int>> & setValsAndT) {
             
-            return 1;
+            // return 1;
 
             double t = setValsAndT.first;
             vector<int> setVals = setValsAndT.second;
@@ -208,12 +208,6 @@ namespace std {
             }
             double constantPart = (2*m - n)/2.0*t + (n - m)/2.0;
 
-            double firstTerm = 1.0;
-            if(sumSetVals == 0) {
-                firstTerm = tgamma(n/2.0)/pow(M_PI,n/2.0)*pow(tgamma(0.5),n)/tgamma(n/2.0 + 1.0)*constantPart;
-            }
-
-
             double numerator;
             if(indexChosen < m) {
                 numerator = t*(sumToM+1.0) + (1.0 - t)*sumFromM + constantPart;
@@ -223,7 +217,7 @@ namespace std {
             }
             double denominator = t*sumToM + (1.0 - t)*sumFromM + constantPart;
 
-            long double ans = firstTerm*(lastK + 0.5)/(sumSetVals + n/2.0 + 1.0)*numerator/denominator;
+            long double ans = (lastK + 0.5)/(sumSetVals + n/2.0 + 1.0)*numerator/denominator;
 
             // cout << "\n\n";
             // cout << "setVals: ";
@@ -250,7 +244,7 @@ namespace std {
 
     mpz_class getTotalTerms(vector<Type*> roots);
 
-    unordered_map<int,mpf_class> stochasticSum(int n, int m, vector<Type*> roots, int numSamples, int checkpoint);
+    unordered_map<int,string> stochasticSum(int n, int m, vector<Type*> roots, unordered_map<int,double> pedigreeRoots, int numSamples, int checkpoint, int printCheckpoint);
 
     pair<vector<Type*>,vector<Type*>> initializeTypes(int m, const vector<vector<vector<double>>> & g, const vector<pair<double,vector<pair<int,int>>>> & types);
 

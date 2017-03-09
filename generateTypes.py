@@ -46,7 +46,7 @@ def goUpPedigree(person,originatedFrom,currentSets,maxVal,useT):
     termsToAdd.extend(goUpPedigree(person.parents[1],originatedFrom,currentSets,maxVal,useT))
     return termsToAdd
 
-def getTypes(pedigree,useT=False):
+def getTypes(pedigree,useT=False,dominantOrRecessive='dominant'):
     # goal is to recreate the types thing
     # there are going to be a ton of sets,
     # some are only going to have a single 0,1,2
@@ -61,8 +61,29 @@ def getTypes(pedigree,useT=False):
 
     # add all the roots to the currentSets dict
     for r in pedigree.roots:
-        assert str(r.Id) not in currentSets, 'This shouldn\'t be here'        
-        currentSets[str(r.Id)] = [maxVal['val'],0]
+        assert str(r.Id) not in currentSets, 'This shouldn\'t be here'
+
+        # check for the t value
+        if(r.affected == 'yes'):
+            if(dominantOrRecessive == 'dominant'):
+                tVal = 1.0
+            elif(dominantOrRecessive == 'recessive'):
+                tVal = 0.0
+            else:
+                assert 0
+        elif(r.affected == 'no'):
+            if(dominantOrRecessive == 'dominant'):
+                tVal = 0.0
+            elif(dominantOrRecessive == 'recessive'):
+                tVal = 1.0
+            else:
+                assert 0
+        elif(r.affected == 'possibly'):
+            tVal = 0.5
+        else:
+            assert 0,'Invalid affected value'
+
+        currentSets[str(r.Id)] = [maxVal['val'],0,tVal]
         maxVal['val'] += 1
 
     for p in pedigree.family:
@@ -93,13 +114,23 @@ def getTypes(pedigree,useT=False):
         if(p.affected == 'yes'):
             # then add an 's' term
             if(useT):
-                zetaTerm = [1.0,[t1,t2]]
+                if(dominantOrRecessive == 'dominant'):
+                    zetaTerm = [1.0,[t1,t2]]
+                elif(dominantOrRecessive == 'recessive'):
+                    zetaTerm = [0.0,[t1,t2]]
+                else:
+                    assert 0
             else:
                 zetaTerm = ['s',[t1,t2]]
         elif(p.affected == 'no'):
             # then add a 'n' term
             if(useT):
-                zetaTerm = [0.0,[t1,t2]]
+                if(dominantOrRecessive == 'dominant'):
+                    zetaTerm = [0.0,[t1,t2]]
+                elif(dominantOrRecessive == 'recessive'):
+                    zetaTerm = [1.0,[t1,t2]]
+                else:
+                    assert 0
             else:
                 zetaTerm = ['n',[t1,t2]]
         elif(p.affected == 'possibly'):
@@ -129,12 +160,29 @@ def getTypes(pedigree,useT=False):
     for t in types:
         t[1] = [[_t[0],_t[0]*maxUniqueVal+_t[1]] for _t in t[1]]
 
-    # print(maxUniqueVal)
-    # for t in types:
-    #     print(t)
+    pedigreeRoots = dict([[v[0],v[2]] for k,v in currentSets.items() if len(v) == 3])
 
-    # for k,v in currentSets.items():
-    #     print(str(k)+' -> '+str(v))
+
+    print('\n-----------------\n')
+    print('Final types:')
+    for t in types:
+        print('\n\t'+str(t))
+    
+
+    print('Current sets:')
+    for k,v in currentSets.items():
+        print('\n\t'+str(k)+' -> '+str(v))
+
+
+
+    print('Pedigree roots:')
+    for k,v in pedigreeRoots.items():
+        print('\n\t'+str(k)+' -> '+str(v))
+    print('\n-----------------\n')
 
     # assert 0
-    return types,currentSets
+
+    return types,pedigreeRoots
+
+
+

@@ -2,8 +2,6 @@
 
 #include "generalizedStochasticGMP.h"
 
-
-
 namespace std {
 
     int Type::globalId = 0;
@@ -144,7 +142,6 @@ namespace std {
             if(tProb == -1) {
                 pair<string,vector<pair<int,int>>> theType("g",t->second);
                 allTypes.push_back(new Type(false,tProb,g,theType));
-
             }
             else {
                 // g should be a cube
@@ -277,7 +274,7 @@ namespace std {
     }
 
 
-    unordered_map<int,mpf_class> stochasticSum(int n, int m, vector<Type*> roots, int numSamples, int checkpoint) {
+    unordered_map<int,string> stochasticSum(int n, int m, vector<Type*> roots, unordered_map<int,double> pedigreeRoots, int numSamples, int checkpoint, int printCheckpoint) {
 
         // cout << "n: " << n << endl;
         // cout << "m: " << m << endl;
@@ -289,23 +286,42 @@ namespace std {
         //     forSanity(roots[i]);
         // }
 
-        mpz_class totalTerms = getTotalTerms(roots);
 
-        unordered_map<int,mpf_class> toReturn = unordered_map<int,mpf_class>();
 
-        mpf_class totalAns = 0.0;
+        
+        vector<pair<double,vector<int>>> setVals = vector<pair<double,vector<int>>>(pedigreeRoots.size());
+        for(auto i=pedigreeRoots.begin(); i!=pedigreeRoots.end(); ++i) {
+            double t = i->second;
+            setVals[i->first] = pair<double,vector<int>>(t,vector<int>(n,0));
+        }
+        // THIS PART IS WRONG! THIS IS USING THE COMPUTATION GRAPH ROOTS (2ND GENERATION)
+        // AND SHOULD BE USING THE PEDIGREE ROOTS (1ST GENERATION)!!!!!!!!!
 
-        vector<pair<double,vector<int>>> setVals = vector<pair<double,vector<int>>>();
-        for(int i=0; i<roots.size(); ++i) {
-            double t = roots[i]->tVal;
-            assert(t>=0);
-            setVals.push_back(pair<double,vector<int>>(t,vector<int>(n,0)));
+        // vector<pair<double,vector<int>>> setVals = vector<pair<double,vector<int>>>();
+        // for(int i=0; i<roots.size(); ++i) {
+        //     double t = roots[i]->tVal;
+        //     assert(t>=0);
+        //     setVals.push_back(pair<double,vector<int>>(t,vector<int>(n,0)));
+        // }
+
+
+        // handles the base case of the incremental integral
+        mpf_class base(1.0);
+        for(int i=0; i<setVals.size(); ++i) {
+            double t = setVals[i].first;
+            base *= tgamma(n/2.0)/pow(M_PI,n/2.0)*pow(tgamma(0.5),n)/tgamma(n/2.0 + 1.0) * ((2*m - n)/2.0*t + (n - m)/2.0);
         }
 
+        unordered_map<int,string> toReturn = unordered_map<int,string>();
+        mpz_class totalTerms = getTotalTerms(roots);
+        mpf_class totalAns = 0.0;
+
+        mp_exp_t *expptr = new mp_exp_t;
 
         for(int i=0; i<numSamples; ++i) {
 
-            mpf_class ans(1.0);
+            mpf_class ans(base);
+
             for(auto r=roots.begin(); r!=roots.end(); ++r) {
                 double _ans = findAnsHelper(*r, 0, &setVals, n, m);
                 assert(_ans > 0.0);
@@ -319,40 +335,54 @@ namespace std {
                 fill(s->second.begin(), s->second.end(), 0);
             }
 
-            if(i != 0 and i%checkpoint == 0) {
+
+            if(i != 0 and (i%checkpoint == 0 or i%printCheckpoint == 0)) {
                 mpf_class averageAnswer = totalAns/i;
                 mpf_class projectedAnswer = totalAns/i*totalTerms;
-                cout << "i: " << i << " \n\ttotalAns: " << totalAns << " \n\tprojected answer: " << projectedAnswer << " \n\taverage answer: " << averageAnswer << endl;
-                toReturn.insert({i,totalAns});
+
+                string digits(mpf_get_str(NULL, expptr, 10, 15, projectedAnswer.get_mpf_t()));
+                string toWrite = digits+":"+to_string(*expptr);
+                
+                if(i%printCheckpoint == 0) {
+                    cout << "i: " << i << " \n\ttotalAns: " << totalAns << " \n\tprojected answer: " << projectedAnswer << " \n\taverage answer: " << averageAnswer << endl;
+                    // cout << "\n\ttoWrite: " << toWrite << endl;
+                }
+                if(i%checkpoint == 0) {
+
+                    toReturn.insert({i,toWrite});
+                }
             }
         }
-
+        delete expptr;
         return toReturn;
-
     }
 
 
-    unordered_map<int,mpf_class> calcProbability(int numbRoots,
+    unordered_map<int,string> calcProbability(int numbRoots,
                                                         int n,
                                                         int m,
                                                         const vector<vector<vector<double>>> & g,
                                                         const vector<pair<double,vector<pair<int,int>>>> & types,
                                                         int numSamples,
-                                                        int checkpoint) {
+                                                        int checkpoint,
+                                                        int printCheckpoint) {
 
         pair<vector<Type*>,vector<Type*>> initializedTypes = initializeTypes(m,g,types);
 
         vector<Type*> roots = initializedTypes.first;
         vector<Type*> allTypes = initializedTypes.second;
 
-        unordered_map<int,mpf_class> toReturn = stochasticSum(n, m, roots, numSamples, checkpoint);
+        assert(0);
+
+        // unordered_map<int,string> toReturn = stochasticSum(n, m, roots, pedigreeRoots, numSamples, checkpoint, printCheckpoint);
         
 
         for(auto a=allTypes.begin(); a!=allTypes.end(); ++a) {
             delete *a;
         }
 
-        return toReturn;
+        // return toReturn;
+        return unordered_map<int,string>();
     }
 
 };
@@ -403,7 +433,8 @@ int main() {
     int numbRoots = 4;
     int n = 4;
     int m = 3;
-    int numSamples = 1000000;
+    int numSamples = 10000;
     int checkpoint = numSamples*0.1;
-    calcProbability(numbRoots,n,m,g,types,numSamples,checkpoint);
+    int printCheckpoint = 1000;
+    calcProbability(numbRoots,n,m,g,types,numSamples,checkpoint,printCheckpoint);
 }

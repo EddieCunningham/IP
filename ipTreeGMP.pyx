@@ -6,14 +6,33 @@ import random
 from generateTypes import *
 from model import *
 import time
+import gmpy2
 from libcpp.vector cimport vector
 from libcpp.pair cimport pair
 from libcpp.string cimport string
 from libcpp.unordered_map cimport unordered_map
 from libcpp cimport bool
-
+from libcpp cimport nullptr
+from libc.stdlib cimport malloc, free
 
 ctypedef Type* Type_ptr
+
+# cdef extern from "gmp.h":
+#     ctypedef struct mpf_t:
+#         pass
+
+#     ctypedef struct mp_exp_t:
+#         pass
+
+#     char* mpf_get_str(char *be_null, mp_exp_t *expptr, int base, size_t n_digits, mpf_t op)
+#     double mpf_get_d_2exp(long *exp, mpf_t op)
+
+
+# cdef extern from "gmpxx.h":
+
+#     cdef cppclass mpf_class:
+#         mpf_class() except +
+#         mpf_t get_mpf_t()
 
 cdef extern from "generalizedStochasticGMP.h" namespace "std":
 
@@ -37,9 +56,7 @@ cdef extern from "generalizedStochasticGMP.h" namespace "std":
 
     pair[vector[Type_ptr],vector[Type_ptr]] initializeTypes(int m, vector[vector[vector[double]]] g, vector[pair[double,vector[pair[int,int]]]] types) except +
 
-    mpz_class getTotalTerms(vector[Type_ptr] roots) except +
-
-    unordered_map[int,mpf_class] stochasticSum(int n, int m, vector[Type_ptr] roots, int numSamples, int checkpoint) except +
+    unordered_map[int,string] stochasticSum(int n, int m, vector[Type_ptr] roots, unordered_map[int,double] pedigreeRoots, int numSamples, int checkpoint, int printCheckpoint) except +
 
 cdef class PyType:
     cdef Type_ptr c_Type
@@ -106,10 +123,10 @@ cdef buildHelper(PyType currentPyType, allPyTypes):
 
 cdef class PyPedigree:
     cdef vector[Type_ptr] roots
+    cdef unordered_map[int,double] pedigreeRoots
     cdef vector[Type_ptr] allTypes
     cdef public int n,m
     cdef public vector[vector[vector[double]]] g
-    cdef public long long totalNonZeroTerms
     cdef public string filename
     cdef public object py_roots
     cdef public object py_allTypes
@@ -123,9 +140,6 @@ cdef class PyPedigree:
 
     def get_g(self):
         return self.g
-
-    def get_totalNonZeroTerms(self):
-        return self.totalNonZeroTerms
 
     def get_roots(self):
         return self.py_roots
@@ -141,8 +155,7 @@ cdef class PyPedigree:
 
 
     cdef parsedTypes(self,int m,vector[vector[vector[double]]] g,vector[pair[double,vector[pair[int,int]]]] types):
-        cdef pair[long long,pair[vector[Type_ptr],vector[Type_ptr]]] ans
-        cdef long long totalNonZeroTerms
+        cdef pair[vector[Type_ptr],vector[Type_ptr]] ans
         cdef vector[Type_ptr] roots
         cdef vector[Type_ptr] allTypes
 
@@ -150,7 +163,6 @@ cdef class PyPedigree:
         roots = ans.first
         allTypes = ans.second
 
-        self.totalNonZeroTerms = getTotalTerms(roots)
         self.roots = roots
         self.allTypes = allTypes
 
@@ -167,10 +179,11 @@ cdef class PyPedigree:
         self.py_allTypes = allPyTypes
 
 
-    cpdef parsePedigree(self,filename,shadingFunction,problemContext):
+    cpdef parsePedigree(self,filename,shadingFunction,problemContext,dominantOrRecessive):
         
         cdef int m
         cdef vector[vector[vector[double]]] g
+        cdef unordered_map[int,double] pedigreeRoots
         cdef vector[pair[double,vector[pair[int,int]]]] types
 
         funcToUse = shadingFunction
@@ -182,19 +195,38 @@ cdef class PyPedigree:
 
         self.pedigree = pedigree
 
-        types,setMappings = getTypes(pedigree,useT=True)
+        types,pedigreeRoots = getTypes(pedigree,useT=True,dominantOrRecessive=dominantOrRecessive)
         n,m,g = problemContext()
 
         self.n = n
         self.m = m
         self.g = g
+        self.pedigreeRoots = pedigreeRoots
         self.parsedTypes(m,g,types)
 
-    cpdef calculateProbability(self,numSamples,checkpoint):
-        cdef unordered_map[int,mpf_class] ans
-        ans = stochasticSum(self.n,self.m,self.roots,numSamples,checkpoint)
-        return ans
+    cpdef calculateProbability(self,numSamples,checkpoint,printCheckpoint):
+        cdef unordered_map[int,string] ans
 
+        ans = stochasticSum(self.n,self.m,self.roots,self.pedigreeRoots,numSamples,checkpoint,printCheckpoint)
+
+        pythonAns = {}       
+        for val in ans:
+            digits = val.second.split(':')[0]
+            exponent = int(val.second.split(':')[1])
+            
+            adding = ''
+            if(exponent <= 0):
+                adding += '.'
+                while(exponent < 0):
+                    adding += '0'
+                    exponent += 1
+                adding += digits
+            else:
+                adding = digits[0:exponent]+'.'+digits[exponent:]
+
+            pythonAns[val.first] = str(gmpy2.mpfr(adding))
+
+        return pythonAns
 
 
 

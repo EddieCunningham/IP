@@ -6,18 +6,21 @@ import random
 from generateTypes import *
 from model import *
 from visualizeTreeGeneral import *
-from ipTree import *
+from ipTreeGMP import *
+# from ipTree import *
 import time
+import gmpy2
 
 
-USE_TEST = False
-FILENAME = 'test_9.json'
+USE_TEST = True
+FILENAME = 'test.json'
 
-VISUALIZE = True
+VISUALIZE = False
 CALC_PROB = True
 
 
-def shadingAD(person):
+def probandShading(person):
+    assert 0
     if(len(person.diagnoses) > 0):
         return 'yes'
     else:
@@ -69,9 +72,9 @@ def autosomeProblem():
 
 def runThisFunction(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
 
-    shadingFunction = shadingAD
-    problemContext = autosomeProblemWrong
-    # problemContext = autosomeProblem
+    shadingFunction = probandShading
+    # problemContext = autosomeProblemWrong
+    problemContext = autosomeProblem
 
     allPedigrees = []
     for filename in os.listdir(jsonFolderPath):
@@ -81,40 +84,62 @@ def runThisFunction(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
 
             completeFileName = os.path.join(jsonFolderPath,filename)
 
-            p = PyPedigree()
-            p.parsePedigree(completeFileName,shadingFunction,problemContext)
+            pedigreeClass = initPedigree(completeFileName,shadingFunction,problemContext,'dominant')
 
-            allPedigrees.append(p)
+            if(VISUALIZE):
+                visualizeComputation(pedigreeClass)
+
+            if(CALC_PROB):
+                num_samples = 50000
+                checkpoint = 100
+                printCheckpoint = 1000
+                calcProb(pedigreeClass,num_samples,checkpoint,printCheckpoint,False,filename)
+
             break
 
-    pedigreeClass = allPedigrees[0]
+def initADProb(filename,jsonFolderPath='/Users/Eddie/kec-bot/app/pedigreeData'):
+    shadingFunction = probandShading
+    problemContext = autosomeProblem
+    pedigreeClass = initPedigree(os.path.join(jsonFolderPath,filename),shadingFunction,problemContext,'dominant')
+    return pedigreeClass
 
+def initARProb(filename,jsonFolderPath='/Users/Eddie/kec-bot/app/pedigreeData'):
+    shadingFunction = probandShading
+    problemContext = autosomeProblem
+    pedigreeClass = initPedigree(os.path.join(jsonFolderPath,filename),shadingFunction,problemContext,'recessive')
+    return pedigreeClass
+
+def initPedigree(filename,shadingFunction,problemContext,dominantOrRecessive):
+    pedigreeClass = PyPedigree()
+    pedigreeClass.parsePedigree(filename,shadingFunction,problemContext,dominantOrRecessive)
+    return pedigreeClass
+
+def visualizeComputation(pedigreeClass):
     n = pedigreeClass.get_n()
     m = pedigreeClass.get_m()
     g = pedigreeClass.get_g()
-    totalNonZeroTerms = pedigreeClass.get_totalNonZeroTerms()
     roots = pedigreeClass.get_roots()
     allTypes = pedigreeClass.get_allTypes()
     filename = pedigreeClass.get_filename()
     pedigree = pedigreeClass.get_pedigree()
-
     numbRoots = len(pedigree.roots)
+    visualize(roots,allTypes,numbRoots,n)
 
-    if(VISUALIZE):
-        visualize(roots,allTypes,numbRoots,n)
+def calcProb(pedigreeClass,num_samples,checkpoint,printCheckpoint,writeToFile,filename):
 
-    if(CALC_PROB):
-        num_samples = 1000000
-        checkpoint = 100000
-        # checkpoint = num_samples*0.004
-        ans = pedigreeClass.calculateProbability(num_samples,checkpoint)
+    data = pedigreeClass.calculateProbability(num_samples,checkpoint,printCheckpoint)
 
-    
+    if(writeToFile):
+        data['name'] = 'data_'+filename
+        with open('./stochasticData/'+data['name'], 'w') as file:
+            json.dump(data,file)
 
 
-start = time.time()
-runThisFunction()
+def mainFunction():
+    start = time.time()
+    runThisFunction()
 
-end = time.time()
-print('\n\nTotal time: '+str(end - start))
+    end = time.time()
+    print('\n\nTotal time: '+str(end - start))
 
+mainFunction()
