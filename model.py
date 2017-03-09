@@ -786,13 +786,24 @@ class Pedigree:
             return 'possibly'
 
         for p in self.family:
-            if(len(p.diagnoses) > 0 and self.probandDisease == p.diagnoses[0]):
-                if(p.diagnoses[3] == 'false'):
-                    p.setAffectedFunctions(yes)
-                else:
-                    p.setAffectedFunctions(possibly)
-            else:
+            print('p.diagnoses '+str(p.diagnoses))
+
+            breakFlag = False
+            for pDis in self.probandDisease:
+                for curDis in p.diagnoses:
+                    if(pDis[0] == curDis[0]):
+                        # then this person has the same disease as the proband
+                        if(pDis[3] == 'false'):
+                            p.setAffectedFunctions(yes)
+                        else:
+                            p.setAffectedFunctions(possibly)
+                        breakFlag = True
+                        break
+                if(breakFlag):
+                    break
+            if(not breakFlag):
                 p.setAffectedFunctions(no)
+
 
     def initAllPeople(self):
 
