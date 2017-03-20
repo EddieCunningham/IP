@@ -7,6 +7,9 @@ import numpy as np
 
 def generateGForChromosomeProblem(left_string,right_string,child_string):
 
+    #           XX  Xy  yX  xX  Xx  xx  xy  yx
+    mappings = ['/','>','^','_','|','x','D','V']
+
     #     XX   Xy   yX   xX   Xx   xx   xy   yx
     p1 = '//   />   >/   |/   /|   ||   |>   >|' # X
     p1_= '//   />   >/   |/   /|   ||   |>   >|' # X
@@ -34,13 +37,11 @@ def generateGForChromosomeProblem(left_string,right_string,child_string):
 
     table = p1+'~'+p1_+'~'+p2+'~'+p2_+'~'+p3+'~'+p3_+'~'+p4+'~'+p4_+'~'+p5+'~'+p5_+'~'+p6+'~'+p6_+'~'+p7+'~'+p7_+'~'+p8+'~'+p8_
 
-    #           XX  Xy  yX  xX  Xx  xx  xy  yx
-    mappings = ['/','>','^','_','|','x','D','V']
 
     parsedTable = [[[_x[0],_x[1]] for _x in x.split('   ')] for x in table.split('~')]
 
-    for p in parsedTable:
-        print(p)
+    # for p in parsedTable:
+    #     print(p)
 
     lookup = {
         'unknown':[0,1,2,3,4,5,6,7],
@@ -94,3 +95,24 @@ def generateGForChromosomeProblem(left_string,right_string,child_string):
 
     return overall
 
+
+def runThis():
+    allG = {}
+
+    for x in itertools.product(['unknown','male','female'],repeat=3):
+        left,right,child = x
+        if((left == 'male' and right == 'male') or (left == 'female' and right == 'female')):
+            continue
+        key = left+','+right+'->'+child
+        val = generateGForChromosomeProblem(left,right,child)
+        allG[key] = val
+
+    allMN = {
+        'unknown':[5,8],
+        'female':[3,4],
+        'male':[2,4]
+    }
+
+    return allMN,allG,'chromosome'
+
+# runThis()

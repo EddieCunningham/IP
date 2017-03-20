@@ -6,18 +6,29 @@ import random
 from generateTypes import *
 from model import *
 from visualizeTreeGeneral import *
-from ipTreeGMP import *
+from ipTreeGMPExtended import *
 from getGHelper import *
 import time
 import gmpy2
 
+# 3 confusion matrices
 
+# human vs known correct
+# algorithm vs human
+# algorithm vs known correct
 
-USE_TEST = False
-FILENAME = 'test_flipped.json'
+# add logging system
+
+# papers with bullet points
+
+USE_TEST = True
+FILENAME = 'test.json'
 
 VISUALIZE = False
 CALC_PROB = True
+
+PROBLEM = 'autosome'
+DOMINANT = 'dominant'
 
 
 def probandShading(person):
@@ -28,6 +39,8 @@ def probandShading(person):
         return 'no'
 
 def autosomeProblem():
+
+
     # AA, Aa, aA, aa
     g = [
           [[1.  ,0.5 ,0.5 ,0. ],
@@ -50,9 +63,23 @@ def autosomeProblem():
            [0.  ,0.25,0.25,0.5],
            [0.  ,0.5 ,0.5 ,1. ]]
         ]
-    m = 3
-    n = 4
-    return n,m,g
+
+    allG = {}
+
+    for x in itertools.product(['unknown','male','female'],repeat=3):
+        left,right,child = x
+        if((left == 'male' and right == 'male') or (left == 'female' and right == 'female')):
+            continue
+        key = left+','+right+'->'+child
+        allG[key] = g
+
+    allMN = {
+        'unknown':[3,4],
+        'female':[3,4],
+        'male':[3,4]
+    }
+
+    return allMN,allG,'autosome'
 
 def chromosomeProblem():
 
@@ -74,12 +101,19 @@ def chromosomeProblem():
         'male':[2,4]
     }
 
-    return allMN,allG
+    return allMN,allG,'chromosome'
 
 def runThisFunction(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
 
     shadingFunction = probandShading
-    problemContext = autosomeProblem
+    if(PROBLEM == 'autosome'):
+        problemContext = autosomeProblem
+    else:
+        problemContext = chromosomeProblem
+    if(DOMINANT == 'dominant'):
+        dominantOrRecessive = 'dominant'
+    else:
+        dominantOrRecessive = 'recessive'
 
     allPedigrees = []
     for filename in os.listdir(jsonFolderPath):
@@ -89,7 +123,7 @@ def runThisFunction(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
 
             completeFileName = os.path.join(jsonFolderPath,filename)
 
-            pedigreeClass = initPedigree(completeFileName,shadingFunction,problemContext,'dominant')
+            pedigreeClass = initPedigree(completeFileName,shadingFunction,problemContext,dominantOrRecessive)
 
             if(VISUALIZE):
                 visualizeComputation(pedigreeClass)
@@ -120,15 +154,12 @@ def initPedigree(filename,shadingFunction,problemContext,dominantOrRecessive):
     return pedigreeClass
 
 def visualizeComputation(pedigreeClass):
-    n = pedigreeClass.get_n()
-    m = pedigreeClass.get_m()
-    g = pedigreeClass.get_g()
     roots = pedigreeClass.get_roots()
     allTypes = pedigreeClass.get_allTypes()
     filename = pedigreeClass.get_filename()
     pedigree = pedigreeClass.get_pedigree()
     numbRoots = len(pedigree.roots)
-    visualize(roots,allTypes,numbRoots,n)
+    visualize(roots,allTypes,numbRoots)
 
 def calcProb(pedigreeClass,num_samples,checkpoint,printCheckpoint,writeToFile,filename):
 

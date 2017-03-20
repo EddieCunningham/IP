@@ -16,31 +16,28 @@ from libcpp cimport nullptr
 from libc.stdlib cimport malloc, free
 
 
-# cdef extern from "gmp.h":
-#     ctypedef struct mpf_t:
-#         pass
-
-#     ctypedef struct mp_exp_t:
-#         pass
-
-#     char* mpf_get_str(char *be_null, mp_exp_t *expptr, int base, size_t n_digits, mpf_t op)
-#     double mpf_get_d_2exp(long *exp, mpf_t op)
-
-
-# cdef extern from "gmpxx.h":
-
-#     cdef cppclass mpf_class:
-#         mpf_class() except +
-#         mpf_t get_mpf_t()
-
 ctypedef Type* Type_ptr
 
-cdef extern from "generalizedStochasticGMP.h" namespace "std":
+cdef extern from "generalizedStochasticGMPExtended.h" namespace "std":
+
+    cdef struct index_struct:
+        int setNumb
+        int uVal
+        string sex
+
+    cdef struct type_struct:
+        double tVal
+        vector[index_struct] indices
+        string sex
+        string name
+
+    cdef struct branchInfo:
+        int left,right
+        double val
 
     cdef cppclass Type:
         Type() except +
-        Type(bool isRoot, vector[vector[vector[double]]] initialVals, pair[string,vector[vector[int,int,string]]] theType) except +
-        # Type(bool isRoot, vector[vector[vector[double]]] initialVals, pair[string,vector[pair[int,int]]] theType) except +
+        Type(bool isRoot, vector[vector[vector[double]]] initialVals, type_struct theType) except +
         Type* left
         Type* right
         string name
@@ -48,20 +45,16 @@ cdef extern from "generalizedStochasticGMP.h" namespace "std":
         double tVal
         bool isRoot
         int _id
-        vector[vector[int,int,string]] indices;
+        vector[index_struct] indices;
         vector[vector[branchInfo]] vals;
         vector[vector[double]] termWeights;
         pair[bool,branchInfo] getNextVal(int whichBranch,bool random)
 
-    cdef struct branchInfo:
-        int left,right
-        double val
 
-    pair[vector[Type_ptr],vector[Type_ptr]] initializeTypes(unordered_map[string,pair[int,int]] allMN, unordered_map[string,vector[vector[vector[double]]]] allG, vector[pair[double,vector[vector[int,int,string]]]] types) except +
-    # pair[vector[Type_ptr],vector[Type_ptr]] initializeTypes(int m, vector[vector[vector[double]]] g, vector[pair[double,vector[pair[int,int]]]] types) except +
+
+    pair[vector[Type_ptr],vector[Type_ptr]] initializeTypes(unordered_map[string,pair[int,int]] allMN, unordered_map[string,vector[vector[vector[double]]]] allG, vector[type_struct] types) except +
 
     unordered_map[int,string] stochasticSum(unordered_map[string,pair[int,int]] allMN, vector[Type_ptr] roots, unordered_map[int,pair[string,double]] pedigreeRoots, int numSamples, int checkpoint, int printCheckpoint) except +
-    # unordered_map[int,string] stochasticSum(int n, int m, vector[Type_ptr] roots, unordered_map[int,double] pedigreeRoots, int numSamples, int checkpoint, int printCheckpoint) except +
 
 cdef class PyType:
     cdef Type_ptr c_Type
@@ -78,11 +71,8 @@ cdef class PyType:
     def is_root(self):
         return self.c_Type.isRoot
 
-    def t_value(self):
-        return self.c_Type.tVal
-
-    cdef addType(self,Type_ptr theType):
-        self.c_Type = theType
+    def get_id(self):
+        return self.c_Type._id
 
     def get_next_val(self, int whichBranch, bool random):
         cdef pair[bool,branchInfo] ans
@@ -90,13 +80,10 @@ cdef class PyType:
         unwrappedBranchInfo = [ans.first,ans.second.left,ans.second.right,ans.second.val]
         return unwrappedBranchInfo
 
-    def get_id(self):
-        return self.c_Type._id
-
     def get_indices(self):
-        cdef vector[pair[int,int]] c_indices
+        cdef vector[index_struct] c_indices
         c_indices = self.c_Type.indices
-        listForm = [[x.first,x.second] for x in c_indices]
+        listForm = [[x.setNumb,x.uVal] for x in c_indices]
         return listForm
 
     def get_vals(self):
@@ -105,11 +92,8 @@ cdef class PyType:
         listForm = [[[_x.left,_x.right,_x.val] for _x in x] for x in c_vals]
         return listForm
 
-    def get_termWeights(self):
-        cdef vector[vector[double]] c_termWeights
-        c_termWeights = self.c_Type.termWeights
-        return c_termWeights
-
+    cdef addType(self,Type_ptr theType):
+        self.c_Type = theType
 
 cdef buildHelper(PyType currentPyType, allPyTypes):
     if(currentPyType.c_Type.left):
@@ -133,8 +117,6 @@ cdef class PyPedigree:
 
     cdef public unordered_map[string,vector[vector[vector[double]]]] allG
     cdef public unordered_map[string,pair[int,int]] allMN
-    # cdef public int m,n
-    # cdef public vector[vector[vector[double]]] g
     cdef public string filename
     cdef public object py_roots
     cdef public object py_allTypes
@@ -153,13 +135,12 @@ cdef class PyPedigree:
         return self.pedigree
 
 
-    cdef parsedTypes(self,unordered_map[string,pair[int,int]] allMN, unordered_map[string,vector[vector[vector[double]]]] allG, vector[pair[double,vector[vector[int,int,string]]]] types):
+    cdef parsedTypes(self,unordered_map[string,pair[int,int]] allMN, unordered_map[string,vector[vector[vector[double]]]] allG, vector[type_struct] types):
         cdef pair[vector[Type_ptr],vector[Type_ptr]] ans
         cdef vector[Type_ptr] roots
         cdef vector[Type_ptr] allTypes
 
         ans = initializeTypes(allMN,allG,types)
-        # ans = initializeTypes(m,g,types)
         roots = ans.first
         allTypes = ans.second
 
@@ -183,10 +164,10 @@ cdef class PyPedigree:
         
         cdef unordered_map[string,vector[vector[vector[double]]]] allG
         cdef unordered_map[string,pair[int,int]] allMN
-        # cdef int m
-        # cdef vector[vector[vector[double]]] g
         cdef unordered_map[int,pair[string,double]] pedigreeRoots
-        cdef vector[pair[double,vector[vector[int,int,string]]]] types
+        cdef vector[type_struct] types
+        cdef index_struct toAdd
+
 
         funcToUse = shadingFunction
 
@@ -201,22 +182,35 @@ cdef class PyPedigree:
         self.allMN = allMN
         self.allG = allG
 
-        types,pedigreeRoots = getTypes(pedigree,dominantOrRecessive=dominantOrRecessive,autoOrChromosome=autoOrChromosome)
+        _types,pedigreeRoots = getTypes(pedigree,dominantOrRecessive=dominantOrRecessive,autoOrChromosome=autoOrChromosome)
+        types = vector[type_struct](len(_types))
 
-        # n,m,g = problemContext()
-        # self.n = n
-        # self.m = m
-        # self.g = g
+        for i,_t in enumerate(_types):
+            types[i].tVal = _t[0]
+
+            types[i].indices = vector[index_struct](len(_t[1]))
+            for j,__t in enumerate(_t[1]):
+                toAdd.setNumb = __t[0]
+                toAdd.uVal = __t[1]
+                toAdd.sex = __t[2]
+                types[i].indices[j] = toAdd
+                if(j > 0):
+                    assert toAdd.uVal != types[i].indices[j-1].uVal
+
+            if(_t[0] == -1):
+                types[i].sex = 'invalid'
+            else:
+                types[i].sex = _t[2]
+
+            types[i].name = ''
 
         self.pedigreeRoots = pedigreeRoots
         self.parsedTypes(allMN,allG,types)
-        # self.parsedTypes(m,g,types)
 
     cpdef calculateProbability(self,numSamples,checkpoint,printCheckpoint):
         cdef unordered_map[int,string] ans
 
         ans = stochasticSum(self.allMN,self.roots,self.pedigreeRoots,numSamples,checkpoint,printCheckpoint)
-        # ans = stochasticSum(self.n,self.m,self.roots,self.pedigreeRoots,numSamples,checkpoint,printCheckpoint)
 
         pythonAns = {}       
         for val in ans:

@@ -786,7 +786,7 @@ class Pedigree:
             return 'possibly'
 
         for p in self.family:
-            print('p.diagnoses '+str(p.diagnoses))
+            # print('p.diagnoses '+str(p.diagnoses))
 
             breakFlag = False
             for pDis in self.probandDisease:

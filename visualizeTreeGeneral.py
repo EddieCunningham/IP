@@ -100,7 +100,7 @@ def drawHelper(f,currentType,whichBranch,colorMappingEdges,colorMappingNodes,dra
         keepGoing,left,right,val = currentType.get_next_val(whichBranch,False)
 
 
-def visualize(roots,allTypes,numbRoots,n):
+def visualize(roots,allTypes,numbRoots):
 
     colorMappingEdges = {}
     colorMappingNodes = {}
@@ -112,7 +112,7 @@ def visualize(roots,allTypes,numbRoots,n):
         if(a.is_root()):
             colorMappingNodes[str(a.get_name())+'_'+str(a.get_id())+'_0'] = 1
         else:
-            for i in range(n):
+            for i in range(8):
                 colorMappingNodes[str(a.get_name())+'_'+str(i)] = 2
 
     colors = getColors(len(colorMappingEdges))

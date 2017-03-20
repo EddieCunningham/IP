@@ -10,6 +10,19 @@
 
 namespace std {
 
+    struct index_struct {
+        int setNumb;
+        int uVal;
+        string sex;
+    };
+
+    struct type_struct {
+        double tVal;
+        string name;
+        vector<index_struct> indices;
+        string sex;
+    };
+
     struct branchInfo {
         int left,right;
         double val;
@@ -20,7 +33,10 @@ namespace std {
     public:
         int _id,counter;
         string name;
-        vector<pair<int,int>> indices;
+        string sex;
+        string leftParentSex;
+        string rightParentSex;
+        vector<index_struct> indices;
         Type* left;
         Type* right;
         vector<vector<branchInfo>> vals;
@@ -29,53 +45,6 @@ namespace std {
         vector<vector<double>> termWeights;
         vector<vector<int>> numberTimesSelected;
 
-        void sanityCheck() {
-            cout << "\n\n_id: " << this->_id << endl;
-            cout << "name: " << this->name << endl;
-            cout << "counter: " << this->counter << endl;
-            cout << "left: " << this->left << endl;
-            cout << "right: " << this->right << endl;
-            cout << "tVal: " << this->tVal << endl;
-            cout << "isRoot: " << this->isRoot << endl;
-
-
-            cout << "indices: " << endl;
-            for(int i=0; i<this->indices.size(); ++i) {
-                cout << "\n\t[" << this->indices[i].first << "," << this->indices[i].second << "]";
-            }
-            cout << endl;
-
-            cout << "vals: " << endl;
-            for(int i=0; i<this->vals.size(); ++i) {
-                for(int j=0; j<this->vals[i].size(); ++j) {
-                    cout << "\n\tleft: " << this->vals[i][j].left << " right: " << this->vals[i][j].right << " val: " << this->vals[i][j].val;
-                }
-                cout << "\n-------------------" << endl;
-            }
-            cout << endl;
-
-            cout << "termWeights: ";
-            for(int i=0; i<this->termWeights.size(); ++i) {
-                for(int j=0; j<this->termWeights[i].size(); ++j) {
-                    cout << this->termWeights[i][j] << " ";
-                }
-                cout << endl;
-            }
-            cout << endl;
-
-
-            cout << "numberTimesSelected: ";
-            for(int i=0; i<this->numberTimesSelected.size(); ++i) {
-                for(int j=0; j<this->numberTimesSelected[i].size(); ++j) {
-                    cout << this->numberTimesSelected[i][j] << " ";
-                }
-                cout << endl;
-            }
-            cout << endl;
-
-
-        }
-
         Type() {
             this->_id = Type::globalId++;
             this->left = nullptr;
@@ -83,14 +52,26 @@ namespace std {
             this->counter = 0;
         }
 
-        Type(bool isRoot, double t_val, const vector<vector<vector<double>>> & initialVals, const pair<string,vector<pair<int,int>>> & theType) : Type() {
+        Type(bool isRoot, const vector<vector<vector<double>>> & initialVals, const type_struct & theType) : Type() {
             this->isRoot = isRoot;
-            this->tVal = t_val;
-            this->name = theType.first;
-            this->indices = theType.second;
+            this->tVal = theType.tVal;
+            this->name = theType.name;
+            this->indices = theType.indices;
+
+            if(this->isRoot) {
+                this->sex = theType.sex;
+                this->leftParentSex = this->indices[0].sex;
+                this->rightParentSex = this->indices[1].sex;
+                this->name = "_";
+            }
+            else {
+                this->sex = this->indices[0].sex;
+                this->leftParentSex = this->indices[1].sex;
+                this->rightParentSex = this->indices[2].sex;
+                this->name = "g";
+            }
 
             this->initVals(initialVals);
-
 
             this->termWeights = vector<vector<double>>(this->vals.size());
             this->numberTimesSelected = vector<vector<int>>(this->vals.size());
@@ -104,9 +85,13 @@ namespace std {
             if(!this->isRoot) {
                 for(int i=0; i<initialVals.size(); ++i) {
                     vector<branchInfo> inThisBranch = vector<branchInfo>();
-                    for(int j=0; j<initialVals[i].size(); ++j) {
-                        for(int k=0; k<initialVals[j].size(); ++k) {
-                            double val = initialVals[i][j][k];
+                    for(int j=0; j<initialVals.at(i).size(); ++j) {
+                        for(int k=0; k<initialVals.at(i).at(j).size(); ++k) {
+
+                            // cout << "\ni: " << i << " j: " << j << " k: " << k << endl;
+                            // cout << "dims: " << "(" << initialVals.size() << "," << initialVals.at(i).size() << "," << initialVals.at(i).at(j).size() << ")" << endl;
+                            double val = initialVals.at(i).at(j).at(k);
+                            // cout << "val: " << val << endl;
                             if(val != 0) {
                                 branchInfo adding;
                                 adding.left = j;
@@ -114,6 +99,7 @@ namespace std {
                                 adding.val = val;
                                 inThisBranch.push_back(adding);
                             }
+                            // cout << "here" << endl;
                         }
                     }
                     this->vals.push_back(inThisBranch);
@@ -122,9 +108,9 @@ namespace std {
             else {
                 assert(initialVals.size() == 1);
                 vector<branchInfo> inThisBranch = vector<branchInfo>();
-                for(int i=0; i<initialVals[0].size(); ++i) {
-                    for(int j=0; j<initialVals[0][i].size(); ++j) {
-                        double val = initialVals[0][i][j];
+                for(int i=0; i<initialVals.at(0).size(); ++i) {
+                    for(int j=0; j<initialVals.at(0).at(i).size(); ++j) {
+                        double val = initialVals.at(0).at(i).at(j);
                         if(val != 0) {
                             branchInfo adding;
                             adding.left = i;
@@ -186,11 +172,12 @@ namespace std {
             return pair<bool,branchInfo>(keepGoing,ans);
         }
 
-        long double incrementalIntegralPart(int indexChosen, int n, int m, const pair<double,vector<int>> & setValsAndT) {
-            
-            // return 1;
+        long double incrementalIntegralPart(int indexChosen, const unordered_map<string,pair<int,int>> & allMN, const pair<pair<string,double>,vector<int>> & setValsAndT) {
 
-            double t = setValsAndT.first;
+            string sex = setValsAndT.first.first;
+            double t = setValsAndT.first.second;
+            int m = allMN.at(sex).first;
+            int n = allMN.at(sex).second;
             vector<int> setVals = setValsAndT.second;
             int lastK = setVals[indexChosen];
             int sumSetVals = 0.0;
@@ -219,34 +206,15 @@ namespace std {
 
             long double ans = (lastK + 0.5)/(sumSetVals + n/2.0 + 1.0)*numerator/denominator;
 
-            // cout << "\n\n";
-            // cout << "setVals: ";
-            // for(int i=0; i<setVals.size(); ++i) {
-            //     cout << setVals[i] << " ";
-            // }
-            // cout << "\nindexChosen: " << indexChosen << endl;
-            // cout << "n: " << n << endl;
-            // cout << "m: " << m << endl;
-            // cout << "t: " << t << endl;
-            // cout << "constantPart: " << constantPart << endl;
-            // cout << "lastK: " << lastK << endl;
-            // cout << "sumSetVals: " << sumSetVals << endl;
-            // cout << "sumToM: " << sumToM << endl;
-            // cout << "sumFromM: " << sumFromM << endl;
-            // cout << "(lastK + 0.5)/(sumSetVals + n/2.0 + 1.0): " << (lastK + 0.5)/(sumSetVals + n/2.0 + 1.0) << endl;
-            // cout << "numerator: " << numerator << endl;
-            // cout << "denominator: " << denominator << endl;
-            // cout << "ans: " << ans << endl;
-
             return ans;
         }
     };
 
     mpz_class getTotalTerms(vector<Type*> roots);
 
-    unordered_map<int,string> stochasticSum(int n, int m, vector<Type*> roots, unordered_map<int,double> pedigreeRoots, int numSamples, int checkpoint, int printCheckpoint);
+    unordered_map<int,string> stochasticSum(const unordered_map<string,pair<int,int>> & allMN, vector<Type*> roots, unordered_map<int,pair<string,double>> pedigreeRoots, int numSamples, int checkpoint, int printCheckpoint);
 
-    pair<vector<Type*>,vector<Type*>> initializeTypes(int m, const vector<vector<vector<double>>> & g, const vector<pair<double,vector<pair<int,int>>>> & types);
+    pair<vector<Type*>,vector<Type*>> initializeTypes(unordered_map<string,pair<int,int>> allMN, const unordered_map<string,vector<vector<vector<double>>>> & allG, const vector<type_struct> & types);
 
 
 }

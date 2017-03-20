@@ -26,8 +26,8 @@ from Cython.Build import cythonize
 #            extra_link_args=["-lgmpxx","-lgmp"]\
 #       )))
 
-setup(ext_modules = cythonize(Extension("ipTreeGMP",\
-           sources=["ipTreeGMP.pyx", "generalizedStochasticGMP.cpp"],\
+setup(ext_modules = cythonize(Extension("ipTreeGMPExtended",\
+           sources=["ipTreeGMPExtended.pyx", "generalizedStochasticGMPExtended.cpp"],\
            include_dirs = ["/usr/local/include"],\
            libraries = ["gmpxx","gmp"],\
            library_dirs = ["/usr/local/lib"],\

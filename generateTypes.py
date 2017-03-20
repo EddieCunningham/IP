@@ -6,7 +6,7 @@ import random
 from generateSum import *
 
 
-def goUpPedigree(person,originatedFrom,currentSets,maxVal,useT):
+def goUpPedigree(person,originatedFrom,currentSets,maxVal):
     # figure out what g terms to add
 
     if(len(person.parents) == 0):
@@ -25,7 +25,7 @@ def goUpPedigree(person,originatedFrom,currentSets,maxVal,useT):
         currentSets[str(person.parents[0].Id)][1] += 1
     else:
         assert str(person.parents[0].Id)+','+str(originatedFrom.Id) not in currentSets, 'This shouldn\'t be here'
-        t2 = list([maxVal['val'],0])
+        t2 = list([maxVal['val'],0,person.parents[0].sex])
         maxVal['val'] += 1
         currentSets[str(person.parents[0].Id)+','+str(originatedFrom.Id)] = t2
 
@@ -34,19 +34,21 @@ def goUpPedigree(person,originatedFrom,currentSets,maxVal,useT):
         currentSets[str(person.parents[1].Id)][1] += 1
     else:
         assert str(person.parents[1].Id)+','+str(originatedFrom.Id) not in currentSets, 'This shouldn\'t be here'
-        t3 = list([maxVal['val'],0])
+        t3 = list([maxVal['val'],0,person.parents[1].sex])
         maxVal['val'] += 1
         currentSets[str(person.parents[1].Id)+','+str(originatedFrom.Id)] = t3
 
-    if(useT):
-        termsToAdd = [[-1.0,[t1,t2,t3]]]
-    else:
-        termsToAdd = [['g',[t1,t2,t3]]]
-    termsToAdd.extend(goUpPedigree(person.parents[0],originatedFrom,currentSets,maxVal,useT))
-    termsToAdd.extend(goUpPedigree(person.parents[1],originatedFrom,currentSets,maxVal,useT))
+    # add a g term
+    termsToAdd = [[-1.0,[t1,t2,t3]]]
+
+    termsToAdd.extend(goUpPedigree(person.parents[0],originatedFrom,currentSets,maxVal))
+    termsToAdd.extend(goUpPedigree(person.parents[1],originatedFrom,currentSets,maxVal))
     return termsToAdd
 
-def getTypes(pedigree,useT=False,dominantOrRecessive='dominant'):
+def getTypes(pedigree,dominantOrRecessive='dominant',autoOrChromosome='autosome'):
+
+    # each type is in the format: [tVal,[[parentID,uniqueID,parentSex],[[parentID,uniqueID,parentSex]]],sex]
+
     # goal is to recreate the types thing
     # there are going to be a ton of sets,
     # some are only going to have a single 0,1,2
@@ -83,7 +85,7 @@ def getTypes(pedigree,useT=False,dominantOrRecessive='dominant'):
         else:
             assert 0,'Invalid affected value'
 
-        currentSets[str(r.Id)] = [maxVal['val'],0,tVal]
+        currentSets[str(r.Id)] = [maxVal['val'],0,r.sex,tVal]
         maxVal['val'] += 1
 
     for p in pedigree.family:
@@ -98,7 +100,7 @@ def getTypes(pedigree,useT=False,dominantOrRecessive='dominant'):
             currentSets[str(p.parents[0].Id)][1] += 1
         else:
             assert str(p.parents[0].Id)+','+str(p.Id) not in currentSets, 'This shouldn\'t be here'
-            t1 = list([maxVal['val'],0])
+            t1 = list([maxVal['val'],0,p.parents[0].sex])
             maxVal['val'] += 1
             currentSets[str(p.parents[0].Id)+','+str(p.Id)] = t1
 
@@ -107,45 +109,39 @@ def getTypes(pedigree,useT=False,dominantOrRecessive='dominant'):
             currentSets[str(p.parents[1].Id)][1] += 1
         else:
             assert str(p.parents[1].Id)+','+str(p.Id) not in currentSets, 'This shouldn\'t be here'
-            t2 = list([maxVal['val'],0])
+            t2 = list([maxVal['val'],0,p.parents[1].sex])
             maxVal['val'] += 1
             currentSets[str(p.parents[1].Id)+','+str(p.Id)] = t2
 
         if(p.affected == 'yes'):
             # then add an 's' term
-            if(useT):
-                if(dominantOrRecessive == 'dominant'):
-                    zetaTerm = [1.0,[t1,t2]]
-                elif(dominantOrRecessive == 'recessive'):
-                    zetaTerm = [0.0,[t1,t2]]
-                else:
-                    assert 0
+            if(dominantOrRecessive == 'dominant'):
+                zetaTerm = [1.0,[t1,t2],p.sex]
+            elif(dominantOrRecessive == 'recessive'):
+                zetaTerm = [0.0,[t1,t2],p.sex]
             else:
-                zetaTerm = ['s',[t1,t2]]
+                assert 0
+
         elif(p.affected == 'no'):
             # then add a 'n' term
-            if(useT):
-                if(dominantOrRecessive == 'dominant'):
-                    zetaTerm = [0.0,[t1,t2]]
-                elif(dominantOrRecessive == 'recessive'):
-                    zetaTerm = [1.0,[t1,t2]]
-                else:
-                    assert 0
+            if(dominantOrRecessive == 'dominant'):
+                zetaTerm = [0.0,[t1,t2],p.sex]
+            elif(dominantOrRecessive == 'recessive'):
+                zetaTerm = [1.0,[t1,t2],p.sex]
             else:
-                zetaTerm = ['n',[t1,t2]]
+                assert 0
+
         elif(p.affected == 'possibly'):
             # then add a 'p' term
-            if(useT):
-                zetaTerm = [0.5,[t1,t2]]
-            else:
-                zetaTerm = ['p',[t1,t2]]
+            zetaTerm = [0.5,[t1,t2],p.sex]
+
         else:
             assert 0,'Invalid affected outcome'
 
         # now branch up the tree to all of the roots and accumulate
         # the new terms to add to types
-        parent0Branch = goUpPedigree(p.parents[0],p,currentSets,maxVal,useT)
-        parent1Branch = goUpPedigree(p.parents[1],p,currentSets,maxVal,useT)
+        parent0Branch = goUpPedigree(p.parents[0],p,currentSets,maxVal)
+        parent1Branch = goUpPedigree(p.parents[1],p,currentSets,maxVal)
 
         types.extend([zetaTerm])
         types.extend(parent0Branch)
@@ -158,29 +154,24 @@ def getTypes(pedigree,useT=False,dominantOrRecessive='dominant'):
     maxUniqueVal += 1
 
     for t in types:
-        t[1] = [[_t[0],_t[0]*maxUniqueVal+_t[1]] for _t in t[1]]
+        t[1] = [[_t[0],_t[0]*maxUniqueVal+_t[1],_t[2]] for _t in t[1]]
 
-    pedigreeRoots = dict([[v[0],v[2]] for k,v in currentSets.items() if len(v) == 3])
-
+    # the roots have the form {id:[sex,tVal]}
+    pedigreeRoots = dict([[v[0],[v[2],v[3]]] for k,v in currentSets.items() if len(v) == 4])
 
     print('\n-----------------\n')
     print('Final types:')
     for t in types:
         print('\n\t'+str(t))
     
-
     print('Current sets:')
     for k,v in currentSets.items():
         print('\n\t'+str(k)+' -> '+str(v))
-
-
 
     print('Pedigree roots:')
     for k,v in pedigreeRoots.items():
         print('\n\t'+str(k)+' -> '+str(v))
     print('\n-----------------\n')
-
-    # assert 0
 
     return types,pedigreeRoots
 
