@@ -50,6 +50,8 @@ namespace std {
         mpf_class getProbability();
         void initializeRandomEval();
         mpf_class randomEvaluation();
+
+        double calcIntegral(int numbCalls);
     };
 
 
