@@ -75,19 +75,6 @@ def addPerson(pedigree,currentJSON):
 class Person:
 
     def __init__(self,jsonObject,pedigree):
-            # keep track of probabilities of different possibilities of autosomes and chromosomes
-        #          AA,Aa,aA,aa
-        # self.ADtypes = np.array([-1,-1,-1])
-        #          aa,aA,Aa,AA
-        # self.ARtypes = np.array([-1,-1,-1])
-        #         [XX,XX',X'X,X'X'] or [XY,X'Y]
-        # self.XLtypes = np.array([-1,-1, -1, -1, -1])
-        #         [XX,XX'] or [XY,XY']
-        # self.Mtypes =  np.array([-1,-1, -1,-1])
-        # Spherical representation of AD
-        # self.ADSpherical = np.array([-1,-1])
-
-        # self.trustFactor = 1.
 
         self.jsonObject = jsonObject
         self.studyID = pedigree.studyID
@@ -95,66 +82,6 @@ class Person:
         self.familyNumbers = []
 
         self.setAffectedFunctions(defaultAffFunc)
-
-    # def getProbsFromSpherical(self,IP):
-    #     [theta,phi] = self.getSpherical(IP)
-    #     return np.array([np.sin(theta)**2*np.cos(phi)**2,np.sin(theta)**2*np.sin(phi)**2,np.cos(theta)**2])
-
-    # def getSpherical(self,inheritancePattern):
-    #     if(inheritancePattern == 'AD'):
-    #         return self.ADSpherical
-    #     # elif(inheritancePattern == 'AR'):
-    #     #     return self.ARtypes
-    #     # elif(inheritancePattern == 'XL'):
-    #     #     return self.XLtypes
-    #     # elif(inheritancePattern == 'M'):
-    #     #     return self.Mtypes
-    #     else:
-    #         assert 0,'There is no inheritance pattern '+str(inheritancePattern)
-
-    # def getType(self,inheritancePattern):
-    #     if(inheritancePattern == 'AD'):
-    #         return self.ADtypes
-    #     elif(inheritancePattern == 'AR'):
-    #         return self.ARtypes
-    #     elif(inheritancePattern == 'XL'):
-    #         return self.XLtypes
-    #     elif(inheritancePattern == 'M'):
-    #         return self.Mtypes
-    #     else:
-    #         assert 0,'There is no inheritance pattern '+str(inheritancePattern)
-
-    # def setSpherical(self,inheritancePattern,newList):
-    #     if(inheritancePattern == 'AD'):
-    #         assert len(newList) == 2, 'Invalid newList size'
-    #         self.ADSpherical = newList
-        # elif(inheritancePattern == 'AR'):
-        #     assert len(newList) == 2, 'Invalid newList size'
-        #     self.ARtypes = newList
-        # elif(inheritancePattern == 'XL'):
-        #     assert len(newList) == 4, 'Invalid newList size'
-        #     self.XLtypes = newList
-        # elif(inheritancePattern == 'M'):
-        #     assert len(newList) == 4, 'Invalid newList size'
-        #     self.Mtypes = newList
-    #     else:
-    #         assert 0,'There is no inheritance pattern '+str(inheritancePattern)  
-
-    # def setType(self,inheritancePattern,newList):
-    #     if(inheritancePattern == 'AD'):
-    #         assert len(newList) == 3, 'Invalid newList size'
-    #         self.ADtypes = newList
-    #     elif(inheritancePattern == 'AR'):
-    #         assert len(newList) == 3, 'Invalid newList size'
-    #         self.ARtypes = newList
-    #     elif(inheritancePattern == 'XL'):
-    #         assert len(newList) == 5, 'Invalid newList size'
-    #         self.XLtypes = newList
-    #     elif(inheritancePattern == 'M'):
-    #         assert len(newList) == 5, 'Invalid newList size'
-    #         self.Mtypes = newList
-    #     else:
-    #         assert 0,'There is no inheritance pattern '+str(inheritancePattern)        
 
     def myAssert(self,invalid=None,cantFind=None):
         if(cantFind):
@@ -751,7 +678,6 @@ class Person:
         return locals()
     donor = property(**donor())
         
-
 class Pedigree:
 
     def __init__(self,allJSON):
@@ -768,13 +694,6 @@ class Pedigree:
             self.specialCase[key] = [child]
         else:
             self.specialCase[key].append(child)
-
-    # def resetIPTypes(self):
-    #     for p in self.family:
-    #         p.ADtypes = [-1,-1,-1]
-    #         p.ARtypes = [-1,-1,-1]
-    #         p.XLtypes = [-1,-1,-1,-1,-1,-1]
-    #         p.Mtypes = [-1,-1,-1,-1]
 
     def setAffectedFunctions(self,func):
 

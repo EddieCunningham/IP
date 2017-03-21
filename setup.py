@@ -26,13 +26,22 @@ from Cython.Build import cythonize
 #            extra_link_args=["-lgmpxx","-lgmp"]\
 #       )))
 
-setup(ext_modules = cythonize(Extension("ipTreeGMPExtended",\
-           sources=["ipTreeGMPExtended.pyx", "generalizedStochasticGMPExtended.cpp"],\
+# setup(ext_modules = cythonize(Extension("ipTreeGMPExtended",\
+#            sources=["ipTreeGMPExtended.pyx", "generalizedStochasticGMPExtended.cpp"],\
+#            include_dirs = ["/usr/local/include"],\
+#            libraries = ["gmpxx","gmp"],\
+#            library_dirs = ["/usr/local/lib"],\
+#            language = "c++",\
+#            extra_compile_args=["-std=c++11"],\
+#       )))
+
+setup(ext_modules = cythonize(Extension("ipNEW",\
+           sources=["ipNEW.pyx", "ipImplementation.cpp"],\
            include_dirs = ["/usr/local/include"],\
-           libraries = ["gmpxx","gmp"],\
+           libraries = ["gmpxx","gmp","gsl"],\
            library_dirs = ["/usr/local/lib"],\
            language = "c++",\
-           extra_compile_args=["-std=c++11"],\
+           extra_compile_args=["-std=c++11"]\
       )))
 
 # python setup.py build_ext --inplace
