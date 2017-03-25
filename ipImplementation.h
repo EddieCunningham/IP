@@ -23,6 +23,7 @@ namespace std {
         vector<double> probs;
         bool updated;
         vector<vector<vector<double>>> g;
+        bool dontInclude;
 
         personClass(int _id_,personClass* parentA_,personClass* parentB_,bool isRoot_,double t_,double probability_,int m_,int n_,vector<double> probs_,bool updated_,vector<vector<vector<double>>> g_)
                     : _id(_id_)
@@ -36,13 +37,15 @@ namespace std {
                     ,probs(probs_)
                     ,updated(updated_)
                     ,g(g_)
+                    ,dontInclude(false)
                     {}
 
 
         void storeProbAndNormalize();
 
         void toString() {
-            cout << "this: " << this;
+            cout << "id: " << this->_id;
+            cout << "\nthis: " << this;
             cout << "\n\tparentA: " << this->parentA;
             cout << "\n\tparentB: " << this->parentB;
             cout << "\n\tisRoot: " << this->isRoot;
@@ -51,6 +54,7 @@ namespace std {
             cout << "\n\tm: " << this->m;
             cout << "\n\tn: " << this->n;
             cout << "\n\tupdated: " << this->updated;
+            cout << "\n\tdontInclude: " << this->dontInclude;
             cout << "\n\tprobs: ";
             for(int i=0; i<this->probs.size(); ++i) {
                 cout << probs[i] << " ";
@@ -70,9 +74,13 @@ namespace std {
         void updateProbs(personClass* c);
         mpf_class getProbability();
         void initializeRandomEval();
-        mpf_class randomEvaluation();
+        double randomEvaluation();
+
+        mpf_class randomEvaluationGMP();
 
         double calcIntegral(int numbCalls);
+        double calcIntegral2(int numbCalls);
+        double naiveMonteCarlo(int numbCalls);
     };
 
 

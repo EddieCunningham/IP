@@ -24,8 +24,8 @@ FILENAME = 'test.json'
 
 CALC_PROB = True
 
-PROBLEM = 'chromosome'
-DOMINANT = 'recessive'
+PROBLEM = 'autosome'
+DOMINANT = 'dominant'
 
 
 def probandShading(person):

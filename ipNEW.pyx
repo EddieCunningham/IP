@@ -33,7 +33,9 @@ cdef extern from "ipImplementation.h" namespace "std":
         pedigreeClass()
         vector[personClass*] allPeople
         vector[personClass*] roots
-        double calcIntegral(int numbCalls)
+        double calcIntegral(int numbCalls) except *
+        double naiveMonteCarlo(int numbCalls) except *
+
 
 cdef class PyPerson:
     cdef personClass* c_Person

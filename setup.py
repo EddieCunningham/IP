@@ -36,7 +36,7 @@ from Cython.Build import cythonize
 #       )))
 
 setup(ext_modules = cythonize(Extension("ipNEW",\
-           sources=["ipNEW.pyx", "ipImplementation.cpp"],\
+           sources=["ipNEW.pyx", "ipImplementation.cpp", "VEGAS.cpp"],\
            include_dirs = ["/usr/local/include"],\
            libraries = ["gmpxx","gmp","gsl"],\
            library_dirs = ["/usr/local/lib"],\
