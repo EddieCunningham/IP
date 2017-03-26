@@ -20,12 +20,14 @@ import gmpy2
 # papers with bullet points
 
 USE_TEST = True
-FILENAME = 'test.json'
+FILENAME = 'test_xLinked_maleToMale.json'
 
 CALC_PROB = True
 
 PROBLEM = 'autosome'
 DOMINANT = 'dominant'
+
+NUMB_CALLS = 100000
 
 
 def probandShading(person):
@@ -124,7 +126,7 @@ def runThisFunction(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
             pedigreeClass.initialization(completeFileName,problemContext,dominantOrRecessive)
 
             if(CALC_PROB):
-                pedigreeClass.calculateProbability()
+                pedigreeClass.calculateProbability(NUMB_CALLS)
 
             break
 

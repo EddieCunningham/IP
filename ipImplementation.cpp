@@ -10,7 +10,20 @@
 #include <gsl/gsl_monte_vegas.h>
 #include <random>
 
-bool DEBUG = false;
+#define MY_DEBUG false
+
+
+/*
+ 
+ #1 naive monte carlo with primitive numbers
+ #2 naive monte carlo with big number library
+ #3 naive monte carlo with log trick and primitive numbers
+ #4 naive monte carlo with log trick with big number library
+ #5 vegas with log trick and primitive numbers
+ #6 vegas with big number library
+ #7 vegas with log trick with big number
+ 
+ */
 
 
 namespace std {
@@ -19,7 +32,7 @@ namespace std {
 
     void personClass::storeProbAndNormalize() {
 
-        if(DEBUG) {
+        if(MY_DEBUG) {
             cout << "LINE: " << __LINE__ << endl;
             this->toString();
         }
@@ -31,6 +44,7 @@ namespace std {
         double probability = 0.0;
         for(int i=0; i<m; ++i) {
             probability += this->probs[i];
+            assert(this->probs[i] >= 0 and this->probs[i] <= 1.0);
         }
         this->probability = probability;
 
@@ -38,8 +52,9 @@ namespace std {
         for(int i=m; i<n; ++i) {
             sumOther += this->probs[i];
         }
+                
 
-        if(abs(this->probability) < pow(10,-15) and t == 1.0) {
+        if((this->probability < pow(10,-15) or this->probability > 1.0) and t == 1.0) {
             // cout << "LINE: " << __LINE__ << endl;
             // this->toString();
             // if(this->parentA) {
@@ -96,8 +111,8 @@ namespace std {
         }
         if(abs(totalSum-1.0) > pow(10,-15)) {
             // cout << "Total sum wasn't 1!  It was " << totalSum << endl;
-            // string a;
-            // cin >> a;
+//             string a;
+//             cin >> a;
             for(int i=0; i<this->probs.size(); ++i) {
                 this->probs[i] /= totalSum;
             }
@@ -117,7 +132,7 @@ namespace std {
     // will place the normalized val in the
     void pedigreeClass::updateProbs(personClass* c) {
 
-        if(DEBUG) {
+        if(MY_DEBUG) {
             cout << "LINE: " << __LINE__ << endl;
             c->toString();
         }
@@ -126,9 +141,6 @@ namespace std {
             return;
         }
 
-        double t = c->t;
-        double m = c->m;
-        double n = c->n;
         vector<vector<vector<double>>>& g = c->g;
         personClass* p = c->parentA;
         personClass* q = c->parentB;
@@ -149,7 +161,7 @@ namespace std {
         c->storeProbAndNormalize();
         c->updated = true;
 
-        if(DEBUG) {
+        if(MY_DEBUG) {
             cout << "LINE: " << __LINE__ << endl;
             c->toString();
         }
@@ -175,6 +187,48 @@ namespace std {
         }
 
         return totalAns;
+    }
+    
+    void pedigreeClass::getProbability2(mpf_class *result) {
+        
+        for(auto p_it=this->allPeople.begin(); p_it!=this->allPeople.end(); ++p_it) {
+            if((*p_it)->dontInclude) {
+                if((*p_it)->isRoot) {
+                    *result = 0.0;
+                    return;
+                }
+                // cout << "skipping this dude:\n";
+                // (*p_it)->toString();
+                continue;
+            }
+            updateProbs(*p_it);
+            double t = (*p_it)->t;
+            double prob = (*p_it)->probability;
+            double probOfShading = t*prob + (1-t)*(1-prob);
+            (*result) = (*result)*probOfShading;
+        }
+    }
+    
+    double pedigreeClass::getLogProbability() {
+        
+        double ans = 0.0;
+        
+        for(auto p_it=this->allPeople.begin(); p_it!=this->allPeople.end(); ++p_it) {
+            if((*p_it)->dontInclude) {
+                if((*p_it)->isRoot) {
+                    return 0.0;
+                }
+                // cout << "skipping this dude:\n";
+                // (*p_it)->toString();
+                continue;
+            }
+            updateProbs(*p_it);
+            double t = (*p_it)->t;
+            double prob = (*p_it)->probability;
+            double probOfShading = t*prob + (1-t)*(1-prob);
+            ans += log(probOfShading);
+        }
+        return ans;
     }
 
     void pedigreeClass::initializeRandomEval() {
@@ -211,7 +265,6 @@ namespace std {
 
     mpf_class pedigreeClass::randomEvaluationGMP() {
         this->initializeRandomEval();
-
         return this->getProbability();
     }
 
@@ -228,9 +281,7 @@ namespace std {
         return ans;
     }
 
-    double pedigreeClass::naiveMonteCarlo(int numbCalls) {
-        return 0.0;
-    }
+
 
     double evaluate(double x[], size_t dim, void* p) {
 
@@ -252,7 +303,7 @@ namespace std {
 
         string ess = "";
 
-        if(DEBUG) {
+        if(MY_DEBUG) {
             cout << "\n\n\n~~~~~~~~~~~~~~ NEW EVAL ~~~~~~~~~~~~~~" << endl;
         }
 
@@ -296,7 +347,7 @@ namespace std {
             (*r_it)->updated = true;
         }
 
-        if(DEBUG) {
+        if(MY_DEBUG) {
             cout << "\n========================================" << endl;
             for(auto p_it=globalPedigree->allPeople.begin(); p_it!=globalPedigree->allPeople.end(); ++p_it) {
 
@@ -311,7 +362,7 @@ namespace std {
 
     double pedigreeClass::calcIntegral(int numbCalls) {
 
-        if(DEBUG) {
+        if(MY_DEBUG) {
             for(int i=0; i<this->allPeople.size(); ++i) {
                 this->allPeople[i]->toString();
             }
@@ -366,7 +417,7 @@ namespace std {
         return res;
     }
 
-    float evaluate2(float x[], float wgt) {
+    float evaluate2(const vector<float> & x, float wgt) {
 
         // cout << "THE PARAMETERS ARE:" << endl;
         // for(int i=0; i<6; ++i) {
@@ -390,7 +441,7 @@ namespace std {
 
         string ess = "";
 
-        if(DEBUG) {
+        if(MY_DEBUG) {
             cout << "\n\n\n~~~~~~~~~~~~~~ NEW EVAL ~~~~~~~~~~~~~~" << endl;
         }
 
@@ -416,6 +467,7 @@ namespace std {
                     value *= sin(sphericalParameters.at(j));
                 }
                 probs[i] = pow(value,2);
+                assert(probs[i] <= 1.0 && probs[i] >= 0);
                 total += pow(value,2);
 
                 if(i < n-2) {
@@ -429,12 +481,16 @@ namespace std {
                 cout << "The total was: " << total << endl;
                 assert(0);
             }
-
+            
             (*r_it)->storeProbAndNormalize();
+            if((*r_it)->dontInclude) {
+                return 0.0;
+            }
+            assert((*r_it)->probability <= 1.0 and (*r_it)->probability >= 0.0);
             (*r_it)->updated = true;
         }
 
-        if(DEBUG) {
+        if(MY_DEBUG) {
             cout << "\n========================================" << endl;
             for(auto p_it=globalPedigree->allPeople.begin(); p_it!=globalPedigree->allPeople.end(); ++p_it) {
 
@@ -447,17 +503,10 @@ namespace std {
         return mpf_get_d(globalPedigree->getProbability().get_mpf_t())*extraSines*normalizingPart;
     }
 
-    float evaluate3(float x[], float wgt) {
-        float ans = 0.0;
-        for(int i=0; i<6; ++i) {
-            ans += x[i];
-        }
-        return ans;
-    }
 
     double pedigreeClass::calcIntegral2(int numbCalls) {
 
-        if(DEBUG) {
+        if(MY_DEBUG) {
             for(int i=0; i<this->allPeople.size(); ++i) {
                 this->allPeople[i]->toString();
             }
@@ -488,7 +537,7 @@ namespace std {
         int init = 0;
         unsigned long ncall = 1000;
         int itmx = 10;
-        int nprn = 1;
+        int nprn = 0;
         float tgral;
         float sd;
         float chi2a;
@@ -498,12 +547,232 @@ namespace std {
         return tgral;
     }
 
+    void evaluate3(const vector<double> & x, mpf_class *result) {
+
+        // cout << "THE PARAMETERS ARE:" << endl;
+        // for(int i=0; i<6; ++i) {
+        //     cout << "x[" << i << "]: " << x[i] << endl;
+        // }
+
+        // each root has n-1 parameters in x
+        // integration terms are {[0,pi],[0,pi],.....,[0,2*pi]} for each root
+
+        // need to make the update values for the roots 1 and non roots 0
+        for(auto p_it=globalPedigree->allPeople.begin(); p_it!=globalPedigree->allPeople.end(); ++p_it) {
+            (*p_it)->updated = false;
+        }
+
+        // still need to integrate using spherical coordinates!!
+        int index = 0;
+        double extraSines = 1.0;
+        double normalizingPart = 1.0;
+
+        string ess = "";
+
+        if(MY_DEBUG) {
+            cout << "\n\n\n~~~~~~~~~~~~~~ NEW EVAL ~~~~~~~~~~~~~~" << endl;
+        }
+        
+        vector<double> sphericalParameters(x.size());
+
+        for(auto r_it=globalPedigree->roots.begin(); r_it!=globalPedigree->roots.end(); ++r_it) {
+
+            // get the spherical parameters from x
+            int n = (*r_it)->n;
+//            vector<double> sphericalParameters(n-1);
+            for(int i=0; i<n-1; ++i) {
+                sphericalParameters[i] = x[index+i];
+            }
+            index += n-1;
+
+            vector<double>& probs = (*r_it)->probs;
+            double total = 0.0;
+            for(int i=0; i<probs.size(); ++i) {
+
+                double value = 1.0;
+                if(i < n-1) {
+                    value *= cos(sphericalParameters.at(i));
+                }
+                for(int j=0; j<i; ++j) {
+                    value *= sin(sphericalParameters.at(j));
+                }
+                probs[i] = pow(value,2);
+                assert(probs[i] <= 1.0 && probs[i] >= 0);
+                total += pow(value,2);
+
+                if(i < n-2) {
+                    extraSines *= pow(sin(sphericalParameters.at(i)),n-2-i);
+                }
+            }
+
+            normalizingPart *= tgamma(n/2.0)/pow(M_PI,n/2.0)/2.0;
+
+            if(abs(total-1.0) >= pow(10,-15)) {
+                cout << "The total was: " << total << endl;
+                assert(0);
+            }
+            
+            (*r_it)->storeProbAndNormalize();
+            if((*r_it)->dontInclude) {
+                return;
+            }
+            assert((*r_it)->probability <= 1.0 and (*r_it)->probability >= 0.0);
+            (*r_it)->updated = true;
+        }
+
+        if(MY_DEBUG) {
+            cout << "\n========================================" << endl;
+            for(auto p_it=globalPedigree->allPeople.begin(); p_it!=globalPedigree->allPeople.end(); ++p_it) {
+
+                cout << "LINE: " << __LINE__ << endl;
+                (*p_it)->toString();
+            }
+            cout << "----------------------------------------" << endl;
+        }
+        globalPedigree->getProbability2(result);
+        (*result) = (*result) * (double)(extraSines*normalizingPart);
+    }
+    
+    
+    double pedigreeClass::naiveMonteCarlo(int numbCalls) {
+        if(MY_DEBUG) {
+            for(int i=0; i<this->allPeople.size(); ++i) {
+                this->allPeople[i]->toString();
+            }
+        }
+        
+        int totalDim = 0;
+        for(int i=0; i<this->roots.size(); ++i) {
+            totalDim += this->roots[i]->n-1;
+        }
+        
+        globalPedigree = this;
+        
+        double xl[totalDim];
+        double xu[totalDim];
+        int index = 0;
+        mpf_class volume = 1.0;
+        for(int i=0; i<this->roots.size(); ++i) {
+            
+            int n = this->roots[i]->n;
+            
+            for(int j=0; j<n-2; ++j) {
+                xl[index+j] = 0;
+                xu[index+j] = M_PI;
+                volume *= M_PI;
+            }
+            xl[index+n-2] = 0;
+            xu[index+n-2] = 2*M_PI;
+            volume *= 2*M_PI;
+            index += n-1;
+        }
+
+        vector<double> x(totalDim);
+
+        mpf_class sum = 0.0;
+        mpf_class sumSquares = 0.0;
+        
+        mpf_class result = 1.0;
+        long int result_precision = result.get_prec();
+
+        for(int i=0; i<numbCalls; ++i) {
+
+            for(int j=0; j<totalDim; ++j) {
+                x[i] = rand()/(double)RAND_MAX*(xu[j]-xl[j]);
+            }
+            
+            result = 1.0;
+            
+            evaluate3(x,&result);
+            
+            sum = sum + result;
+            sumSquares = sumSquares + mpf_class(result*result);
+            
+            result.set_prec(result_precision);
+            
+        }
+
+        mpf_class ans = volume*sum/numbCalls;
+        mpf_class s2 = volume*volume/numbCalls*sumSquares;
+        mpf_class variance = (s2 - ans*ans)/numbCalls;
+
+        cout << "Approximated integral: " << ans << endl;
+        cout << "Approximated variance: " << variance << endl;
+        
+        
+        
+        return 0.0;
+    }
+
 
 };
 
 using namespace std;
 
+double logAccumulator(double log_x1, double log_x2, double lastValue) {
+    return log1p(exp(log_x1-log_x2+lastValue));
+}
+
+struct logAddition {
+    bool initialized = false;
+    double lastF = 0.0;
+    double last_log_x = -1;
+    
+    bool initValue(double firstTerm) {
+        if(firstTerm <= 0) {
+            return false;
+        }
+        this->last_log_x = log(firstTerm);
+        this->initialized = true;
+        return true;
+    }
+    
+    void _addTerm(double log_term) {
+        this->lastF = logAccumulator(this->last_log_x, log_term, this->lastF);
+        this->last_log_x = log_term;
+    }
+    
+    void addTerm(double term) {
+        assert(this->initialized);
+        if(term <= 0) {
+            return;
+        }
+        double log_term = log(term);
+        this->_addTerm(log_term);
+    }
+    
+    void addLogTerm(double log_term) {
+        assert(this->initialized);
+        this->_addTerm(log_term);
+    }
+    
+    double getSum() {
+        return this->last_log_x + this->lastF;
+    }
+};
+/*
 int main() {
+    
+    
+    vector<double> randomNumbers = vector<double>(10000000);
+    double trueAns = 0.0;
+    for(int i=0; i<randomNumbers.size(); ++i) {
+        double randomNumb = pow(rand()/(double)RAND_MAX,20);
+        randomNumbers[i] = randomNumb;
+        trueAns += randomNumbers.at(i);
+    }
+    trueAns = log(trueAns);
+    
+    logAddition adder;
+    int i=0;
+    while(!(adder.initValue(randomNumbers.at(i++)))){}
+    for(;i<randomNumbers.size(); ++i) {
+        adder.addTerm(randomNumbers.at(i));
+    }
+    
+    cout << "True ans: " << trueAns << endl;
+    cout << "Adder ans: " << adder.getSum() << endl;
+    return 1;
 
     srand(12934867);
 
@@ -606,9 +875,10 @@ int main() {
     // globalPedigree = &pedigree;
     // cout << pedigree.evaluate(x, totalDim, nullptr) << endl;
 
-    cout << pedigree.calcIntegral2(10000) << endl;
-
+    // cout << pedigree.calcIntegral2(10000) << endl;
+    pedigree.naiveMonteCarlo(10000);
     return 1;
 }
 
 
+*/

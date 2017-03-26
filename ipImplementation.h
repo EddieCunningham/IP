@@ -73,6 +73,8 @@ namespace std {
         double getNormVal(personClass *p, int index);
         void updateProbs(personClass* c);
         mpf_class getProbability();
+        void getProbability2(mpf_class *result);
+        double getLogProbability();
         void initializeRandomEval();
         double randomEvaluation();
 

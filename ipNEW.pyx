@@ -15,7 +15,7 @@ from libc.stdint cimport uintptr_t
 
 ctypedef personClass* person_ptr
 
-cdef extern from "ipImplementation.h" namespace "std":
+cdef extern from "logProbabilityIP.h" namespace "std":
 
     cdef cppclass personClass:
         personClass(int _id_,personClass* parentA_,personClass* parentB_,bool isRoot_,double t_,double probability_,int m_,int n_,vector[double] probs_,bool updated_,vector[vector[vector[double]]] g_)
@@ -29,13 +29,11 @@ cdef extern from "ipImplementation.h" namespace "std":
         vector[vector[vector[double]]] g
         int _id
 
-    cdef cppclass pedigreeClass:
-        pedigreeClass()
+    cdef cppclass pedigreeClass2:
+        pedigreeClass2()
         vector[personClass*] allPeople
         vector[personClass*] roots
-        double calcIntegral(int numbCalls) except *
         double naiveMonteCarlo(int numbCalls) except *
-
 
 cdef class PyPerson:
     cdef personClass* c_Person
@@ -104,25 +102,38 @@ cdef class PyPerson:
         self.parentB = parentB
         self.c_Person.parentB = parentB.c_Person
 
+    # def toString(self):
+    #     print('self: '+str(self))
+    #     print('\tparentA: '+str(self.parentA))
+    #     print('\tparentB: '+str(self.parentB))
+    #     print('\tisRoot: '+str(self.isRoot))
+    #     print('\tt: '+str(self.t))
+    #     print('\tprobability: '+str(self.probability))
+    #     print('\tm: '+str(self.m))
+    #     print('\tn: '+str(self.n))
+    #     print('\tprobs: '+str(self.probs))
+    #     print('\tupdated: '+str(self.updated))
+    #     print('\tg: '+str(self.g))
+    #     print('\t_id: '+str(self._id))
+
     def toString(self):
-        print('self: '+str(self))
-        print('\tparentA: '+str(self.parentA))
-        print('\tparentB: '+str(self.parentB))
-        print('\tisRoot: '+str(self.isRoot))
-        print('\tt: '+str(self.t))
-        print('\tprobability: '+str(self.probability))
-        print('\tm: '+str(self.m))
-        print('\tn: '+str(self.n))
-        print('\tprobs: '+str(self.probs))
-        print('\tupdated: '+str(self.updated))
-        print('\tg: '+str(self.g))
-        print('\t_id: '+str(self._id))
+        print('personClass x_'+str(self._id)+'('+str(self._id)+','),
+        if(not self.parentA):
+            print('nullptr,'),
+            print('nullptr,'),
+            print('true,'),
+        else:
+            print('&x_'+str(self.parentA.c_Person._id)+','),
+            print('&x_'+str(self.parentB.c_Person._id)+','),
+            print('false,'),
+        print(str(self.t)+','),
+        print('0.0,2,3,vector<double>(3),false,g);\n')
 
 def empty(obj):
     return None
 
 cdef class PyPedigree:
-    cdef pedigreeClass c_pedigree
+    cdef pedigreeClass2 c_pedigree
 
     cdef public object allPeople
     cdef public object roots
@@ -194,8 +205,8 @@ cdef class PyPedigree:
         print('\n\n--------------------------------------\n\n')
 
 
-    cpdef calculateProbability(self):
-        return self.c_pedigree.calcIntegral(1000)
+    cpdef calculateProbability(self,numbCalls):
+        return self.c_pedigree.naiveMonteCarlo(numbCalls)
 
 
 

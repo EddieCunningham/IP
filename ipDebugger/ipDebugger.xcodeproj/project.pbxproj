@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2CF93A821E84663F0018CE5B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CF93A811E84663F0018CE5B /* main.cpp */; };
+		2CEE4CD01E87118A00378F73 /* logProbabilityIP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CEE4CCE1E87118A00378F73 /* logProbabilityIP.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +23,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2CEE4CCE1E87118A00378F73 /* logProbabilityIP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = logProbabilityIP.cpp; path = ../../logProbabilityIP.cpp; sourceTree = "<group>"; };
+		2CEE4CCF1E87118A00378F73 /* logProbabilityIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = logProbabilityIP.h; path = ../../logProbabilityIP.h; sourceTree = "<group>"; };
 		2CF93A7E1E84663F0018CE5B /* ipDebugger */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ipDebugger; sourceTree = BUILT_PRODUCTS_DIR; };
-		2CF93A811E84663F0018CE5B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +58,8 @@
 		2CF93A801E84663F0018CE5B /* ipDebugger */ = {
 			isa = PBXGroup;
 			children = (
-				2CF93A811E84663F0018CE5B /* main.cpp */,
+				2CEE4CCF1E87118A00378F73 /* logProbabilityIP.h */,
+				2CEE4CCE1E87118A00378F73 /* logProbabilityIP.cpp */,
 			);
 			path = ipDebugger;
 			sourceTree = "<group>";
@@ -119,7 +121,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CF93A821E84663F0018CE5B /* main.cpp in Sources */,
+				2CEE4CD01E87118A00378F73 /* logProbabilityIP.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +218,13 @@
 		2CF93A861E84663F0018CE5B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-lgmpxx",
+					"-lgmp",
+					"-lgsl",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -223,6 +232,13 @@
 		2CF93A871E84663F0018CE5B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-lgmpxx",
+					"-lgmp",
+					"-lgsl",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -246,6 +262,7 @@
 				2CF93A871E84663F0018CE5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
