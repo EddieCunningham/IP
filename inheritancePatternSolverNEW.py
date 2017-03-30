@@ -7,6 +7,7 @@ from model import *
 from ipNEW import *
 from getGHelper import *
 import time
+import numpy as np
 import gmpy2
 
 # 3 confusion matrices
@@ -19,129 +20,107 @@ import gmpy2
 
 # papers with bullet points
 
-USE_TEST = True
-FILENAME = 'test_xLinked_maleToMale.json'
-
-CALC_PROB = True
-
-PROBLEM = 'autosome'
-DOMINANT = 'dominant'
+FILENAME = 'test_13.json'
 
 NUMB_CALLS = 100000
 
+PRINT_ITERATIONS = False
+PRINT_PEOPLE = False
 
-def probandShading(person):
-    assert 0
-    if(len(person.diagnoses) > 0):
-        return 'yes'
+PRINT_INDIVIDUAL_RESULTS = True
+
+
+def runProblem(filename,problemContext,dominantOrRecessive,problemType):
+    pedigreeClass = PyPedigree()
+    pedigreeClass.initialization(filename,problemContext,dominantOrRecessive)
+    contradiction,log_ans,log_stdev = pedigreeClass.calculateProbability(NUMB_CALLS,PRINT_ITERATIONS,PRINT_PEOPLE)
+
+    if(contradiction == 1.0):
+        contradiction = 'yes'
     else:
-        return 'no'
+        contradiction = 'no'
 
-def autosomeProblem():
+    resultString = '\n'
+    resultString += '\n'+str(problemType)+' results:'
+    resultString += '\ncontradiction: '+str(contradiction)
+    resultString += '\nans: '+str(np.exp(log_ans))
+    resultString += '\nstdev: '+str(np.exp(log_stdev))
+    return resultString,contradiction,np.exp(log_ans),np.exp(log_stdev)
 
+def runXLRProb(filename):
+    problemContext = chromosomeProblem
+    dominantOrRecessive = 'recessive'
+    return runProblem(filename,problemContext,dominantOrRecessive,'X-Linked Recessive')
 
-    # AA, Aa, aA, aa
-    g = [
-          [[1.  ,0.5 ,0.5 ,0. ],
-           [0.5 ,0.25,0.25,0. ],
-           [0.5 ,0.25,0.25,0. ],
-           [0.0 ,0.  ,0.  ,0. ]],
-  
-          [[0.  ,0.5 ,0.5 ,1. ],
-           [0.  ,0.25,0.25,0.5],
-           [0.  ,0.25,0.25,0.5],
-           [0.  ,0.  ,0.  ,0. ]],
-  
-          [[0.  ,0.  ,0.  ,0. ],
-           [0.5 ,0.25,0.25,0. ],
-           [0.5 ,0.25,0.25,0. ],
-           [1.  ,0.5 ,0.5 ,0. ]],
+def runXLDProb(filename):
+    problemContext = chromosomeProblem
+    dominantOrRecessive = 'dominant'
+    return runProblem(filename,problemContext,dominantOrRecessive,'X-Linked Dominant')
 
-          [[0.  ,0.  ,0.  , 0.],
-           [0.  ,0.25,0.25,0.5],
-           [0.  ,0.25,0.25,0.5],
-           [0.  ,0.5 ,0.5 ,1. ]]
-        ]
+def runARProb(filename):
+    problemContext = autosomeProblem
+    dominantOrRecessive = 'recessive'
+    return runProblem(filename,problemContext,dominantOrRecessive,'Autosomal Recessive')
 
-    allG = {}
-
-    for x in itertools.product(['unknown','male','female'],repeat=3):
-        left,right,child = x
-        if((left == 'male' and right == 'male') or (left == 'female' and right == 'female')):
-            continue
-        key = left+','+right+'->'+child
-        allG[key] = g
-
-    allMN = {
-        'unknown':[3,4],
-        'female':[3,4],
-        'male':[3,4]
-    }
-
-    return allMN,allG,'autosome'
-
-def chromosomeProblem():
-
-    # XX, XX_, X_X, XY, YX, X_X_, X_Y, YX_
-
-    allG = {}
-
-    for x in itertools.product(['unknown','male','female'],repeat=3):
-        left,right,child = x
-        if((left == 'male' and right == 'male') or (left == 'female' and right == 'female')):
-            continue
-        key = left+','+right+'->'+child
-        val = generateGForChromosomeProblem(left,right,child)
-        allG[key] = val
-
-    allMN = {
-        'unknown':[5,8],
-        'female':[3,4],
-        'male':[2,4]
-    }
-
-    return allMN,allG,'chromosome'
-
+def runADProb(filename):
+    problemContext = autosomeProblem
+    dominantOrRecessive = 'dominant'
+    return runProblem(filename,problemContext,dominantOrRecessive,'Autosomal Dominant')
+    
 def runThisFunction(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
 
-    shadingFunction = probandShading
-    if(PROBLEM == 'autosome'):
-        problemContext = autosomeProblem
+    filename = os.path.join(jsonFolderPath,FILENAME)
+    print('Running solver on XLR problem')
+    resultXLR,contradictionXLR,ansXLR,stdevXLR = runXLRProb(filename)
+
+    print('\n---------------\nRunning solver on AR problem')
+    resultAR,contradictionAR,ansAR,stdevAR = runARProb(filename)
+
+    print('\n---------------\nRunning solver on AD problem')
+    resultAD,contradictionAD,ansAD,stdevAD = runADProb(filename)
+    
+    print('\n---------------\n')
+
+    total = 0
+
+    if(contradictionXLR != 'yes'):
+        if(PRINT_INDIVIDUAL_RESULTS):
+            print('\n\n'+resultXLR)
+        total += ansXLR
     else:
-        problemContext = chromosomeProblem
-    if(DOMINANT == 'dominant'):
-        dominantOrRecessive = 'dominant'
+        if(PRINT_INDIVIDUAL_RESULTS):
+            print('\n\n'+'Contradiction in XLR!')
+
+    if(contradictionAR != 'yes'):
+        if(PRINT_INDIVIDUAL_RESULTS):
+            print('\n\n'+resultAR)
+        total += ansAR
     else:
-        dominantOrRecessive = 'recessive'
+        if(PRINT_INDIVIDUAL_RESULTS):
+            print('\n\n'+'Contradiction in AR!')
 
-    allPedigrees = []
-    for filename in os.listdir(jsonFolderPath):
-        if('.json' in filename):
-            if(USE_TEST):
-                filename = FILENAME
+    if(contradictionAD != 'yes'):
+        if(PRINT_INDIVIDUAL_RESULTS):
+            print('\n\n'+resultAD)
+        total += ansAD
+    else:
+        if(PRINT_INDIVIDUAL_RESULTS):
+            print('\n\n'+'Contradiction in AD!')
 
-            completeFileName = os.path.join(jsonFolderPath,filename)
+    print('\n\n-----------------------\nResults for '+FILENAME+'\n-----------------------\n')
+    if(contradictionXLR != 'yes'):
+        print('Probability of XLR: '+str(ansXLR/float(total)))
+    else:
+        print('Probability of XLR: 0')
+    if(contradictionAR != 'yes'):
+        print('Probability of AR: '+str(ansAR/float(total)))
+    else:
+        print('Probability of AR: 0')
+    if(contradictionAD != 'yes'):
+        print('Probability of AD: '+str(ansAD/float(total)))
+    else:
+        print('Probability of AD: 0')
 
-            pedigreeClass = PyPedigree()
-            pedigreeClass.initialization(completeFileName,problemContext,dominantOrRecessive)
-
-            if(CALC_PROB):
-                pedigreeClass.calculateProbability(NUMB_CALLS)
-
-            break
-
-
-def initADProb(filename,jsonFolderPath='/Users/Eddie/kec-bot/app/pedigreeData'):
-    problemContext = autosomeProblem
-    pedigreeClass = PyPedigree()    
-    pedigreeClass.initialization(os.path.join(jsonFolderPath,filename),problemContext,'dominant')
-    return pedigreeClass
-
-def initARProb(filename,jsonFolderPath='/Users/Eddie/kec-bot/app/pedigreeData'):
-    problemContext = autosomeProblem
-    pedigreeClass = PyPedigree()
-    pedigreeClass.initialization(os.path.join(jsonFolderPath,filename),problemContext,'recessive')
-    return pedigreeClass
 
 
 def mainFunction():

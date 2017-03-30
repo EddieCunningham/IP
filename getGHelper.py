@@ -5,114 +5,188 @@ import math
 import random
 import numpy as np
 
-def generateGForChromosomeProblem(left_string,right_string,child_string):
 
-    #           XX  Xy  yX  xX  Xx  xx  xy  yx
-    mappings = ['/','>','^','_','|','x','D','V']
-
-    #     XX   Xy   yX   xX   Xx   xx   xy   yx
-    p1 = '//   />   >/   |/   /|   ||   |>   >|' # X
-    p1_= '//   />   >/   |/   /|   ||   |>   >|' # X
-
-    p2 = '//   />   >/   |/   /|   ||   |>   >|' # X
-    p2_= '^^   ^.   .^   V^   ^V   VV   V.   .V' # y
-
-    p3 = '^^   ^.   .^   V^   ^V   VV   V.   .V' # y
-    p3_= '//   />   >/   |/   /|   ||   |>   >|' # X
-
-    p4 = '__   _D   D_   x_   _x   xx   xD   Dx' # x
-    p4_= '//   />   >/   |/   /|   ||   |>   >|' # X
-
-    p5 = '//   />   >/   |/   /|   ||   |>   >|' # X
-    p5_= '__   _D   D_   x_   _x   xx   xD   Dx' # x
-
-    p6 = '__   _D   D_   x_   _x   xx   xD   Dx' # x
-    p6_= '__   _D   D_   x_   _x   xx   xD   Dx' # x
-
-    p7 = '__   _D   D_   x_   _x   xx   xD   Dx' # x
-    p7_= '^^   ^.   .^   V^   ^V   VV   V.   .V' # y
-
-    p8 = '^^   ^.   .^   V^   ^V   VV   V.   .V' # y
-    p8_= '__   _D   D_   x_   _x   xx   xD   Dx' # x
-
-    table = p1+'~'+p1_+'~'+p2+'~'+p2_+'~'+p3+'~'+p3_+'~'+p4+'~'+p4_+'~'+p5+'~'+p5_+'~'+p6+'~'+p6_+'~'+p7+'~'+p7_+'~'+p8+'~'+p8_
+PRINT = False
 
 
-    parsedTable = [[[_x[0],_x[1]] for _x in x.split('   ')] for x in table.split('~')]
-
-    # for p in parsedTable:
-    #     print(p)
-
-    lookup = {
-        'unknown':[0,1,2,3,4,5,6,7],
-        'female':[0,3,4,5],
-        'male':[1,2,6,7]
-    }
-
-    left = lookup[left_string]
-    right = lookup[right_string]
-    child = lookup[child_string]
-
-    overall = []
-    for i in child:
-        m = mappings[i]
-        current = [[0 for _i in range(len(right))] for i in range(len(left))]
-        for _j,j in enumerate(left):
-            row1 = 2*j
-            row2 = 2*j+1
-            for _k,k in enumerate(right):
-                e1 = parsedTable[row1][k][0]
-                e2 = parsedTable[row1][k][1]
-                e3 = parsedTable[row2][k][0]
-                e4 = parsedTable[row2][k][1]
-                relevant = len([x for x in [e1,e2,e3,e4] if x == m])
-                total = len([x for x in [e1,e2,e3,e4] if x != '.'])
-                current[_j][_k] = float(relevant)/float(total)
-        overall.append(current)
-    
-    # print('[')
-    # for k,o in enumerate(overall):
-    #     print('\t[')
-    #     for i,_o in enumerate(o):
-    #         toPrint = '\t\t['
-    #         for j,__o in enumerate(_o):
-    #             if(j == len(_o)-1):
-    #                 toPrint += '{0:1f}'.format(__o)
-    #             else:
-    #                 toPrint += '{0:1f},'.format(__o)
-
-    #         if(i == len(o)-1):
-    #             toPrint += ']'
-    #         else:
-    #             toPrint += '],'
-    #         print(toPrint)
-
-    #     if(k == len(overall)-1):
-    #         print('\t]')
-    #     else:    
-    #         print('\t],')
-    # print(']')
-
-    return overall
+def generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedAllele,childSex,leftParentSex,rightParentSex,chromoOrAuto):
 
 
-def runThis():
+    # make sure that we have valid alleles
+    for x in inputString:
+        assert(x[0] in validAlleles and x[1] in validAlleles)
+
+    # if need order to matter
+    if(orderMatters):
+        newInputString = []
+        for i in inputString:
+            if(i[0] != i[1]):
+                newInputString.append(i[1]+i[0])
+            newInputString.append(i)
+        inputString = newInputString
+
+    # sort the inputString so that affected people are first
+    inputString = sorted(inputString,key=lambda x: len([_x for _x in x if _x == affectedAllele]),reverse=True)
+
+    # remove illegal pairs
+    inputString = [x for x in inputString if x not in illegal]
+
+    # get the sex mappings
+    if(chromoOrAuto == 'chromosome'):
+        sexMappings = {
+            'unknown':list(range(len(inputString))),
+            'male':[i for i,x in enumerate(inputString) if 'y' in x],
+            'female':[i for i,x in enumerate(inputString) if 'y' not in x]
+        }
+    else:
+        sexMappings = {
+            'unknown':list(range(len(inputString))),
+            'male':list(range(len(inputString))),
+            'female':list(range(len(inputString)))
+        }
+
+    left = [inputString[x] for x in sexMappings[leftParentSex]]
+    right = [inputString[x] for x in sexMappings[rightParentSex]]
+    child = [inputString[x] for x in sexMappings[childSex]]
+
+
+    # get all MN for the sexes
+    allMN = dict([[k,[len([x for x in v if affectedAllele in inputString[x]]),len(v)]] for k,v in sexMappings.items()])
+
+    if(PRINT):
+        print('\n\n---------------- PUNNET SQUARE ----------------\n')
+
+        print('Child possibilities: '+str(child)+'\n\n')
+
+        print('    '),
+        for i,r in enumerate(right):
+            if(i+1 == len(right)):
+                print(str(r)+'\n')
+            else:
+                print(str(r)+'  '),
+        for l in left:
+            print(str(l)+'\n')
+
+        print('\n-----------------------------------------------\n\n')
+
+    punnetSquare = []
+
+    for i,c in enumerate(child):
+
+        currentMatrix = []
+        for j,l in enumerate(left):
+
+            currentRow = []
+            for k,r in enumerate(right):
+
+                multiplier = 1.0
+                if((chromoOrAuto == 'chromosome') and (len([x for x in [l,r] if x[0] == 'y' or x[1] == 'y']) != 1)):
+                    currentRow.append(0)
+                    continue
+
+                allCombos = [l[0]+r[0],l[0]+r[1],l[1]+r[0],l[1]+r[1]]
+                if(chromoOrAuto == 'chromosome'):
+                    if(childSex == 'male'):
+                        total = len([x for x in allCombos if (x not in illegal and 'y' in x)])
+                    elif(childSex == 'female'):
+                        total = len([x for x in allCombos if (x not in illegal and 'y' not in x)])
+                    else:
+                        total = len([x for x in allCombos if x not in illegal])
+                else:
+                    total = len([x for x in allCombos if x not in illegal])
+                if(orderMatters):
+                    relevant = len([x for x in allCombos if x == c])
+                else:
+                    relevant = len([x for x in allCombos if (x == c or x[1]+x[0] == c)])
+                val = multiplier*float(relevant)/float(total)
+
+                currentRow.append(val)
+
+            currentMatrix.append(currentRow)
+
+        punnetSquare.append(currentMatrix)
+
+    # pretty print
+    if(PRINT):
+        print('{')
+        for k,o in enumerate(punnetSquare):
+            print('\t{')
+            for i,_o in enumerate(o):
+                toPrint = '\t\t{'
+                for j,__o in enumerate(_o):
+                    if(j == len(_o)-1):
+                        toPrint += '{0:1f}'.format(__o)
+                    else:
+                        toPrint += '{0:1f},'.format(__o)
+
+                if(i == len(o)-1):
+                    toPrint += '}'
+                else:
+                    toPrint += '},'
+                print(toPrint)
+
+            if(k == len(punnetSquare)-1):
+                print('\t}')
+            else:
+                print('\t},')
+        print('}')
+
+    # check to see that the punnet square makes sense
+    for i in range(len(punnetSquare[0])):
+        for j in range(len(punnetSquare[0][0])):
+            theSum = 0
+            for k in range(len(punnetSquare)):
+                theSum += punnetSquare[k][i][j]
+            assert(theSum == 1 or theSum == 0)
+
+    return punnetSquare,allMN
+
+
+def allGHelper(inputString,validAlleles,orderMatters,illegal,affectedAllele,autoOrChromo):
     allG = {}
-
     for x in itertools.product(['unknown','male','female'],repeat=3):
-        left,right,child = x
-        if((left == 'male' and right == 'male') or (left == 'female' and right == 'female')):
+        leftParentSex,rightParentSex,childSex = x
+        if((leftParentSex == 'male' and rightParentSex == 'male') or (leftParentSex == 'female' and rightParentSex == 'female') or (leftParentSex == 'unknown' and rightParentSex != 'unknown') or (leftParentSex != 'unknown' and rightParentSex == 'unknown')):
             continue
-        key = left+','+right+'->'+child
-        val = generateGForChromosomeProblem(left,right,child)
-        allG[key] = val
+        key = leftParentSex+','+rightParentSex+'->'+childSex
+        allG[key],allMN = generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedAllele,childSex,leftParentSex,rightParentSex,autoOrChromo)
 
-    allMN = {
-        'unknown':[5,8],
-        'female':[3,4],
-        'male':[2,4]
-    }
+    return allG,allMN
+
+def autosomeProblem():
+
+    inputString = ['AA','Aa','aa']
+    validAlleles = 'Aa'
+    orderMatters = False
+    illegal = []
+    affectedAllele = 'A'
+    autoOrChromo = 'autosome'
+
+    allG,allMN = allGHelper(inputString,validAlleles,orderMatters,illegal,affectedAllele,autoOrChromo)
+
+    return allMN,allG,'autosome'
+
+def chromosomeProblem():
+
+    inputString = ['XX','Xy','Xx','xx','xy']
+    validAlleles = 'Xxy'
+    orderMatters = False
+    illegal = ['yy']
+    affectedAllele = 'X'
+    autoOrChromo = 'chromosome'
+
+    allG,allMN = allGHelper(inputString,validAlleles,orderMatters,illegal,affectedAllele,autoOrChromo)
+
+    maleMN = allMN['male']
+    femaleMN = allMN['female']
+    g = allG['male,female->male']
+
 
     return allMN,allG,'chromosome'
 
-# runThis()
+
+# allMN,allG,autoOrChromo = chromosomeProblem()
+# print(allMN)
+# print('\n\n\n')
+# print(allG)
+

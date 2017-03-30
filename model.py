@@ -6,6 +6,15 @@ import ast
 import os
 import json
 
+
+#############################################################################
+#
+#
+#                GET RID OF THE GLOBAL VARIABLE ALLPEOPLE
+#
+#
+#############################################################################
+
 def defaultAffFunc(person_obj):
     try:
         return len(person_obj.diagnoses) and person_obj.diagnoses[0][0] == person_obj.pedigree.probandDisease[0][0]
@@ -681,11 +690,14 @@ class Person:
 class Pedigree:
 
     def __init__(self,allJSON):
+        global allPeople
+        allPeople = {}
         self.specialCase = {}
         self.allJSON = allJSON
         self.family = []
         self.probandDisease = None
         self.initAllPeople()
+
 
     def specialCaseImpliedParents(self,parentA,parentB,child):
         [a,b] = sorted([parentA.Id,parentB.Id])

@@ -4,7 +4,7 @@
 
 
 #define MY_DEBUG false
-
+#define PRINT_WORK true
 
 /*
  
@@ -20,6 +20,220 @@
 
 
 namespace std {
+
+    int sgn(double val) {
+        if(val == 0) {
+            return 0;
+        }
+        else if(val < 0) {
+            return -1;
+        }
+        else {
+            return 1;
+        }
+    }
+
+
+    double __accumulatePositive(double log_x, double log_y) {
+        return log_x + log1p(exp(log_y - log_x));
+    }
+    
+    double __accumulateNegative(double log_x, double log_y) {
+        return log_x + log1p(-exp(log_y - log_x));
+    }
+    
+    struct logAddition {
+        double log_ans = __DBL_MAX__;
+        bool needToInitialize = true;
+        
+        void _accumulatePositive(double log_x) {
+            this->log_ans = __accumulatePositive(this->log_ans, log_x);
+        }
+        
+        void _accumulateNegative(double log_x) {
+            this->log_ans = __accumulateNegative(this->log_ans, log_x);
+        }
+        
+        void _addPoint(int sign, double log_x) {
+            if(this->needToInitialize) {
+                if(sign == 0) {
+                    return;
+                }
+                this->log_ans = log_x;
+                this->needToInitialize = false;
+            }
+            else if(sign == -1) {
+                this->_accumulateNegative(log_x);
+            }
+            else if(sign == 1){
+                this->_accumulatePositive(log_x);
+            }
+            else {
+                return;
+            }
+        }
+        
+        void addPositiveLogPoint(double log_x) {
+            this->_addPoint(1,log_x);
+        }
+        void addNegativeLogPoint(double log_x) {
+            this->_addPoint(-1,log_x);
+        }
+        void addZeroPoint() {
+            return;
+        }
+        void addPoint(double x) {
+            if(x == 0) {
+                return;
+            }
+            this->_addPoint(sgn(x),log(abs(x)));
+        }
+    };
+    
+    struct logVariance {
+        int sign_avg = 0;
+        double log_x_avg = 0.0;
+        double log_m = __DBL_MAX__;
+        double log_var = __DBL_MAX__;
+        int n = 0;
+        
+        void _avgIsZero(int sign, double log_x) {
+            this->sign_avg = sign;
+            if(sign != 0) {
+                this->log_x_avg = log_x - log(this->n);
+            }
+        }
+        
+        void _updateAvg(int sign, double log_x) {
+            
+            if(this->sign_avg == 0) {
+                this->_avgIsZero(sign,log_x);
+                return;
+            }
+            
+            double log_p1 = log(1.0-1.0/this->n) + this->log_x_avg;
+            double log_p2 = log_x - log(this->n);
+            
+            if(sign == 0) {
+                this->log_x_avg = log_p1;
+            }
+            else if(sign == this->sign_avg) {
+                this->log_x_avg = __accumulatePositive(log_p1,log_p2);
+            }
+            else {
+                if(log_p1 > log_p2) {
+                    this->log_x_avg = __accumulateNegative(log_p1,log_p2);
+                }
+                else if(log_p1 < log_p2) {
+                    this->log_x_avg = __accumulateNegative(log_p2,log_p1);
+                    this->sign_avg = sign;
+                }
+                else {
+                    this->log_x_avg = __DBL_MAX__;
+                    this->sign_avg = 0;
+                }
+            }
+        }
+        
+        void _updateM(int sign, double log_x, int old_sign_avg, double old_log_x_avg) {
+            
+            if(this->n == 1) {
+                return;
+            }
+            double log_p1 = sign == 0 ? __DBL_MAX__ : 2*log_x;
+            double log_p2 = sign*this->sign_avg == 0 ? __DBL_MAX__ : log_x + this->log_x_avg;
+            double log_p3 = sign*old_sign_avg == 0 ? __DBL_MAX__ : log_x + old_log_x_avg;
+            double log_p4 = old_sign_avg*this->sign_avg == 0 ? __DBL_MAX__ : this->log_x_avg + old_log_x_avg;
+            
+            bool log_m_has_val = false;
+            
+            if(this->n > 2 && this->log_m != __DBL_MAX__) {
+                if(sign != 0) {
+                    this->log_m = __accumulatePositive(this->log_m,log_p1);
+                    log_m_has_val = true;
+                }
+            }
+            else {
+                if(sign != 0) {
+                    this->log_m = log_p1;
+                    log_m_has_val = true;
+                }
+            }
+            
+            /* ------------- */
+            
+            if(log_m_has_val == false) {
+                if(this->sign_avg*old_sign_avg != 0) {
+                    if(this->log_m != __DBL_MAX__) {
+                        this->log_m = __accumulatePositive(this->log_m,log_p4);
+                    }
+                    else {
+                        this->log_m = log_p4;
+                    }
+                }
+                else {
+                    return;
+                }
+            }
+            else if(this->sign_avg*old_sign_avg == 1) {
+                this->log_m = __accumulatePositive(this->log_m,log_p4);
+            }
+            else if(this->sign_avg*old_sign_avg == -1) {
+                this->log_m = __accumulateNegative(this->log_m,log_p4);
+            }
+            
+            /* ------------- */
+            
+            if(sign*this->sign_avg == -1) {
+                this->log_m = __accumulatePositive(this->log_m,log_p2);
+            }
+            else if(sign*this->sign_avg == 1) {
+                this->log_m = __accumulateNegative(this->log_m,log_p2);
+            }
+            
+            /* ------------- */
+            
+            if(sign*old_sign_avg == -1) {
+                this->log_m = __accumulatePositive(this->log_m,log_p3);
+            }
+            else if(sign*old_sign_avg == 1) {
+                this->log_m = __accumulateNegative(this->log_m,log_p3);
+            }
+        }
+        
+        void _addPoint(int sign, double log_x) {
+            this->n += 1;
+            double old_log_x_avg = this->log_x_avg;
+            int old_sign_avg = this->sign_avg;
+            this->_updateAvg(sign,log_x);
+            this->_updateM(sign,log_x,old_sign_avg,old_log_x_avg);
+            if(this->n > 1) {
+                this->log_var = this->log_m - log(this->n - 1);
+            }
+        }
+        
+        void addPositiveLogPoint(double log_x) {
+            this->_addPoint(1,log_x);
+        }
+        void addNegativeLogPoint(double log_x) {
+            this->_addPoint(-1,log_x);
+        }
+        void addZeroPoint() {
+            this->_addPoint(0,__DBL_MAX__);
+        }
+        void addPoint(double x) {
+            if(x == 0) {
+                this->_addPoint(0,__DBL_MAX__);
+                return;
+            }
+            this->_addPoint(sgn(x),log(abs(x)));
+        }
+        
+        double getLogStdev() {
+            return this->log_var*0.5;
+        }
+        
+    };
     
     
     void personClass::storeProbAndNormalize() {
@@ -169,7 +383,7 @@ namespace std {
         for(auto p_it=this->allPeople.begin(); p_it!=this->allPeople.end(); ++p_it) {
             if((*p_it)->dontInclude) {
                 if((*p_it)->isRoot) {
-                    return 0;
+                    return __DBL_MAX__;
                 }
                 // cout << "skipping this dude:\n";
                 // (*p_it)->toString();
@@ -194,7 +408,7 @@ namespace std {
             
             if((*p_it)->dontInclude) {
                 if((*p_it)->isRoot) {
-                    return -1;
+                    return __DBL_MAX__;
                 }
                 continue;
             }
@@ -272,7 +486,7 @@ namespace std {
             
             (*r_it)->storeProbAndNormalize();
             if((*r_it)->dontInclude) {
-                return -1;
+                return __DBL_MAX__;
             }
             if(!((*r_it)->probability <= 1.0 and (*r_it)->probability >= 0.0)) {
                 raise(SIGABRT);
@@ -290,15 +504,15 @@ namespace std {
             cout << "----------------------------------------" << endl;
         }
         double log_prob = this->getLogProbability();
-        if(log_prob == -1) {
-            return -1;
+        if(log_prob == __DBL_MAX__) {
+            return __DBL_MAX__;
         }
         return log_prob+log_extraSines+log_normalizingPart;
     }
     
     
-    double pedigreeClass2::naiveMonteCarlo(long numbCalls) {
-        if(MY_DEBUG) {
+    vector<double> pedigreeClass2::naiveMonteCarlo(long numbCalls, bool printIterations, bool printPeople) {
+        if(printPeople) {
             for(int i=0; i<this->allPeople.size(); ++i) {
                 this->allPeople[i]->toString();
             }
@@ -331,51 +545,60 @@ namespace std {
         vector<double> x(totalDim);
         
         logAddition adder;
-        
-        while(!(adder.initialized)) {
-            for(int j=0; j<totalDim; ++j) {
-                x[j] = rand()/(double)RAND_MAX*(xu[j]-xl[j]);
-            }
-            double logEval = this->logEvaluation(x);
-            adder.initLogValue(logEval);
-        }
+        logVariance variance;
         
         double currentAns = 0.0;
+        double currentStdev = 0.0;
         for(long i=0; i<numbCalls; ++i) {
             
             for(int j=0; j<totalDim; ++j) {
                 x[j] = rand()/(double)RAND_MAX*(xu[j]-xl[j]);
             }
-            
             double logEval = this->logEvaluation(x);
-            adder.addLogTerm(logEval);
+            if(logEval == __DBL_MAX__) {
+                adder.addZeroPoint();
+                variance.addZeroPoint();
+            }
+            else {
+                adder.addPositiveLogPoint(logEval);
+                variance.addPositiveLogPoint(logEval);
+            }
             
-            
-            if(i%5000 == 0) {
-                currentAns = log_volume + adder.getSum() - log(i+1);
-                cout << "\ni: " << i << endl;
-                cout << "Adder sum is: " << adder.getSum() << endl;
-                cout << "Approximated log integral: " << currentAns << endl;
-                cout << "Approximated integral: " << exp(currentAns) << endl;
+            if(printIterations) {
+                if(i%5000 == 0 && i>0) {
+                    
+                    currentAns = log_volume + adder.log_ans - log(i+1);
+                     currentStdev = log_volume + variance.getLogStdev() - 0.5*log(i+1);
+                    cout << "\n\ni: " << i << endl;
+                    cout << "Approximated log integral: " << currentAns << endl;
+                    cout << "Current log standard deviation: " << currentStdev << endl;
+                    cout << "\nApproximated integral: " << exp(currentAns) << endl;
+                    cout << "Current log standard deviation: " << exp(currentStdev) << endl;
+                }
             }
         }
         
-        currentAns = log_volume + adder.getSum() - log(numbCalls);
-        double variance = -1.0;
+        currentAns = log_volume + adder.log_ans - log(numbCalls);
+        currentStdev = log_volume + variance.getLogStdev() - 0.5*log(numbCalls);
         
-        cout << "\n-----------\nApproximated log integral: " << currentAns << endl;
-        cout << "Approximated integral: " << exp(currentAns) << endl;
-        cout << "Approximated variance: " << variance << endl;
+        if(printIterations) {
+            cout << "\n-----------\nApproximated log integral: " << currentAns << endl;
+            cout << "Current log standard deviation: " << currentStdev << endl;
+            cout << "Approximated integral: " << exp(currentAns) << endl;
+            cout << "Approximated variance: " << exp(currentStdev) << endl;
+        }
 
+        double contradictionFlag = 0;
         for(auto p_it=this->allPeople.begin(); p_it!=this->allPeople.end(); ++p_it) {            
             if((*p_it)->dontInclude) {
-                cout << "Had a contradiction with person " << (*p_it)->_id << endl;
+                if(true) {
+                    cout << "Had a contradiction with person " << (*p_it)->_id << endl;
+                }
+                contradictionFlag = 1;
             }
         }
         
-        
-        
-        return 0.0;
+        return vector<double>({contradictionFlag,currentAns,currentStdev});
     }
     
     
@@ -383,184 +606,94 @@ namespace std {
 
 using namespace std;
 
+
+struct variance_adder {
+    double x_avg = 0.0;
+    double m = 0.0;
+    double var = 0.0;
+    int n = 0;
+
+    void addPoint(double x) {
+        n += 1;
+        double delta = x - x_avg;
+        x_avg += delta/n;
+        double delta2 = x - x_avg;
+        m += delta*delta2;
+        if(n > 1) {
+            var = m/(n-1);
+        }
+    }
+};
+
+
+
+
 int main() {
+
+    /*
+    vector<double> vals({0,0,0,0,0,0,0,0,0,-1,1});
     
+    variance_adder a;
+    logVariance b;
+    
+    for(int i=0; i<vals.size(); ++i) {
+
+        double x = vals.at(i);
+        a.addPoint(x);
+        b.addPoint(x);
+        
+        cout << "\n----------------\n";
+        cout << "i: " << i << endl;
+        cout << endl;
+        cout << "a.x_avg: " << a.x_avg << endl;
+        cout << "a.m: " << a.m << endl;
+        cout << "a.var: " << a.var << endl;
+        cout << endl;
+        cout << "exp(b.log_x_avg): " << b.sign_avg*exp(b.log_x_avg) << endl;
+        cout << "exp(b.log_m): " << exp(b.log_m) << endl;
+        cout << "exp(b.log_var): " << exp(b.log_var) << endl;
+        cout << endl;
+        cout << "b.log_x_avg: " << b.log_x_avg << endl;
+        cout << "b.log_m: " << b.log_m << endl;
+        cout << "b.log_var: " << b.log_var << endl;
+    }
+    return 1;
+    */
     
     srand(12934867);
-    
-    vector<vector<vector<double>>> g = {
-        {
-            {1.0,0.5,0.0},
-            {0.5,0.25,0.0},
-            {0.0,0.0,0.0}
-        },
-        {
-            {0.0,0.5,1.0},
-            {0.5,0.5,0.5},
-            {1.0,0.5,0.0}
-        },
-        {
-            {0.0,0.0,0.0},
-            {0.0,0.25,0.5},
-            {0.0,0.5,1.0}
-        }
-    };
-    
-    
-    // personClass a(0,                  // id
-    //               nullptr,            // parentA
-    //               nullptr,            // parentB
-    //               true,               // isRoot
-    //               0.0,                // t
-    //               0.0,                // probability
-    //               2,                  // m
-    //               3,                  // n
-    //               vector<double>(3),  // probs
-    //               false,              // updated
-    //               g);                 // g
-    
-    // personClass b(1,                  // id
-    //               nullptr,            // parentA
-    //               nullptr,            // parentB
-    //               true,               // isRoot
-    //               1.0,                // t
-    //               0.0,                // probability
-    //               2,                  // m
-    //               3,                  // n
-    //               vector<double>(3),  // probs
-    //               false,              // updated
-    //               g);                 // g
-    
-    // personClass c(2,                  // id
-    //               &a,                 // parentA
-    //               &b,                 // parentB
-    //               false,              // isRoot
-    //               1.0,                // t
-    //               0.0,                // probability
-    //               2,                  // m
-    //               3,                  // n
-    //               vector<double>(3),  // probs
-    //               false,              // updated
-    //               g);                 // g
-    
-    // personClass d(3,                  // id
-    //               nullptr,            // parentA
-    //               nullptr,            // parentB
-    //               true,               // isRoot
-    //               0.0,                // t
-    //               0.0,                // probability
-    //               2,                  // m
-    //               3,                  // n
-    //               vector<double>(3),  // probs
-    //               false,              // updated
-    //               g);                 // g
-    
-    // personClass e(4,                  // id
-    //               &c,                 // parentA
-    //               &d,                 // parentB
-    //               false,              // isRoot
-    //               0.0,                // t
-    //               0.0,                // probability
-    //               2,                  // m
-    //               3,                  // n
-    //               vector<double>(3),  // probs
-    //               false,              // updated
-    //               g);                 // g
-
-
-
-    personClass x_1(1, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_2(2, nullptr, nullptr, true, 1.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_21(21, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_22(22, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__1(-1, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__4(-4, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__10(-10, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__13(-13, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__16(-16, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__19(-19, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__23(-23, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__27(-27, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__31(-31, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__34(-34, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__37(-37, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__40(-40, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__7(-7, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__43(-43, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__46(-46, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__49(-49, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__53(-53, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x__74(-74, nullptr, nullptr, true, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_3(3, &x_1, &x_2, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_4(4, &x_1, &x_2, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_5(5, &x_1, &x_2, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_6(6, &x_1, &x_2, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_7(7, &x_1, &x_2, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_8(8, &x_1, &x_2, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_9(9, &x_1, &x_2, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_10(10, &x_1, &x_2, false, 1.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_11(11, &x_1, &x_2, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_12(12, &x_1, &x_2, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_13(13, &x_1, &x_2, false, 1.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_14(14, &x_22, &x_21, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_15(15, &x_22, &x_21, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_16(16, &x_22, &x_21, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_17(17, &x_22, &x_21, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_18(18, &x_22, &x_21, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_19(19, &x_22, &x_21, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_20(20, &x_22, &x_21, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_32(32, &x_1, &x_2, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_33(33, &x_3, &x__1, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_34(34, &x_4, &x__4, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_35(35, &x_32, &x__7, false, 1.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_36(36, &x_5, &x__10, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_37(37, &x_6, &x__13, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_38(38, &x_7, &x__16, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_39(39, &x_9, &x__19, false, 1.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_40(40, &x_12, &x__23, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_41(41, &x_13, &x_14, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_42(42, &x_13, &x_14, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_43(43, &x_13, &x_14, false, 1.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_44(44, &x_13, &x_14, false, 1.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_45(45, &x_13, &x_14, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_46(46, &x_16, &x__27, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_47(47, &x_17, &x__31, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_48(48, &x_18, &x__34, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_49(49, &x_19, &x__37, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_50(50, &x_20, &x__40, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_51(51, &x_41, &x__43, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_52(52, &x_42, &x__46, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_53(53, &x_43, &x__49, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_54(54, &x_43, &x__49, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_55(55, &x_43, &x__49, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_56(56, &x_43, &x__49, false, 1.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_57(57, &x_44, &x__53, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_58(58, &x_44, &x__53, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
-personClass x_602(602, &x_56, &x__74, false, 0.0, 0.0,2,3,vector<double>(3),false,g);
+    personClass x_1(1,nullptr,nullptr,true,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({
+}));
+personClass x_2(2,nullptr,nullptr,true,0.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({
+}));
+personClass x_3(3,&x_1,&x_2,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({
+    {
+        {1.000000,0.500000,0.000000},
+        {0.500000,0.250000,0.000000},
+        {0.000000,0.000000,0.000000}
+    },
+    {
+        {0.000000,0.500000,1.000000},
+        {0.500000,0.500000,0.500000},
+        {1.000000,0.500000,0.000000}
+    },
+    {
+        {0.000000,0.000000,0.000000},
+        {0.000000,0.250000,0.500000},
+        {0.000000,0.500000,1.000000}
+    }
+}));
 
     
     
     pedigreeClass2 pedigree;
-    // pedigree.allPeople=vector<personClass*>({&a,&b,&c,&d,&e});
-    // pedigree.roots=vector<personClass*>({&a,&b,&d});
-
-    pedigree.allPeople=vector<personClass*>({&x_1,&x_2,&x_21,&x_22,&x__1,&x__4,&x__10,&x__13,&x__16,&x__19,&x__23,&x__27,&x__31,&x__34,
-&x__37,&x__40,&x__7,&x__43,&x__46,&x__49,&x__53,&x__74,&x_3,&x_4,&x_5,&x_6,&x_7,&x_8,&x_9,&x_10,&x_11,&x_12,&x_13,&x_14,&x_15,&x_16,
-&x_17,&x_18,&x_19,&x_20,&x_32,&x_33,&x_34,&x_35,&x_36,&x_37,&x_38,&x_39,&x_40,&x_41,&x_42,&x_43,&x_44,&x_45,&x_46,&x_47,&x_48,&x_49,
-&x_50,&x_51,&x_52,&x_53,&x_54,&x_55,&x_56,&x_57,&x_58,&x_602});
-
-pedigree.roots=vector<personClass*>({&x_1,&x_2,&x_21,&x_22,&x__1,&x__4,&x__10,&x__13,&x__16,&x__19,&x__23,&x__27,&x__31,&x__34,&x__37,
-&x__40,&x__7,&x__43,&x__46,&x__49,&x__53,&x__74});
+    pedigree.allPeople=vector<personClass*>({&x_1,&x_2,&x_3});
+    pedigree.roots=vector<personClass*>({&x_1,&x_2});
 
 
-    pedigree.naiveMonteCarlo(1000000);
+    pedigree.naiveMonteCarlo(100000,true,true);
     
     cout << "\n\n ============================ \n\n" << endl;
     
-    // pedigreeClass pedigree_non_log;
-    // pedigree_non_log.allPeople=vector<personClass*>({&a,&b,&c,&d,&e});
-    // pedigree_non_log.roots=vector<personClass*>({&a,&b,&d});
-    // pedigree_non_log.calcIntegral(100000);
     return 1;
 }
 

@@ -10,9 +10,9 @@
 #include <stdlib.h>
 #include <random>
 #include <csignal>
-// #include "ipImplementation.h"
 
 namespace std {
+    
     
     class personClass {
     public:
@@ -47,23 +47,98 @@ namespace std {
         void storeProbAndNormalize();
         
         void toString() {
-            cout << "id: " << this->_id;
-            cout << "\nthis: " << this;
-            cout << "\n\tparentA: " << this->parentA;
-            cout << "\n\tparentB: " << this->parentB;
-            cout << "\n\tisRoot: " << this->isRoot;
-            cout << "\n\tt: " << this->t;
-            cout << "\n\tprobability: " << this->probability;
-            cout << "\n\tm: " << this->m;
-            cout << "\n\tn: " << this->n;
-            cout << "\n\tupdated: " << this->updated;
-            cout << "\n\tdontInclude: " << this->dontInclude;
-            cout << "\n\tprobs: ";
-            for(int i=0; i<this->probs.size(); ++i) {
-                cout << probs[i] << " ";
+            string str = "personClass x_";
+            if(this->_id < 0) {
+                str += "_"+to_string(abs(this->_id));
             }
-            cout << endl << endl;
+            else {
+                str += to_string(this->_id);
+            }
+            str += "("+to_string(this->_id)+",";
+            if(this->parentA) {
+                if(this->parentA->_id < 0) {
+                    str += "&x__"+to_string(abs(this->parentA->_id))+",";
+                }
+                else {
+                    str += "&x_"+to_string(this->parentA->_id)+",";
+                }
+            }
+            else {
+                str += "nullptr,";
+            }
+            if(this->parentB) {
+                if(this->parentB->_id < 0) {
+                    str += "&x__"+to_string(abs(this->parentB->_id))+",";
+                }
+                else {
+                    str += "&x_"+to_string(this->parentB->_id)+",";
+                }
+            }
+            else {
+                str += "nullptr,";
+            }
+            if(this->isRoot) {
+                str += "true,";
+            }
+            else {
+                str += "false,";
+            }
+            str += to_string(this->t)+",";
+            str += to_string(this->probability)+",";
+            str += to_string(this->m)+",";
+            str += to_string(this->n)+",";
+            str += "vector<double>("+to_string(this->n)+"),";
+            str += "false,";
+            str += "vector<vector<vector<double>>>({";
+            for(int i=0; i<this->g.size(); ++i) {
+                str += "\n\t{";
+                for(int j=0; j<this->g.at(i).size(); ++j) {
+                    str += "\n\t\t{";
+                    for(int k=0; k<this->g.at(i).at(j).size(); ++k) {
+                        if(k == this->g.at(i).at(j).size()-1) {
+                            str += to_string(g.at(i).at(j).at(k));
+                        }
+                        else {
+                            str += to_string(g.at(i).at(j).at(k))+",";
+                        }
+                    }
+                    if(j == this->g.at(i).size()-1) {
+                        str += "}";
+                    }
+                    else {
+                       str += "},";
+                    }
+                }
+                if(i == this->g.size()-1) {
+                    str += "\n\t}";
+                }
+                else {
+                   str += "\n\t},";
+                }
+            }
+            str += "\n}));";
+
+            cout << str << endl;
         }
+
+        // void toString() {
+        //     cout << "id: " << this->_id;
+        //     cout << "\nthis: " << this;
+        //     cout << "\n\tparentA: " << this->parentA;
+        //     cout << "\n\tparentB: " << this->parentB;
+        //     cout << "\n\tisRoot: " << this->isRoot;
+        //     cout << "\n\tt: " << this->t;
+        //     cout << "\n\tprobability: " << this->probability;
+        //     cout << "\n\tm: " << this->m;
+        //     cout << "\n\tn: " << this->n;
+        //     cout << "\n\tupdated: " << this->updated;
+        //     cout << "\n\tdontInclude: " << this->dontInclude;
+        //     cout << "\n\tprobs: ";
+        //     for(int i=0; i<this->probs.size(); ++i) {
+        //         cout << probs[i] << " ";
+        //     }
+        //     cout << endl << endl;
+        // }
     };
 
     class pedigreeClass2 {
@@ -79,64 +154,7 @@ namespace std {
         double getLogProbability();
         
         double logEvaluation(const vector<double> & x);
-        double naiveMonteCarlo(long numbCalls);
+        vector<double> naiveMonteCarlo(long numbCalls, bool printIterations, bool printPeople);
     };
-    
-    struct logAddition {
-        bool initialized = false;
-        double lastF = 0.0;
-        double last_log_x = -1;
-        
-        
-        bool initValue(double firstTerm) {
-            if(firstTerm <= 0) {
-                return false;
-            }
-            this->last_log_x = log(firstTerm);
-            this->initialized = true;
-            return true;
-        }
-        
-        bool initLogValue(double log_firstTerm) {
-            if(log_firstTerm == -1) {
-                return false;
-            }
-            this->last_log_x = log_firstTerm;
-            this->initialized = true;
-            return true;
-        }
-        
-        double _accumulate(double log_x1, double log_x2, double lastValue) {
-            return log1p(exp(log_x1-log_x2+lastValue));
-        }
-        
-        void _addTerm(double log_term) {
-            this->lastF = this->_accumulate(this->last_log_x, log_term, this->lastF);
-            this->last_log_x = log_term;
-        }
-        
-        void addTerm(double term) {
-            assert(this->initialized);
-            if(term <= 0) {
-                return;
-            }
-            double log_term = log(term);
-            this->_addTerm(log_term);
-        }
-        
-        void addLogTerm(double log_term) {
-            assert(this->initialized);
-            if(log_term == -1) {
-                return;
-            }
-            this->_addTerm(log_term);
-        }
-        
-        double getSum() {
-            return this->last_log_x + this->lastF;
-        }
-    };
-    
-    
     
 };

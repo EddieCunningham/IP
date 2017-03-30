@@ -33,7 +33,7 @@ cdef extern from "logProbabilityIP.h" namespace "std":
         pedigreeClass2()
         vector[personClass*] allPeople
         vector[personClass*] roots
-        double naiveMonteCarlo(int numbCalls) except *
+        vector[double] naiveMonteCarlo(long numbCalls, bool printIterations, bool printPeople) except *
 
 cdef class PyPerson:
     cdef personClass* c_Person
@@ -102,32 +102,32 @@ cdef class PyPerson:
         self.parentB = parentB
         self.c_Person.parentB = parentB.c_Person
 
-    # def toString(self):
-    #     print('self: '+str(self))
-    #     print('\tparentA: '+str(self.parentA))
-    #     print('\tparentB: '+str(self.parentB))
-    #     print('\tisRoot: '+str(self.isRoot))
-    #     print('\tt: '+str(self.t))
-    #     print('\tprobability: '+str(self.probability))
-    #     print('\tm: '+str(self.m))
-    #     print('\tn: '+str(self.n))
-    #     print('\tprobs: '+str(self.probs))
-    #     print('\tupdated: '+str(self.updated))
-    #     print('\tg: '+str(self.g))
-    #     print('\t_id: '+str(self._id))
-
     def toString(self):
-        print('personClass x_'+str(self._id)+'('+str(self._id)+','),
-        if(not self.parentA):
-            print('nullptr,'),
-            print('nullptr,'),
-            print('true,'),
-        else:
-            print('&x_'+str(self.parentA.c_Person._id)+','),
-            print('&x_'+str(self.parentB.c_Person._id)+','),
-            print('false,'),
-        print(str(self.t)+','),
-        print('0.0,2,3,vector<double>(3),false,g);\n')
+        print('self: '+str(self))
+        print('\tparentA: '+str(self.parentA))
+        print('\tparentB: '+str(self.parentB))
+        print('\tisRoot: '+str(self.isRoot))
+        print('\tt: '+str(self.t))
+        print('\tprobability: '+str(self.probability))
+        print('\tm: '+str(self.m))
+        print('\tn: '+str(self.n))
+        print('\tprobs: '+str(self.probs))
+        print('\tupdated: '+str(self.updated))
+        print('\tg: '+str(self.g))
+        print('\t_id: '+str(self._id))
+
+    # def toString(self):
+    #     print('personClass x_'+str(self._id)+'('+str(self._id)+','),
+    #     if(not self.parentA):
+    #         print('nullptr,'),
+    #         print('nullptr,'),
+    #         print('true,'),
+    #     else:
+    #         print('&x_'+str(self.parentA.c_Person._id)+','),
+    #         print('&x_'+str(self.parentB.c_Person._id)+','),
+    #         print('false,'),
+    #     print(str(self.t)+','),
+    #     print('0.0,2,3,vector<double>(3),false,g);\n')
 
 def empty(obj):
     return None
@@ -149,11 +149,18 @@ cdef class PyPedigree:
     def get_pedigree(self):
         return self.pedigree
 
+    def __cinit__(self):
+        self.c_pedigree = pedigreeClass2()
+        self.c_pedigree.allPeople = vector[person_ptr]()
+        self.c_pedigree.roots = vector[person_ptr]()
+
+
     cpdef initialization(self,filename,problemContext,dominantOrRecessive):
         
         cdef PyPerson tempPerson
 
         with open(filename) as data_file:
+            
             data = json.loads(json.load(data_file))
             pedigree = Pedigree(data)
             pedigree.setAffectedFunctions(empty)
@@ -161,8 +168,6 @@ cdef class PyPedigree:
         self.pedigree = pedigree
 
         allMN,allG,problemName = problemContext()
-        self.c_pedigree.allPeople = vector[person_ptr]()
-        self.c_pedigree.roots = vector[person_ptr]()
         self.allPeople = []
         self.roots = []
 
@@ -199,14 +204,15 @@ cdef class PyPedigree:
                 tempPerson.setParentB(helperStruct[p.parents[1].Id])
 
 
-        for a in self.allPeople:
-            a.toString()
+        # for a in self.allPeople:
+        #     a.toString()
 
-        print('\n\n--------------------------------------\n\n')
+        # print('\n\n--------------------------------------\n\n')
 
 
-    cpdef calculateProbability(self,numbCalls):
-        return self.c_pedigree.naiveMonteCarlo(numbCalls)
+    cpdef calculateProbability(self,numbCalls,printIterations,printPeople):
+        ans = self.c_pedigree.naiveMonteCarlo(numbCalls,printIterations,printPeople)
+        return ans
 
 
 

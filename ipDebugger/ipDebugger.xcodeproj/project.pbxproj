@@ -220,6 +220,7 @@
 			buildSettings = {
 				"HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include;
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				"OTHER_CPLUSPLUSFLAGS[arch=*]" = "$(OTHER_CFLAGS)";
 				"OTHER_LDFLAGS[arch=*]" = (
 					"-lgmpxx",
 					"-lgmp",
