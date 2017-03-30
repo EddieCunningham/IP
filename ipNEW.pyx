@@ -143,6 +143,8 @@ cdef class PyPedigree:
     cdef public object pedigree
     cdef public object filename
 
+    cdef public string trueIP
+
     def get_filename(self):
         return self.filename
 
@@ -166,6 +168,7 @@ cdef class PyPedigree:
             pedigree.setAffectedFunctions(empty)
 
         self.pedigree = pedigree
+        self.trueIP = pedigree.inheritancePattern
 
         allMN,allG,problemName = problemContext()
         self.allPeople = []
@@ -174,6 +177,10 @@ cdef class PyPedigree:
         helperStruct = {}
 
         for p in pedigree.family:
+
+            if(len(p.adoptiveParents) > 0):
+                print('Skipping person: '+p.toString())
+                continue
 
             m,n = allMN[p.sex]
             if(len(p.parents) > 0):
@@ -197,8 +204,12 @@ cdef class PyPedigree:
             helperStruct[p.Id] = tempPerson
 
 
+        offset = 0
         for i,p in enumerate(pedigree.family):
-            tempPerson = self.allPeople[i]
+            if(len(p.adoptiveParents) > 0):
+                offset += 1
+                continue
+            tempPerson = self.allPeople[i-offset]
             if(len(p.parents) > 0):
                 tempPerson.setParentA(helperStruct[p.parents[0].Id])
                 tempPerson.setParentB(helperStruct[p.parents[1].Id])

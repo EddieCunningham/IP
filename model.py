@@ -741,13 +741,12 @@ class Pedigree:
         # initialize all of the shown parents
         for i,currentJSON in enumerate(self.allJSON):
             if(i==0):
-                pass
-            else:
-                adding = addPerson(self,currentJSON)
-                if(adding.proband == True):
-                    if not len(adding.diagnoses):
-                        print 'error: proband does not have a disease selected'
-                    self.probandDisease = adding.diagnoses
+                continue
+            adding = addPerson(self,currentJSON)
+            if(adding.proband == True):
+                if not len(adding.diagnoses):
+                    print 'error: proband does not have a disease selected'
+                self.probandDisease = adding.diagnoses
 
         # initialize all of the implied parents
         for x in self.family:

@@ -81,6 +81,7 @@ def generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedA
 
                 multiplier = 1.0
                 if((chromoOrAuto == 'chromosome') and (len([x for x in [l,r] if x[0] == 'y' or x[1] == 'y']) != 1)):
+                    # makes sure that same sex doesn't reproduce
                     currentRow.append(0)
                     continue
 

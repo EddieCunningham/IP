@@ -261,39 +261,13 @@ namespace std {
         }
         
         
-        if((this->probability < pow(10,-15) or this->probability > 1.0) and t == 1.0) {
-            // cout << "LINE: " << __LINE__ << endl;
-            // this->toString();
-            // if(this->parentA) {
-            //     cout << "ParentA:" << endl;
-            //     this->parentA->toString();
-            // }
-            // if(this->parentB) {
-            //     cout << "ParentB:" << endl;
-            //     this->parentB->toString();
-            // }
-            
-            // cout << "CONTRADICTION!  probability was: " << this->probability << endl;
+        if((this->probability < pow(10,-15) or this->probability > 1.0+pow(10,15)) and t == 1.0) {
             this->dontInclude = true;
             return;
-            // throw 20;
         }
         if(abs(sumOther) < pow(10,-15) and t == 0.0) {
-            // cout << "LINE: " << __LINE__ << endl;
-            // this->toString();
-            // if(this->parentA) {
-            //     cout << "ParentA:" << endl;
-            //     this->parentA->toString();
-            // }
-            // if(this->parentB) {
-            //     cout << "ParentB:" << endl;
-            //     this->parentB->toString();
-            // }
-            
-            // cout << "CONTRADICTION!  sumOther was: " << sumOther << endl;
             this->dontInclude = true;
             return;
-            // throw 20;
         }
         
         
@@ -661,33 +635,53 @@ int main() {
     */
     
     srand(12934867);
-    personClass x_1(1,nullptr,nullptr,true,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({
-}));
-personClass x_2(2,nullptr,nullptr,true,0.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({
-}));
-personClass x_3(3,&x_1,&x_2,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({
-    {
-        {1.000000,0.500000,0.000000},
-        {0.500000,0.250000,0.000000},
-        {0.000000,0.000000,0.000000}
-    },
-    {
-        {0.000000,0.500000,1.000000},
-        {0.500000,0.500000,0.500000},
-        {1.000000,0.500000,0.000000}
-    },
-    {
-        {0.000000,0.000000,0.000000},
-        {0.000000,0.250000,0.500000},
-        {0.000000,0.500000,1.000000}
-    }
-}));
+    personClass x_1(1,nullptr,nullptr,true,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({}));
+personClass x_2(2,nullptr,nullptr,true,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({}));
+personClass x_3(3,nullptr,nullptr,true,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({}));
+personClass x__10(-10,nullptr,nullptr,true,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({}));
+personClass x__7(-7,nullptr,nullptr,true,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({}));
+personClass x__4(-4,nullptr,nullptr,true,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({}));
+personClass x__1(-1,nullptr,nullptr,true,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({}));
+personClass x__23(-23,nullptr,nullptr,true,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({}));
+personClass x__26(-26,nullptr,nullptr,true,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({}));
+personClass x__29(-29,nullptr,nullptr,true,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({}));
+personClass x__99(-99,nullptr,nullptr,true,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({}));
+personClass x_4(4,&x_1,&x_2,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{0.000000,0.000000,0.000000}},{{0.000000,0.500000,1.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.000000,0.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_5(5,&x_1,&x_2,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{0.000000,0.000000,0.000000}},{{0.000000,0.500000,1.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.000000,0.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_6(6,&x_1,&x_2,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{0.000000,0.000000,0.000000}},{{0.000000,0.500000,1.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.000000,0.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_7(7,&x_1,&x_2,false,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.500000,1.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_8(8,&x_1,&x_2,false,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.500000,1.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_10(10,&x_3,&x_4,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{0.000000,0.000000,0.000000}},{{0.000000,0.500000,1.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.000000,0.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_11(11,&x_3,&x_4,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{0.000000,0.000000,0.000000}},{{0.000000,0.500000,1.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.000000,0.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_12(12,&x_3,&x_4,false,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.500000,1.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_13(13,&x_3,&x_4,false,0.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.500000,1.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_14(14,nullptr,nullptr,true,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({}));
+personClass x_26(26,&x_4,&x__10,false,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,1.000000},{0.500000,0.500000},{0.000000,0.000000}},{{0.000000,0.000000},{0.500000,0.500000},{1.000000,1.000000}}}));
+personClass x_27(27,&x_4,&x__10,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.000000},{0.500000,0.000000},{0.000000,0.000000}},{{0.000000,1.000000},{0.500000,0.500000},{1.000000,0.000000}},{{0.000000,0.000000},{0.000000,0.500000},{0.000000,1.000000}}}));
+personClass x_28(28,&x_6,&x__7,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.000000},{0.500000,0.000000},{0.000000,0.000000}},{{0.000000,1.000000},{0.500000,0.500000},{1.000000,0.000000}},{{0.000000,0.000000},{0.000000,0.500000},{0.000000,1.000000}}}));
+personClass x_29(29,&x_6,&x__7,false,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,1.000000},{0.500000,0.500000},{0.000000,0.000000}},{{0.000000,0.000000},{0.500000,0.500000},{1.000000,1.000000}}}));
+personClass x_30(30,&x_7,&x__4,false,1.000000,0.000000,3,5,vector<double>(5),false,vector<vector<vector<double>>>({{{0.500000,0.250000,0.000000},{0.000000,0.000000,0.000000}},{{0.500000,0.250000,0.000000},{0.500000,0.250000,0.000000}},{{0.000000,0.250000,0.500000},{0.500000,0.250000,0.000000}},{{0.000000,0.000000,0.000000},{0.000000,0.250000,0.500000}},{{0.000000,0.250000,0.500000},{0.000000,0.250000,0.500000}}}));
+personClass x_31(31,&x_8,&x__1,false,1.000000,0.000000,3,5,vector<double>(5),false,vector<vector<vector<double>>>({{{0.500000,0.250000,0.000000},{0.000000,0.000000,0.000000}},{{0.500000,0.250000,0.000000},{0.500000,0.250000,0.000000}},{{0.000000,0.250000,0.500000},{0.500000,0.250000,0.000000}},{{0.000000,0.000000,0.000000},{0.000000,0.250000,0.500000}},{{0.000000,0.250000,0.500000},{0.000000,0.250000,0.500000}}}));
+personClass x_32(32,&x_10,&x__23,false,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,1.000000},{0.500000,0.500000},{0.000000,0.000000}},{{0.000000,0.000000},{0.500000,0.500000},{1.000000,1.000000}}}));
+personClass x_33(33,&x_10,&x__23,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.000000},{0.500000,0.000000},{0.000000,0.000000}},{{0.000000,1.000000},{0.500000,0.500000},{1.000000,0.000000}},{{0.000000,0.000000},{0.000000,0.500000},{0.000000,1.000000}}}));
+personClass x_35(35,&x_11,&x__26,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.000000},{0.500000,0.000000},{0.000000,0.000000}},{{0.000000,1.000000},{0.500000,0.500000},{1.000000,0.000000}},{{0.000000,0.000000},{0.000000,0.500000},{0.000000,1.000000}}}));
+personClass x_36(36,&x_11,&x__26,false,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,1.000000},{0.500000,0.500000},{0.000000,0.000000}},{{0.000000,0.000000},{0.500000,0.500000},{1.000000,1.000000}}}));
+personClass x_38(38,&x_12,&x__29,false,1.000000,0.000000,3,5,vector<double>(5),false,vector<vector<vector<double>>>({{{0.500000,0.250000,0.000000},{0.000000,0.000000,0.000000}},{{0.500000,0.250000,0.000000},{0.500000,0.250000,0.000000}},{{0.000000,0.250000,0.500000},{0.500000,0.250000,0.000000}},{{0.000000,0.000000,0.000000},{0.000000,0.250000,0.500000}},{{0.000000,0.250000,0.500000},{0.000000,0.250000,0.500000}}}));
+personClass x_41(41,&x_13,&x_14,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{0.000000,0.000000,0.000000}},{{0.000000,0.500000,1.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.000000,0.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_42(42,&x_13,&x_14,false,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.500000,1.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_43(43,&x_13,&x_14,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.500000,0.000000},{0.000000,0.000000,0.000000}},{{0.000000,0.500000,1.000000},{1.000000,0.500000,0.000000}},{{0.000000,0.000000,0.000000},{0.000000,0.500000,1.000000}}}));
+personClass x_50(50,nullptr,nullptr,true,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({}));
+personClass x_51(51,&x_43,&x_50,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.000000},{0.500000,0.000000},{0.000000,0.000000}},{{0.000000,1.000000},{0.500000,0.500000},{1.000000,0.000000}},{{0.000000,0.000000},{0.000000,0.500000},{0.000000,1.000000}}}));
+personClass x_52(52,&x_43,&x_50,false,0.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,1.000000},{0.500000,0.500000},{0.000000,0.000000}},{{0.000000,0.000000},{0.500000,0.500000},{1.000000,1.000000}}}));
+personClass x_53(53,&x_43,&x_50,false,1.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,1.000000},{0.500000,0.500000},{0.000000,0.000000}},{{0.000000,0.000000},{0.500000,0.500000},{1.000000,1.000000}}}));
+personClass x_54(54,&x_43,&x_50,false,0.000000,0.000000,1,2,vector<double>(2),false,vector<vector<vector<double>>>({{{1.000000,1.000000},{0.500000,0.500000},{0.000000,0.000000}},{{0.000000,0.000000},{0.500000,0.500000},{1.000000,1.000000}}}));
+personClass x_188(188,&x_41,&x__99,false,1.000000,0.000000,2,3,vector<double>(3),false,vector<vector<vector<double>>>({{{1.000000,0.000000},{0.500000,0.000000},{0.000000,0.000000}},{{0.000000,1.000000},{0.500000,0.500000},{1.000000,0.000000}},{{0.000000,0.000000},{0.000000,0.500000},{0.000000,1.000000}}}));
 
     
     
     pedigreeClass2 pedigree;
-    pedigree.allPeople=vector<personClass*>({&x_1,&x_2,&x_3});
-    pedigree.roots=vector<personClass*>({&x_1,&x_2});
+pedigree.allPeople=vector<personClass*>({&x_1,&x_2,&x_3,&x_4,&x_5,&x_6,&x_7,&x_8,&x_10,&x_11,&x_12,&x_13,&x_14,&x_26,&x_27,&x_28,&x_29,&x_30,&x_31,&x_32,&x_33,&x_35,&x_36,&x_38,&x_41,&x_42,&x_43,&x_50,&x_51,&x_52,&x_53,&x_54,&x_188,&x__10,&x__7,&x__4,&x__1,&x__23,&x__26,&x__29,&x__99});
+pedigree.roots=vector<personClass*>({&x_1,&x_2,&x_3,&x_14,&x_50,&x__10,&x__7,&x__4,&x__1,&x__23,&x__26,&x__29,&x__99});
 
 
     pedigree.naiveMonteCarlo(100000,true,true);

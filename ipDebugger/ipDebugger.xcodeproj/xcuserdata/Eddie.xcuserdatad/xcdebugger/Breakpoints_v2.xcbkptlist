@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../logProbabilityIP.cpp"
-            timestampString = "512344210.077444"
+            timestampString = "512582692.054628"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "344"
-            endingLineNumber = "344"
+            startingLineNumber = "318"
+            endingLineNumber = "318"
             landmarkName = "pedigreeClass2::updateProbs(personClass* c)"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../logProbabilityIP.cpp"
-            timestampString = "512344292.764947"
+            timestampString = "512582692.054628"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "358"
-            endingLineNumber = "358"
+            startingLineNumber = "332"
+            endingLineNumber = "332"
             landmarkName = "pedigreeClass2::updateProbs(personClass* c)"
             landmarkType = "7">
          </BreakpointContent>
@@ -106,12 +106,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../logProbabilityIP.cpp"
-            timestampString = "512508348.919845"
+            timestampString = "512582692.054628"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "592"
-            endingLineNumber = "592"
+            startingLineNumber = "566"
+            endingLineNumber = "566"
             landmarkName = "pedigreeClass2::naiveMonteCarlo(long numbCalls, bool printIterations, bool printPeople)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../logProbabilityIP.cpp"
+            timestampString = "512582692.054628"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
+            landmarkName = "personClass::storeProbAndNormalize()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../logProbabilityIP.cpp"
+            timestampString = "512582692.054628"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "265"
+            endingLineNumber = "265"
+            landmarkName = "personClass::storeProbAndNormalize()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
