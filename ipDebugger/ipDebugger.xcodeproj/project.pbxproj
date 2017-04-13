@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2CEE4CD01E87118A00378F73 /* logProbabilityIP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CEE4CCE1E87118A00378F73 /* logProbabilityIP.cpp */; };
+		2CB7DD9A1E9FE3F2009D340F /* cMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD931E9FE3F2009D340F /* cMain.cpp */; };
+		2CB7DD9B1E9FE3F2009D340F /* helperFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD941E9FE3F2009D340F /* helperFunctions.cpp */; };
+		2CB7DD9C1E9FE3F2009D340F /* logProbIPNew.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD951E9FE3F2009D340F /* logProbIPNew.cpp */; };
+		2CB7DD9D1E9FE3F2009D340F /* pdfSamplingMonteCarloIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD981E9FE3F2009D340F /* pdfSamplingMonteCarloIntegration.cpp */; };
+		2CB7DD9E1E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD991E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +27,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2CEE4CCE1E87118A00378F73 /* logProbabilityIP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = logProbabilityIP.cpp; path = ../../logProbabilityIP.cpp; sourceTree = "<group>"; };
-		2CEE4CCF1E87118A00378F73 /* logProbabilityIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = logProbabilityIP.h; path = ../../logProbabilityIP.h; sourceTree = "<group>"; };
+		2CB7DD931E9FE3F2009D340F /* cMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cMain.cpp; path = ../../src/cMain.cpp; sourceTree = "<group>"; };
+		2CB7DD941E9FE3F2009D340F /* helperFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helperFunctions.cpp; path = ../../src/helperFunctions.cpp; sourceTree = "<group>"; };
+		2CB7DD951E9FE3F2009D340F /* logProbIPNew.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = logProbIPNew.cpp; path = ../../src/logProbIPNew.cpp; sourceTree = "<group>"; };
+		2CB7DD961E9FE3F2009D340F /* logProbIPNew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = logProbIPNew.h; path = ../../src/logProbIPNew.h; sourceTree = "<group>"; };
+		2CB7DD971E9FE3F2009D340F /* metropolisHastings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = metropolisHastings.h; path = ../../src/metropolisHastings.h; sourceTree = "<group>"; };
+		2CB7DD981E9FE3F2009D340F /* pdfSamplingMonteCarloIntegration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pdfSamplingMonteCarloIntegration.cpp; path = ../../src/pdfSamplingMonteCarloIntegration.cpp; sourceTree = "<group>"; };
+		2CB7DD991E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uniformMonteCarloIntegration.cpp; path = ../../src/uniformMonteCarloIntegration.cpp; sourceTree = "<group>"; };
 		2CF93A7E1E84663F0018CE5B /* ipDebugger */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ipDebugger; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -58,8 +67,13 @@
 		2CF93A801E84663F0018CE5B /* ipDebugger */ = {
 			isa = PBXGroup;
 			children = (
-				2CEE4CCF1E87118A00378F73 /* logProbabilityIP.h */,
-				2CEE4CCE1E87118A00378F73 /* logProbabilityIP.cpp */,
+				2CB7DD931E9FE3F2009D340F /* cMain.cpp */,
+				2CB7DD941E9FE3F2009D340F /* helperFunctions.cpp */,
+				2CB7DD951E9FE3F2009D340F /* logProbIPNew.cpp */,
+				2CB7DD961E9FE3F2009D340F /* logProbIPNew.h */,
+				2CB7DD971E9FE3F2009D340F /* metropolisHastings.h */,
+				2CB7DD981E9FE3F2009D340F /* pdfSamplingMonteCarloIntegration.cpp */,
+				2CB7DD991E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp */,
 			);
 			path = ipDebugger;
 			sourceTree = "<group>";
@@ -121,7 +135,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CEE4CD01E87118A00378F73 /* logProbabilityIP.cpp in Sources */,
+				2CB7DD9C1E9FE3F2009D340F /* logProbIPNew.cpp in Sources */,
+				2CB7DD9E1E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp in Sources */,
+				2CB7DD9A1E9FE3F2009D340F /* cMain.cpp in Sources */,
+				2CB7DD9D1E9FE3F2009D340F /* pdfSamplingMonteCarloIntegration.cpp in Sources */,
+				2CB7DD9B1E9FE3F2009D340F /* helperFunctions.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,6 +189,12 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-I/usr/local/include",
+					"-L/usr/local/lib",
+					"-lgsl",
+					"-lgslcblas",
+				);
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -209,8 +233,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-I/usr/local/include",
+					"-L/usr/local/lib",
+					"-lgsl",
+					"-lgslcblas",
+				);
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -222,9 +253,10 @@
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
 				"OTHER_CPLUSPLUSFLAGS[arch=*]" = "$(OTHER_CFLAGS)";
 				"OTHER_LDFLAGS[arch=*]" = (
-					"-lgmpxx",
-					"-lgmp",
+					"-I/usr/local/include",
+					"-L/usr/local/lib",
 					"-lgsl",
+					"-lgslcblas",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -236,9 +268,10 @@
 				"HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include;
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
 				"OTHER_LDFLAGS[arch=*]" = (
-					"-lgmpxx",
-					"-lgmp",
+					"-I/usr/local/include",
+					"-L/usr/local/lib",
 					"-lgsl",
+					"-lgslcblas",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

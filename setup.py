@@ -36,7 +36,10 @@ from Cython.Build import cythonize
 #       )))
 
 setup(ext_modules = cythonize(Extension("ipNEW",\
-           sources=["ipNEW.pyx", "logProbabilityIP.cpp"],\
+           sources=["ipNEW.pyx", "logProbIPNew.cpp"],\
+           include_dirs = ["/usr/local/include"],\
+           libraries = ["gsl","gslcblas"],\
+           library_dirs = ["/usr/local/lib"],\
            language = "c++",\
            extra_compile_args=["-std=c++11"]\
       )))

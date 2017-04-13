@@ -120,25 +120,6 @@ namespace std {
 
             cout << str << endl;
         }
-
-        // void toString() {
-        //     cout << "id: " << this->_id;
-        //     cout << "\nthis: " << this;
-        //     cout << "\n\tparentA: " << this->parentA;
-        //     cout << "\n\tparentB: " << this->parentB;
-        //     cout << "\n\tisRoot: " << this->isRoot;
-        //     cout << "\n\tt: " << this->t;
-        //     cout << "\n\tprobability: " << this->probability;
-        //     cout << "\n\tm: " << this->m;
-        //     cout << "\n\tn: " << this->n;
-        //     cout << "\n\tupdated: " << this->updated;
-        //     cout << "\n\tdontInclude: " << this->dontInclude;
-        //     cout << "\n\tprobs: ";
-        //     for(int i=0; i<this->probs.size(); ++i) {
-        //         cout << probs[i] << " ";
-        //     }
-        //     cout << endl << endl;
-        // }
     };
 
     class pedigreeClass2 {
@@ -153,11 +134,8 @@ namespace std {
         double getProbability();
         double getLogProbability();
         
-        double logEvaluation(const vector<double> & x);
+        pair<double,double> logEvaluation(const vector<double> & x);
         vector<double> naiveMonteCarlo(long numbCalls, bool printIterations, bool printPeople);
-
-        vector<double> testerMonteCarlo(long numbCalls, bool printIterations, bool printPeople);
-        double differentPDF(const vector<double> & x);
     };
     
 };

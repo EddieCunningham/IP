@@ -15,62 +15,77 @@ from libc.stdint cimport uintptr_t
 
 ctypedef personClass* person_ptr
 
-cdef extern from "logProbabilityIP.h" namespace "std":
+cdef extern from "logProbIPNew.h" namespace "std":
 
     cdef cppclass personClass:
-        personClass(int _id_,personClass* parentA_,personClass* parentB_,bool isRoot_,double t_,double probability_,int m_,int n_,vector[double] probs_,bool updated_,vector[vector[vector[double]]] g_)
+        personClass(int _id_,personClass* parentA_,personClass* parentB_,bool isRoot_,double t_,double s_,double probability_,int l_,int m_,int n_,vector[double] probs_,bool updated_,vector[vector[vector[double]]] g_,bool affected_)
         personClass* parentA
         personClass* parentB
         bool isRoot
-        double t,probability
+        double t,s,probability
         int m,n
         vector[double] probs
         bool updated
         vector[vector[vector[double]]] g
+        bool affected
         int _id
 
     cdef cppclass pedigreeClass2:
         pedigreeClass2()
         vector[personClass*] allPeople
         vector[personClass*] roots
-        vector[double] naiveMonteCarlo(long numbCalls, bool printIterations, bool printPeople) except *
+        vector[double] naiveMonteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH) except *
 
 cdef class PyPerson:
     cdef personClass* c_Person
     cdef public PyPerson parentA
     cdef public PyPerson parentB
     cdef public bool isRoot
-    cdef public double t,probability
-    cdef public int m,n
+    cdef public double t,s,probability
+    cdef public int l,m,n
     cdef public vector[double] probs
     cdef public bool updated
     cdef public vector[vector[vector[double]]] g
+    cdef public bool affected
     cdef public int _id
 
-    def __cinit__(self,object modelPerson,dominantOrRecessive,int m,int n,vector[vector[vector[double]]] g):
+    def __cinit__(self,object modelPerson,dominantOrRecessive,int l, int m,int n,vector[vector[vector[double]]] g):
         parentA = None
         parentB = None
 
+
+        # ADD SPOT FOR S VAL HERE
         isRoot = (len(modelPerson.parents) == 0)
         if(modelPerson.affected == 'yes'):
             if(dominantOrRecessive == 'dominant'):
                 tVal = 1.0
+                sVal = 0.5
             elif(dominantOrRecessive == 'recessive'):
                 tVal = 0.0
+                sVal = 0.5
             else:
                 assert 0
         elif(modelPerson.affected == 'no'):
             if(dominantOrRecessive == 'dominant'):
+                # can't have carrier in the dominant case
                 tVal = 0.0
+                sVal = 0.5
             elif(dominantOrRecessive == 'recessive'):
-                tVal = 1.0
+                if(modelPerson.carrier):
+                    tVal = 1.0
+                    sVal = 1.0
+                else:
+                    tVal = 1.0
+                    sVal = 0.5
             else:
                 assert 0
         elif(modelPerson.affected == 'possibly'):
             tVal = 0.5
+            sVal = 0.5
         else:
             assert 0,'Invalid affected value'
         t = tVal
+        s = sVal
         probability = 0.0
         probs = vector[double]()
         for i in range(n):
@@ -78,17 +93,22 @@ cdef class PyPerson:
         updated = False
         _id = modelPerson.Id
 
-        self.c_Person = new personClass(_id,NULL,NULL,isRoot,t,probability,m,n,probs,updated,g)                
+        affected = modelPerson.affected!='no'
+
+        self.c_Person = new personClass(_id,NULL,NULL,isRoot,t,s,probability,l,m,n,probs,updated,g,affected)                
 
         self.isRoot = isRoot
         self.t = t
+        self.s = s
         self.probability = probability
+        self.l = l
         self.m = m
         self.n = n
         self.probs = probs
         self.probs = probs
         self.updated = updated
         self.g = g
+        self.affected = affected
         self._id = _id
 
     def __dealloc__(self):
@@ -108,7 +128,9 @@ cdef class PyPerson:
         print('\tparentB: '+str(self.parentB))
         print('\tisRoot: '+str(self.isRoot))
         print('\tt: '+str(self.t))
+        print('\ts: '+str(self.s))
         print('\tprobability: '+str(self.probability))
+        print('\tl: '+str(self.l))
         print('\tm: '+str(self.m))
         print('\tn: '+str(self.n))
         print('\tprobs: '+str(self.probs))
@@ -170,7 +192,7 @@ cdef class PyPedigree:
         self.pedigree = pedigree
         self.trueIP = pedigree.inheritancePattern
 
-        allMN,allG,problemName = problemContext()
+        allLMN,allG,problemName = problemContext()
         self.allPeople = []
         self.roots = []
 
@@ -182,7 +204,7 @@ cdef class PyPedigree:
                 print('Skipping person: '+p.toString())
                 continue
 
-            m,n = allMN[p.sex]
+            l,m,n = allLMN[p.sex]
             if(len(p.parents) > 0):
                 child = p.sex
                 parentA = p.parents[0].sex
@@ -191,7 +213,7 @@ cdef class PyPedigree:
             else:
                 g = vector[vector[vector[double]]]()
 
-            tempPerson = PyPerson(p,dominantOrRecessive,m,n,g)
+            tempPerson = PyPerson(p,dominantOrRecessive,l,m,n,g)
 
             if(len(p.parents) == 0):
                 self.roots.append(tempPerson)
@@ -221,8 +243,8 @@ cdef class PyPedigree:
         # print('\n\n--------------------------------------\n\n')
 
 
-    cpdef calculateProbability(self,numbCalls,printIterations,printPeople):
-        ans = self.c_pedigree.naiveMonteCarlo(numbCalls,printIterations,printPeople)
+    cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH):
+        ans = self.c_pedigree.naiveMonteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH)
         return ans
 
 

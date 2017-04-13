@@ -49,9 +49,33 @@ def generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedA
     right = [inputString[x] for x in sexMappings[rightParentSex]]
     child = [inputString[x] for x in sexMappings[childSex]]
 
-
+   
     # get all MN for the sexes
-    allMN = dict([[k,[len([x for x in v if affectedAllele in inputString[x]]),len(v)]] for k,v in sexMappings.items()])
+
+    allLMN = []
+    for k,v in sexMappings.items():
+        for i,x in enumerate(v):
+            pair = inputString[x]
+            if(len([x for x in [_x for _x in pair if _x != 'y'] if x == affectedAllele]) !=  len([_x for _x in pair if _x != 'y'])):
+                break
+        L = i
+        M = len([x for x in v if affectedAllele in inputString[x]])
+        N = len(v)
+
+        allLMN.append([k,[L,M,N]])
+    allLMN = dict(allLMN)
+
+
+     # make sure that the first index of each represents a person with 2 affected alleles
+    for L in range(allLMN[leftParentSex][0]):
+        assert len([x for x in [_x for _x in left[L] if _x != 'y'] if x == affectedAllele]) ==  len([_x for _x in left[L] if _x != 'y'])
+    
+    for L in range(allLMN[rightParentSex][0]):
+        assert len([x for x in [_x for _x in right[L] if _x != 'y'] if x == affectedAllele]) ==  len([_x for _x in right[L] if _x != 'y'])
+    
+    for L in range(allLMN[childSex][0]):
+        assert len([x for x in [_x for _x in child[L] if _x != 'y'] if x == affectedAllele]) ==  len([_x for _x in child[L] if _x != 'y'])
+
 
     if(PRINT):
         print('\n\n---------------- PUNNET SQUARE ----------------\n')
@@ -140,7 +164,7 @@ def generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedA
                 theSum += punnetSquare[k][i][j]
             assert(theSum == 1 or theSum == 0)
 
-    return punnetSquare,allMN
+    return punnetSquare,allLMN
 
 
 def allGHelper(inputString,validAlleles,orderMatters,illegal,affectedAllele,autoOrChromo):
@@ -150,44 +174,44 @@ def allGHelper(inputString,validAlleles,orderMatters,illegal,affectedAllele,auto
         if((leftParentSex == 'male' and rightParentSex == 'male') or (leftParentSex == 'female' and rightParentSex == 'female') or (leftParentSex == 'unknown' and rightParentSex != 'unknown') or (leftParentSex != 'unknown' and rightParentSex == 'unknown')):
             continue
         key = leftParentSex+','+rightParentSex+'->'+childSex
-        allG[key],allMN = generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedAllele,childSex,leftParentSex,rightParentSex,autoOrChromo)
+        allG[key],allLMN = generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedAllele,childSex,leftParentSex,rightParentSex,autoOrChromo)
 
-    return allG,allMN
+    return allG,allLMN
 
 def autosomeProblem():
 
     inputString = ['AA','Aa','aa']
     validAlleles = 'Aa'
-    orderMatters = False
+    orderMatters = True
     illegal = []
     affectedAllele = 'A'
     autoOrChromo = 'autosome'
 
-    allG,allMN = allGHelper(inputString,validAlleles,orderMatters,illegal,affectedAllele,autoOrChromo)
+    allG,allLMN = allGHelper(inputString,validAlleles,orderMatters,illegal,affectedAllele,autoOrChromo)
 
-    return allMN,allG,'autosome'
+    return allLMN,allG,'autosome'
 
 def chromosomeProblem():
 
     inputString = ['XX','Xy','Xx','xx','xy']
     validAlleles = 'Xxy'
-    orderMatters = False
+    orderMatters = True
     illegal = ['yy']
     affectedAllele = 'X'
     autoOrChromo = 'chromosome'
 
-    allG,allMN = allGHelper(inputString,validAlleles,orderMatters,illegal,affectedAllele,autoOrChromo)
+    allG,allLMN = allGHelper(inputString,validAlleles,orderMatters,illegal,affectedAllele,autoOrChromo)
 
-    maleMN = allMN['male']
-    femaleMN = allMN['female']
+    maleMN = allLMN['male']
+    femaleMN = allLMN['female']
     g = allG['male,female->male']
 
 
-    return allMN,allG,'chromosome'
+    return allLMN,allG,'chromosome'
 
 
-# allMN,allG,autoOrChromo = chromosomeProblem()
-# print(allMN)
+# allLMN,allG,autoOrChromo = chromosomeProblem()
+# print(allLMN)
 # print('\n\n\n')
 # print(allG)
 

@@ -746,6 +746,7 @@ class Pedigree:
             if(adding.proband == True):
                 if not len(adding.diagnoses):
                     print 'error: proband does not have a disease selected'
+                    assert 0
                 self.probandDisease = adding.diagnoses
 
         # initialize all of the implied parents

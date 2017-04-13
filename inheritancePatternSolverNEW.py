@@ -1,9 +1,18 @@
 import os
+import csv
 import math
 from model import *
 from ipNEW import *
 from getGHelper import *
 import numpy as np
+
+'''
+
+ - plot ad and ar for different values of t
+ - change t for the parents and not the other ancestors
+ - change t with a fade out towards the ancestors 
+
+'''
 
 # 3 confusion matrices
 
@@ -15,22 +24,35 @@ import numpy as np
 
 # papers with bullet points
 
-FILENAME = 'test.json'
+FILENAME = '6087SR.json'
 
 NUMB_CALLS = 100000
+NUMB_TO_PRINT = NUMB_CALLS*0.5
 
-PRINT_ITERATIONS = False
+PRINT_ITERATIONS = True
 PRINT_PEOPLE = False
 
 PRINT_INDIVIDUAL_RESULTS = True
 
+USE_NEW_DISTRIBUTION = True
+K = 10.0
+
+USELEAK = False
+LEAKPROB = 0.01
+LEAKDECAY = 0.5
+
+USEMH = False
 
 def runProblem(filename,problemContext,dominantOrRecessive,problemType):
-    pedigreeClass = PyPedigree()
-    pedigreeClass.initialization(filename,problemContext,dominantOrRecessive)
-    contradiction,log_ans,log_stdev = pedigreeClass.calculateProbability(NUMB_CALLS,PRINT_ITERATIONS,PRINT_PEOPLE)
 
-    trueIP = pedigreeClass.trueIP
+    if(True or problemType != 'X-Linked Recessive'):
+        pedigreeClass = PyPedigree()
+        pedigreeClass.initialization(filename,problemContext,dominantOrRecessive)
+        contradiction,log_ans,log_stdev = pedigreeClass.calculateProbability(NUMB_CALLS,PRINT_ITERATIONS,NUMB_TO_PRINT,PRINT_PEOPLE,USE_NEW_DISTRIBUTION,K,USELEAK,LEAKPROB,LEAKDECAY,USEMH)
+        trueIP = pedigreeClass.trueIP
+    else:
+        contradiction,log_ans,log_stdev = 1.0,1.0,1.0
+        trueIP = 'AD'
 
     if(contradiction == 1.0):
         contradiction = 'yes'
@@ -70,13 +92,13 @@ def evaluateIP(jsonFileName,jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeD
     print('Running solver on XLR problem')
     resultXLR,contradictionXLR,ansXLR,stdevXLR,trueIP = runXLRProb(filename)
 
-    print('\n---------------\nRunning solver on AR problem')
+    print('\n------------------------------------------------------------------------------------------------------\nRunning solver on AR problem')
     resultAR,contradictionAR,ansAR,stdevAR,trueIP = runARProb(filename)
 
-    print('\n---------------\nRunning solver on AD problem')
+    print('\n------------------------------------------------------------------------------------------------------\nRunning solver on AD problem')
     resultAD,contradictionAD,ansAD,stdevAD,trueIP = runADProb(filename)
     
-    print('\n---------------\n')
+    print('\n------------------------------------------------------------------------------------------------------\n')
 
     total = 0
 
@@ -121,28 +143,82 @@ def evaluateIP(jsonFileName,jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeD
     else:
         print('Probability of AD: 0')
 
+    return resultXLR,contradictionXLR,ansXLR,stdevXLR,resultAR,contradictionAR,ansAR,stdevAR,resultAD,contradictionAD,ansAD,stdevAD,trueIP
 
-def evaluateAllPedigrees(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
+
+def evaluateAllPedigrees(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData',writeToCSV=True):
 
     goodFlag = True
 
-    for root, dirs, filenames in os.walk(jsonFolderPath):
-        for f in filenames:
-            if(f == '6481MR.json'):
-                goodFlag = True
+    with open('pedigreeResultsEvenNewer.csv', 'w') as csvfile:
+        fieldnames = ['PedigreeId','Correct_IP','contradictionXLR','ansXLR','stdevXLR','contradictionAR','ansAR','stdevAR','contradictionAD','ansAD','stdevAD']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
 
-            if(f == '5777AH.json' or f == '6158AT.json'):
-                continue # don't want to deal with adoption bs
-            
-            if(goodFlag and '.json' in f):
-                print('\n\n\n============================ SOLVING FOR '+str(f)+' ============================\n\n\n')
-                evaluateIP(f,jsonFolderPath)
-                print('\n\n\n================================================================================\n\n\n')
+        for root, dirs, filenames in os.walk(jsonFolderPath):
+            for f in filenames:
+                if(f == '6481MR.json'):
+                    goodFlag = True
+
+                if(f == '5777AH.json' or f == '6158AT.json'):
+                    continue # don't want to deal with adoption bs
+                
+                if(goodFlag and '.json' in f):
+                    print('\n\n\n============================ SOLVING FOR '+str(f)+' ============================\n\n\n')
+                    resultXLR,contradictionXLR,ansXLR,stdevXLR,resultAR,contradictionAR,ansAR,stdevAR,resultAD,contradictionAD,ansAD,stdevAD,trueIP = evaluateIP(f,jsonFolderPath)
+                    
+                    writer.writerow({ \
+                                    'PedigreeId': str(f), \
+                                    'Correct_IP': str(trueIP), \
+                                    'contradictionXLR': str(contradictionXLR), \
+                                    'ansXLR': str(ansXLR), \
+                                    'stdevXLR': str(stdevXLR), \
+                                    'contradictionAR': str(contradictionAR), \
+                                    'ansAR': str(ansAR), \
+                                    'stdevAR': str(stdevAR), \
+                                    'contradictionAD': str(contradictionAD), \
+                                    'ansAD': str(ansAD), \
+                                    'stdevAD': str(stdevAD) \
+                                    })
+
+
+                    print('\n\n\n================================================================================\n\n\n')
+
+
+
+'''
+    ######################
+
+    MAKE A PART OF THE PERSONCLASS ABOUT THE CARRIER SO THAT INSTEAD OF CHANGING 
+    T TO BATTLE INCOMPLETE PENETRANCE, USE CARRIER PROB
+
+    ######################
+'''
+
+
+def testIncompletePenetrance():
+    global LEAKPROB
+
+    answers = []
+    MIN = 0.001
+    MAX = 1.0
+    ITERS = 200
+    for i in range(0,ITERS+1):
+        LEAKPROB = (MAX-MIN)*i/ITERS + MIN
+        _,_,_,_,_,_,ansAR,_,_,_,ansAD,_,_ = evaluateIP(FILENAME)
+        answers.append([LEAKPROB,[ansAR,ansAD]])
+        print('LEAK PROB: '+str(LEAKPROB)+'\n\n\n')
+
+    for l,a in answers:
+        print(str(l)+' -> '+str(a))
 
 
 def mainFunction():
     evaluateIP(FILENAME)
 
 
-evaluateAllPedigrees()
-# mainFunction()
+# evaluateAllPedigrees()
+mainFunction()
+# testIncompletePenetrance()
+
+
