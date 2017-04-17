@@ -15,7 +15,7 @@ from libc.stdint cimport uintptr_t
 
 ctypedef personClass* person_ptr
 
-cdef extern from "logProbIPNew.h" namespace "std":
+cdef extern from "logProbIPNew.h":
 
     cdef cppclass personClass:
         personClass(int _id_,personClass* parentA_,personClass* parentB_,bool isRoot_,double t_,double s_,double probability_,int l_,int m_,int n_,vector[double] probs_,bool updated_,vector[vector[vector[double]]] g_,bool affected_)
@@ -34,7 +34,7 @@ cdef extern from "logProbIPNew.h" namespace "std":
         pedigreeClass2()
         vector[personClass*] allPeople
         vector[personClass*] roots
-        vector[double] naiveMonteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH) except *
+        vector[double] monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots) except *
 
 cdef class PyPerson:
     cdef personClass* c_Person
@@ -52,7 +52,6 @@ cdef class PyPerson:
     def __cinit__(self,object modelPerson,dominantOrRecessive,int l, int m,int n,vector[vector[vector[double]]] g):
         parentA = None
         parentB = None
-
 
         # ADD SPOT FOR S VAL HERE
         isRoot = (len(modelPerson.parents) == 0)
@@ -243,8 +242,8 @@ cdef class PyPedigree:
         # print('\n\n--------------------------------------\n\n')
 
 
-    cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH):
-        ans = self.c_pedigree.naiveMonteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH)
+    cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots):
+        ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots)
         return ans
 
 

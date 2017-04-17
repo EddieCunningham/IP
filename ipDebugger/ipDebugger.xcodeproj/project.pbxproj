@@ -12,6 +12,7 @@
 		2CB7DD9C1E9FE3F2009D340F /* logProbIPNew.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD951E9FE3F2009D340F /* logProbIPNew.cpp */; };
 		2CB7DD9D1E9FE3F2009D340F /* pdfSamplingMonteCarloIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD981E9FE3F2009D340F /* pdfSamplingMonteCarloIntegration.cpp */; };
 		2CB7DD9E1E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD991E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp */; };
+		2CB7DDA01EA076B3009D340F /* bruteForceMonteCarloIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD9F1EA076B3009D340F /* bruteForceMonteCarloIntegration.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,7 @@
 		2CB7DD971E9FE3F2009D340F /* metropolisHastings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = metropolisHastings.h; path = ../../src/metropolisHastings.h; sourceTree = "<group>"; };
 		2CB7DD981E9FE3F2009D340F /* pdfSamplingMonteCarloIntegration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pdfSamplingMonteCarloIntegration.cpp; path = ../../src/pdfSamplingMonteCarloIntegration.cpp; sourceTree = "<group>"; };
 		2CB7DD991E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uniformMonteCarloIntegration.cpp; path = ../../src/uniformMonteCarloIntegration.cpp; sourceTree = "<group>"; };
+		2CB7DD9F1EA076B3009D340F /* bruteForceMonteCarloIntegration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bruteForceMonteCarloIntegration.cpp; path = ../../src/bruteForceMonteCarloIntegration.cpp; sourceTree = "<group>"; };
 		2CF93A7E1E84663F0018CE5B /* ipDebugger */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ipDebugger; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -67,6 +69,7 @@
 		2CF93A801E84663F0018CE5B /* ipDebugger */ = {
 			isa = PBXGroup;
 			children = (
+				2CB7DD9F1EA076B3009D340F /* bruteForceMonteCarloIntegration.cpp */,
 				2CB7DD931E9FE3F2009D340F /* cMain.cpp */,
 				2CB7DD941E9FE3F2009D340F /* helperFunctions.cpp */,
 				2CB7DD951E9FE3F2009D340F /* logProbIPNew.cpp */,
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CB7DD9C1E9FE3F2009D340F /* logProbIPNew.cpp in Sources */,
+				2CB7DDA01EA076B3009D340F /* bruteForceMonteCarloIntegration.cpp in Sources */,
 				2CB7DD9E1E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp in Sources */,
 				2CB7DD9A1E9FE3F2009D340F /* cMain.cpp in Sources */,
 				2CB7DD9D1E9FE3F2009D340F /* pdfSamplingMonteCarloIntegration.cpp in Sources */,

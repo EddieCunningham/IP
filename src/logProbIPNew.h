@@ -14,10 +14,9 @@
 #include <stdlib.h>
 #include <random>
 #include <csignal>
+#include <exception>
 
 using namespace std;
-
-
 
 struct topK {
     vector<double> vals;
@@ -70,9 +69,10 @@ public:
     personClass* parentA;
     personClass* parentB;
     bool isRoot;
-    double t,s,probability;
-    int l,m,n;
-    vector<double> probs;
+    double t,s,probability,probOfShadingAverage;
+    int l,m,n,timesUpdated;
+    int startIndex,endIndex;
+    vector<double> probs,probsAverage;
     bool updated;
     vector<vector<vector<double>>> g;
     bool affected;
@@ -87,16 +87,42 @@ public:
     ,t(t_)
     ,s(s_)
     ,probability(probability_)
+    ,probOfShadingAverage(0)
     ,l(l_)
     ,m(m_)
     ,n(n_)
+    ,timesUpdated(1)
+    ,startIndex(-1)
+    ,endIndex(-1)
     ,probs(probs_)
+    ,probsAverage(probs_)
     ,updated(updated_)
     ,g(g_)
     ,affected(affected_)
     ,dontInclude(false)
     ,children()
     {}
+
+    void reset() {
+        // need to update these:
+        // probOfShadingAverage
+        // timesUpdated
+        // startIndex
+        // endIndex
+        // probsAverage
+        // updated
+        // dontInclude
+
+        this->probOfShadingAverage = 0.0;
+        this->timesUpdated = 1;
+        this->startIndex = -1;
+        this->endIndex = -1;        
+        for(int i=0; i<this->probsAverage.size(); ++i) {
+            this->probsAverage.at(i) = 0;
+        }
+        this->updated = false;
+        this->dontInclude = false;
+    }
     
     
     void storeProbAndNormalize();
@@ -192,35 +218,58 @@ public:
 };
 
 class pedigreeClass2 {
-public:
-    pedigreeClass2(){}
+private:
 
-    double log_probRoots;
     double lastLogEval;
+    
+    bool isDominant;
 
-    vector<personClass*> allPeople;
-    vector<personClass*> roots;
     vector<personClass*> leaves;
 
     vector<vector<personClass*>> carrierRoots;
-    
+    vector<personClass*> possiblyAffectedAncestors;
+
+    void makeAffected(personClass* person);
+    void makeUnAffected(personClass* person);
+    void makeCarrier(personClass* person);
+
     double getNormVal(personClass *p, int index);
     void updateProbs(personClass* c);
     double getProbability();
     double getLogProbability();
 
+    void getDominantOrRecessive();
     void updateAllChildrenAndLeaves();
     void determineCarrierRoots(bool useLeak, double leakProb, double leakDecay);
 
-    void _oneAffectedPDF(bool useNewDist, double K);
+    void _bruteForcePDF();
+    void _oneAffectedPDF(double K);
     void updateRootLogPDF(bool useNewDist, double K);
     
-    pair<double,double> logEvaluation(const vector<double> & x, bool useNewDist, double K);
-    
+
+    vector<double> _evaluateFromSingleRoot(long numbCalls, bool printIterations, int numbToPrint, unordered_set<personClass*> rootsToUse);
+    pair<double,string> _bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, int numbRoots, int numbToChange);
+    vector<double> _bruteForce(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, int numbRoots);
     vector<double> _monteCarloMH(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay);
     vector<double> _uniformMonteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay);
 
-    vector<double> monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH);
+public:
+
+    vector<personClass*> allPeople;
+    vector<personClass*> roots;
+    double log_probRoots;
+
+
+    pedigreeClass2(){}
+
+    void resetAll() {
+        for(auto it=this->allPeople.begin(); it!=this->allPeople.end(); ++it) {
+            (*it)->reset();
+        }
+    }
+
+    pair<double,double> logEvaluation(const vector<double> & x, bool useNewDist, double K, bool samplingFromPDF);
+    vector<double> monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots);
 };
 
 

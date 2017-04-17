@@ -21,7 +21,7 @@ class sampler {
 public:
     int dimension,nAccepted,nSampled;
     double standardDeviation,acceptanceRatio;
-    vector<double> currentState,temp,xl,xu;
+    vector<double> currentState,temp,xl,xu,averageState;
     double currentProb;
     gsl_rng *rng;
     gsl_vector *mean;
@@ -29,25 +29,25 @@ public:
     gsl_vector *result;
     gsl_matrix *work;
 
-    vector<vector<int>> bins;
 
     pedigreeClass2* pedigree;
-    bool initialized;
+    bool initialized,uniform;
 
-    sampler(int dimension_, const vector<double>& xl_, const vector<double>& xu_, pedigreeClass2* pedigree_, vector<int> bins_):
+    sampler(int dimension_, const vector<double>& xl_, const vector<double>& xu_, pedigreeClass2* pedigree_, bool uniform_):
     dimension(dimension_),
     nAccepted(0),
     nSampled(0),
     xl(xl_),
     xu(xu_),
+    averageState(vector<double>(dimension_,0.0)),
     pedigree(pedigree_),
     currentState(dimension_),
     temp(dimension_),
-    initialized(false) {
+    initialized(false),
+    uniform(uniform_) {
 
-        this->bins = vector<vector<int>>(this->dimension);
-        for(int i=0; i<this->bins.size(); ++i) {
-            this->bins[i] = vector<int>(bins_.at(i));
+        if(uniform_) {
+            return;
         }
 
         this->standardDeviation = 0.15;
@@ -74,6 +74,9 @@ public:
     }
 
     ~sampler() {
+        if(this->uniform) {
+            return;
+        }
         gsl_rng_free(this->rng);
         gsl_vector_free(this->result);
         gsl_vector_free(this->mean);
@@ -83,7 +86,17 @@ public:
 
     void initState(bool useNewDist, double K) {
         for(int i=0; i<this->dimension; ++i) {
-            this->currentState[i] = gsl_rng_uniform(this->rng);
+            if(this->uniform) {
+                if(this->xu[i] == -1 || this->xl[i] == -1) {
+                    this->currentState[i] = -1.0;
+                }
+                else {
+                    this->currentState[i] = rand()/(double)RAND_MAX;
+                }
+            }
+            else {
+                this->currentState[i] = gsl_rng_uniform(this->rng);
+            }
         }
 
         this->currentProb = this->probEval(this->currentState, useNewDist, K);
@@ -91,8 +104,8 @@ public:
     }
 
     double probEval(const vector<double>& x, bool useNewDist, double K) {
-        this->pedigree->logEvaluation(x, useNewDist, K);
-        return exp(this->pedigree->log_probRoots);
+        this->pedigree->logEvaluation(x, useNewDist, K, this->uniform);
+        return this->pedigree->log_probRoots;
     }
 
     void rmvnorm() {
@@ -106,9 +119,22 @@ public:
         gsl_vector_add(this->result,this->mean);
     }
 
+    const pair<vector<double>&,double> _uniformSample() {
+
+        for(int i=0; i<this->dimension; ++i) {
+            if(this->xu[i] == -1 || this->xl[i] == -1) {
+                this->currentState[i] = -1.0;
+            }
+            else {
+                this->currentState[i] = rand()/(double)RAND_MAX*(this->xu[i]-this->xl[i]);
+            }
+        }
+        this->probEval(this->currentState, false, -1);
+        return pair<vector<double>&,double>(this->currentState,-1);
+    }
+
     const pair<vector<double>&,double> _nextSample(bool useNewDist, double K) {
         
-        this->nSampled += 1;
         this->acceptanceRatio = (double)this->nAccepted/this->nSampled;
 
         for(int i=0; i<this->dimension; i++) {
@@ -140,42 +166,26 @@ public:
 
     const pair<vector<double>&,double> nextSample(bool useNewDist, double K) {
 
+        if(this->nSampled > 0) {
+            // update the last average
+            for(int i=0; i<this->averageState.size(); ++i) {
+                this->averageState.at(i) += (this->currentState.at(i)-this->averageState.at(i))/(double)this->nSampled;
+            }
+        }
+
+        this->nSampled += 1;
+
         if(!(this->initialized)) {
             cout << "Need to call the initState function" << endl;
             raise(SIGABRT);
         }
 
-        const pair<vector<double>&,double> ans = this->_nextSample(useNewDist,K);
-        return ans;
-        for(int i=0; i<this->bins.size(); ++i) {
-
-            int minVal = this->xl.at(i);
-            int maxVal = this->xu.at(i);
-            double x = ans.first.at(i);
-            int ngenHistogram = this->bins.at(i).size();
-
-            int binIndex = (int)((x-minVal)*(maxVal-minVal)/(double)ngenHistogram);
-
-            this->bins.at(i)[binIndex] += 1;
+        if(this->uniform) {
+            return _uniformSample();
         }
-
-        return ans;
-    }
-
-    double KLDivergence() {
-        // calculate the KL divergence
-
-        for(int i=0; i<this->bins.size(); ++i) {
-
-            double projectionKLDivergence = 0.0;
-            for(int j=0; j<this->bins.at(i).size(); ++j) {
-
-                projectionKLDivergence += 0;
-            }
+        else {
+            return this->_nextSample(useNewDist,K);
         }
-
-        // won't work in high dimensions!
-        return 0.0;
     }
 };
 

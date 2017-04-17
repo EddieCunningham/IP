@@ -9,14 +9,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../VEGAS.cpp"
-            timestampString = "512000098.977364"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514072657.231895"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "252"
-            endingLineNumber = "252"
-            landmarkName = "rebin(float rc, int nd, vector&lt;float&gt; &amp;r, vector&lt;float&gt; &amp;xin, vector&lt;vector&lt;float&gt;&gt; &amp;xi, int j)"
-            landmarkType = "9">
+            startingLineNumber = "200"
+            endingLineNumber = "200"
+            landmarkName = "pedigreeClass2::getLogProbability()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -25,14 +25,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../VEGAS.cpp"
-            timestampString = "512000098.977364"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514062735.714977"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "267"
-            endingLineNumber = "267"
-            landmarkName = "rebin(float rc, int nd, vector&lt;float&gt; &amp;r, vector&lt;float&gt; &amp;xin, vector&lt;vector&lt;float&gt;&gt; &amp;xi, int j)"
-            landmarkType = "9">
+            startingLineNumber = "224"
+            endingLineNumber = "224"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -41,45 +41,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../VEGAS.cpp"
-            timestampString = "512000098.977364"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "259"
-            endingLineNumber = "259"
-            landmarkName = "rebin(float rc, int nd, vector&lt;float&gt; &amp;r, vector&lt;float&gt; &amp;xin, vector&lt;vector&lt;float&gt;&gt; &amp;xi, int j)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../VEGAS.cpp"
-            timestampString = "512000098.977364"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "260"
-            endingLineNumber = "260"
-            landmarkName = "rebin(float rc, int nd, vector&lt;float&gt; &amp;r, vector&lt;float&gt; &amp;xin, vector&lt;vector&lt;float&gt;&gt; &amp;xi, int j)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../logProbabilityIP.cpp"
-            timestampString = "512582692.054628"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514072657.231895"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "318"
             endingLineNumber = "318"
-            landmarkName = "pedigreeClass2::updateProbs(personClass* c)"
+            landmarkName = "pedigreeClass2::logEvaluation(const vector&lt;double&gt; &amp; x, bool useNewDist, double K, bool samplingFromPDF)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -89,13 +57,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../logProbabilityIP.cpp"
-            timestampString = "512582692.054628"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514072657.231895"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "332"
-            endingLineNumber = "332"
-            landmarkName = "pedigreeClass2::updateProbs(personClass* c)"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
+            landmarkName = "pedigreeClass2::getLogProbability()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -105,13 +73,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../logProbabilityIP.cpp"
-            timestampString = "512582692.054628"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514066718.00645"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "566"
-            endingLineNumber = "566"
-            landmarkName = "pedigreeClass2::naiveMonteCarlo(long numbCalls, bool printIterations, bool printPeople)"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
+            landmarkName = "pedigreeClass2::_evaluateFromSingleRoot(long numbCalls, bool printIterations, int numbToPrint, unordered_set&lt;personClass*&gt; rootsToUse)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -121,12 +89,92 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../logProbabilityIP.cpp"
-            timestampString = "512582692.054628"
+            filePath = "../src/metropolisHastings.h"
+            timestampString = "514067586.128187"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "269"
-            endingLineNumber = "269"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "_nextSample(bool useNewDist, double K)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514068379.06545"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "pedigreeClass2::_evaluateFromSingleRoot(long numbCalls, bool printIterations, int numbToPrint, unordered_set&lt;personClass*&gt; rootsToUse)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514068687.783107"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
+            landmarkName = "pedigreeClass2::_evaluateFromSingleRoot(long numbCalls, bool printIterations, int numbToPrint, unordered_set&lt;personClass*&gt; rootsToUse)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "277"
+            endingLineNumber = "277"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514069549.751472"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
+            landmarkName = "pedigreeClass2::_evaluateFromSingleRoot(long numbCalls, bool printIterations, int numbToPrint, unordered_set&lt;personClass*&gt; rootsToUse)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514069589.785984"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "personClass::storeProbAndNormalize()"
             landmarkType = "7">
          </BreakpointContent>
@@ -137,12 +185,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../logProbabilityIP.cpp"
-            timestampString = "512582692.054628"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514069590.869994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "265"
-            endingLineNumber = "265"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "personClass::storeProbAndNormalize()"
             landmarkType = "7">
          </BreakpointContent>
@@ -153,46 +201,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../logProbIPNew.cpp"
-            timestampString = "512947093.294357"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514072657.231895"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "376"
-            endingLineNumber = "376"
-            landmarkName = "goUp(personClass* person, bool found, unordered_set&lt;personClass*&gt;* relevantRoots, unordered_set&lt;personClass*&gt;* hasContradiction, bool useLeak, double leakProb, double leakDecay)"
-            landmarkType = "9">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "std::pedigreeClass2::updateProbs(std::personClass*)"
-                  moduleName = "ipDebugger"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Eddie/IP/logProbIPNew.cpp"
-                  timestampString = "512947048.473485"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "378"
-                  endingLineNumber = "378"
-                  offsetFromSymbolStart = "994">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "std::pedigreeClass2::updateProbs(std::personClass*)"
-                  moduleName = "ipDebugger"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Eddie/IP/logProbIPNew.cpp"
-                  timestampString = "512947048.477091"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "378"
-                  endingLineNumber = "378"
-                  offsetFromSymbolStart = "1009">
-               </Location>
-            </Locations>
+            startingLineNumber = "336"
+            endingLineNumber = "336"
+            landmarkName = "pedigreeClass2::logEvaluation(const vector&lt;double&gt; &amp; x, bool useNewDist, double K, bool samplingFromPDF)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -201,14 +217,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../logProbIPNew.cpp"
-            timestampString = "512947074.529695"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514072657.231895"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "365"
-            endingLineNumber = "365"
-            landmarkName = "goUp(personClass* person, bool found, unordered_set&lt;personClass*&gt;* relevantRoots, unordered_set&lt;personClass*&gt;* hasContradiction, bool useLeak, double leakProb, double leakDecay)"
-            landmarkType = "9">
+            startingLineNumber = "152"
+            endingLineNumber = "152"
+            landmarkName = "pedigreeClass2::updateProbs(personClass* c)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -217,28 +233,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../logProbIPNew.cpp"
-            timestampString = "512947093.827323"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514072777.863213"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "374"
-            endingLineNumber = "374"
-            landmarkName = "goUp(personClass* person, bool found, unordered_set&lt;personClass*&gt;* relevantRoots, unordered_set&lt;personClass*&gt;* hasContradiction, bool useLeak, double leakProb, double leakDecay)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../logProbIPNew.cpp"
-            timestampString = "513461465.380654"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "720"
-            endingLineNumber = "720">
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "personClass::storeProbAndNormalize()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -247,12 +249,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../logProbIPNew.cpp"
-            timestampString = "513461732.561242"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514072794.024682"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "723"
-            endingLineNumber = "723">
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "personClass::storeProbAndNormalize()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -261,41 +265,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../logProbIPNew.cpp"
-            timestampString = "513462000.982136"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "517"
-            endingLineNumber = "517">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../logProbIPNew.cpp"
-            timestampString = "513462026.093705"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "555"
-            endingLineNumber = "555">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../metropolisHastings.h"
-            timestampString = "513722023.743136"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514072818.075622"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "87"
             endingLineNumber = "87"
-            landmarkName = "rmvnorm()"
+            landmarkName = "personClass::storeProbAndNormalize()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -305,13 +281,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../metropolisHastings.h"
-            timestampString = "513722023.743136"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514076739.857954"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
-            landmarkName = "_nextSample()"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "personClass::storeProbAndNormalize()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -321,13 +297,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../metropolisHastings.h"
-            timestampString = "513722023.743136"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514076740.609799"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
-            landmarkName = "_nextSample()"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "personClass::storeProbAndNormalize()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -337,13 +313,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../metropolisHastings.h"
-            timestampString = "513722023.743136"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
-            landmarkName = "_nextSample()"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -353,27 +329,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../logProbIPNew.cpp"
-            timestampString = "513636216.712455"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514076761.217536"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "818"
-            endingLineNumber = "818">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../metropolisHastings.h"
-            timestampString = "513722126.251322"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
-            landmarkName = "_nextSample()"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -383,13 +345,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../metropolisHastings.h"
-            timestampString = "513722179.512544"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514077153.814848"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
-            landmarkName = "_nextSample()"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "personClass::storeProbAndNormalize()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -399,13 +361,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../src/metropolisHastings.h"
-            timestampString = "513795765.419138"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514077154.686807"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
-            landmarkName = "rmvnorm()"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "personClass::storeProbAndNormalize()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -415,14 +377,254 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../src/metropolisHastings.h"
-            timestampString = "513795768.566747"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514078004.258783"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
-            landmarkName = "class sampler"
-            landmarkType = "3">
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "personClass::storeProbAndNormalize()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/logProbIPNew.cpp"
+            timestampString = "514078005.594675"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "personClass::storeProbAndNormalize()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "318"
+            endingLineNumber = "318"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "317"
+            endingLineNumber = "317"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "254"
+            endingLineNumber = "254"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "247"
+            endingLineNumber = "247"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "271"
+            endingLineNumber = "271"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "276"
+            endingLineNumber = "276"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "238"
+            endingLineNumber = "238"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147276.348989"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
+            landmarkName = "pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots, int numbToChange)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/bruteForceMonteCarloIntegration.cpp"
+            timestampString = "514147314.986192"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "340"
+            endingLineNumber = "340"
+            landmarkName = "pedigreeClass2::_bruteForce(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -19,6 +19,7 @@
 
 using namespace std;
 
+
 void personClass::storeProbAndNormalize() {
     
     if(MY_DEBUG) {
@@ -32,56 +33,75 @@ void personClass::storeProbAndNormalize() {
     double n = this->n;
 
     double probability = 0.0;
+    double probToL = 0.0;
+    double probFromL = 0.0;
     for(int i=0; i<m; ++i) {
 
         if(i < l) {
-            probability += this->probs[i]*(1-s);
+            probability += this->probs.at(i);
+            probToL += (1-s)*this->probs.at(i);
         }
         else {
-            probability += this->probs[i]*s;
+            probability += this->probs.at(i);
+            probFromL += s*this->probs.at(i);
         }
-        if(!(this->probs[i] >= 0 and this->probs[i] <= 1.0+pow(10,15))) {
+        if(!(this->probs.at(i) >= 0 and this->probs.at(i) <= 1.0+pow(10,15))) {
             raise(SIGABRT);
         }
+        this->probsAverage.at(i) += (this->probs.at(i)-this->probsAverage.at(i))/this->timesUpdated;
     }
     this->probability = probability;
+    double probOfShading = this->t*probability + (1-this->t)*(1-probability);
+
+    this->probOfShadingAverage += (probOfShading-this->probOfShadingAverage)/this->timesUpdated;
+    
+    this->timesUpdated += 1;
     
     double sumOther = 0.0;
     for(int i=m; i<n; ++i) {
-        sumOther += this->probs[i];
+        sumOther += this->probs.at(i);
     }
     
     
-    // FIGURE OUT BETTER WAY TO DEAL WITH CONTRADICTIONS
     if((this->probability < pow(10,-15) or this->probability > 1.0+pow(10,15)) and t == 1.0) {
+//        cout << " | contradiction at person " << this->_id;
         this->dontInclude = true;
+        throw 20;
         return;
     }
-    if(abs(sumOther) < pow(10,-15) and t == 0.0) {
+    if(sumOther < pow(10,-15) && t == 0.0) {
+//        cout << " | contradiction at person " << this->_id;
         this->dontInclude = true;
+        throw 20;
+        return;
+    }
+    if(probFromL < pow(10,-15) && (t == 1.0 && s == 1.0)) {
+//        cout << " | contradiction at person " << this->_id;
+        this->dontInclude = true;
+        throw 20;
         return;
     }
     
     
     for(int i=0; i<m; ++i) {
         if(abs(this->probability) < pow(10,-15)) {
-            this->probs[i] = 0.0;
+            this->probs.at(i) = 0.0;
         }
         else {
             if(i < l) {
-                this->probs[i] *= t*(1-s)/this->probability;
+                this->probs.at(i) *= t*(1-s)/(probToL+probFromL);
             }
             else {
-                this->probs[i] *= t*s/this->probability;
+                this->probs.at(i) *= t*s/(probToL+probFromL);
             }
         }
     }
     for(int i=m; i<n; ++i) {
         if(abs(sumOther) < pow(10,-15)) {
-            this->probs[i] = 0.0;
+            this->probs.at(i) = 0.0;
         }
         else {
-            this->probs[i] *= (1.0-t)/sumOther;
+            this->probs.at(i) *= (1.0-t)/sumOther;
         }
     }
     /////////////////////////////////////////////////////
@@ -95,7 +115,7 @@ void personClass::storeProbAndNormalize() {
         //             string a;
         //             cin >> a;
         for(int i=0; i<this->probs.size(); ++i) {
-            this->probs[i] /= totalSum;
+            this->probs.at(i) /= totalSum;
         }
     }
 }
@@ -127,16 +147,17 @@ void pedigreeClass2::updateProbs(personClass* c) {
     personClass* p = c->parentA;
     personClass* q = c->parentB;
     
+    double pProb,qProb;
     for(int i=0; i<g.size(); ++i) {
         
-        c->probs[i] = 0.0;
+        c->probs.at(i) = 0.0;
         for(int j=0; j<g.at(i).size(); ++j) {
             
-            double pProb = this->getNormVal(p,j);
+            pProb = this->getNormVal(p,j);
             for(int k=0; k<g.at(i).at(j).size(); ++k) {
                 
-                double qProb = this->getNormVal(q,k);
-                c->probs[i] += g.at(i).at(j).at(k)*pProb*qProb;
+                qProb = this->getNormVal(q,k);
+                c->probs.at(i) += g.at(i).at(j).at(k)*pProb*qProb;
             }
         }
     }
@@ -193,11 +214,7 @@ double pedigreeClass2::getLogProbability() {
     return totalAns;
 }
 
-void pedigreeClass2::_oneAffectedPDF(bool useNewDist, double K) {
-
-    if(!useNewDist) {
-        this->log_probRoots = 1.0;
-    }
+void pedigreeClass2::_oneAffectedPDF(double K) {
 
     personClass* itMax = nullptr;
     double maxVal = -1.0;
@@ -223,11 +240,15 @@ void pedigreeClass2::_oneAffectedPDF(bool useNewDist, double K) {
 }
 
 void pedigreeClass2::updateRootLogPDF(bool useNewDist, double K) {
-    this->_oneAffectedPDF(useNewDist,K);
+    if(!useNewDist) {
+        this->_bruteForcePDF();
+    }
+    else {
+        this->_oneAffectedPDF(K);
+    }
 }
 
-
-pair<double,double> pedigreeClass2::logEvaluation(const vector<double> & x, bool useNewDist, double K) {
+pair<double,double> pedigreeClass2::logEvaluation(const vector<double> & x, bool useNewDist, double K, bool samplingFromPDF) {
     
     for(auto p_it=this->allPeople.begin(); p_it!=this->allPeople.end(); ++p_it) {
         (*p_it)->updated = false;
@@ -247,41 +268,71 @@ pair<double,double> pedigreeClass2::logEvaluation(const vector<double> & x, bool
     vector<double> sphericalParameters(x.size());
     
     for(auto r_it=this->roots.begin(); r_it!=this->roots.end(); ++r_it) {
+
+        vector<double>& probs = (*r_it)->probs;
+        int startIndex = (*r_it)->startIndex;
+        int endIndex = (*r_it)->endIndex;
         
         // get the spherical parameters from x
         int n = (*r_it)->n;
+        int nonZero = 0;
         for(int i=0; i<n-1; ++i) {
-            sphericalParameters[i] = x[index+i];
+            sphericalParameters.at(i) = x.at(index+i);
+            if(sphericalParameters.at(i) > 0) {
+                nonZero += 1;
+            }
         }
         index += n-1;
+
+        if(endIndex-startIndex>0 && nonZero != endIndex-startIndex) {
+            cout << "Was expecting this value to be " << endIndex-startIndex << endl;
+            raise(SIGABRT);
+        }
+        assert(startIndex>=0);
+
         
-        vector<double>& probs = (*r_it)->probs;
         double total = 0.0;
-        for(int i=0; i<probs.size(); ++i) {
-            
-            double value = 1.0;
-            if(i < n-1) {
-                value *= cos(sphericalParameters.at(i));
+        fill(probs.begin(),probs.end(),0.0);
+        if(endIndex-startIndex == 0) {
+            probs.at(startIndex) = 1;
+            total += 1;
+        }
+        else {
+
+            string helper = "";
+
+            for(int i=0; i<(endIndex-startIndex+1); ++i) {
+            // for(int i=0; i<probs.size(); ++i) {
+                
+                double value = 1.0;
+                helper += "[";
+                if(i < endIndex-startIndex) {
+                    value *= cos(sphericalParameters.at(i));
+                    helper += "cos^2(t"+to_string(i+startIndex)+") ";
+                }
+                for(int j=0; j<i; ++j) {
+                    value *= sin(sphericalParameters.at(j));
+                    helper += "sin^2(t"+to_string(j+startIndex)+") ";
+                }
+                probs.at(i+startIndex) = pow(value,2);
+                if(!(probs.at(i+startIndex) <= 1.0 && probs.at(i+startIndex) >= 0)) {
+                    raise(SIGABRT);
+                }
+                total += pow(value,2);
+                helper += "] {";
+                
+                if(i < endIndex-startIndex-1) {
+                    log_extraSines += (endIndex-startIndex-1-i)*log(sin(sphericalParameters.at(i)));
+                    helper += "sin(t"+to_string(i+startIndex)+")^"+to_string(endIndex-startIndex-1-i)+" ";
+                }
+                helper += "} ";
             }
-            for(int j=0; j<i; ++j) {
-                value *= sin(sphericalParameters.at(j));
-            }
-            probs[i] = pow(value,2);
-            if(!(probs[i] <= 1.0 && probs[i] >= 0)) {
-                raise(SIGABRT);
-            }
-            total += pow(value,2);
-            
-            if(i < n-2) {
-                log_extraSines += (n-2-i)*log(sin(sphericalParameters.at(i)));
-            }
+            helper += ";";
         }
 
         if(abs(total-1.0) >= pow(10,-15)) {
             cout << "The total was: " << total << endl;
-            if(!(0)) {
-                raise(SIGABRT);
-            }
+            raise(SIGABRT);
         }
         
         (*r_it)->storeProbAndNormalize();
@@ -307,10 +358,19 @@ pair<double,double> pedigreeClass2::logEvaluation(const vector<double> & x, bool
     if(log_prob == __DBL_MAX__) {
         return pair<double,double>(__DBL_MAX__,__DBL_MAX__);
     }
-
+    
     // calculate the probaility of this root configuration
-    this->updateRootLogPDF(useNewDist,K);
-    this->lastLogEval = log_prob+log_extraSines+this->log_probRoots;
+    if(samplingFromPDF) {
+
+        // if we are sampling from the pdf while using monte carlo integration, 
+        // we don't need to worry about having a pdf that integrates to 1
+        // because the normalization factors cancel out
+        this->lastLogEval = log_prob;
+    }
+    else {
+        this->updateRootLogPDF(useNewDist,K);
+        this->lastLogEval = log_prob+log_extraSines+this->log_probRoots;
+    }
 
     // first part is the answer, the second part is the part of the volume
     return pair<double,double>(this->lastLogEval,log_extraSines+this->log_probRoots);
@@ -350,7 +410,7 @@ bool autosomalContradiction(personClass* person) {
     return false;
 }
 
-void goUp(personClass* person, bool found, unordered_set<personClass*>* relevantRoots, unordered_set<personClass*>* hasContradiction, bool useLeak, double leakProb, double leakDecay) {
+void goUp(personClass* person, bool found, unordered_set<personClass*>* relevantRoots, unordered_set<personClass*>* hasContradiction, unordered_set<personClass*>* relevantAncestors, bool useLeak, double leakProb, double leakDecay) {
 
 /*
     GOAL IS TO MAKE PEOPLE WHO HAVE A PROB OF BEING 0 SOMETHING HIGHER LIKE 0.2
@@ -382,6 +442,13 @@ void goUp(personClass* person, bool found, unordered_set<personClass*>* relevant
         found = true;
     }
 
+    if(found && (person->affected == false) && person->parentA && person->s != 1.0) {
+        // mark all people in the ancestral tree of affected people
+        // who might be marked incorrectly.  these people must not be
+        // roots and must not be affected
+        relevantAncestors->insert(person);
+    }
+
     if(person->parentA == nullptr && person->parentB == nullptr) {
 
         if(found || person->affected) {
@@ -389,8 +456,8 @@ void goUp(personClass* person, bool found, unordered_set<personClass*>* relevant
         }
     }
     else {
-        goUp(person->parentA,found,relevantRoots,hasContradiction,useLeak,leakProb,leakDecay);
-        goUp(person->parentB,found,relevantRoots,hasContradiction,useLeak,leakProb,leakDecay);
+        goUp(person->parentA,found,relevantRoots,hasContradiction,relevantAncestors,useLeak,leakProb,leakDecay);
+        goUp(person->parentB,found,relevantRoots,hasContradiction,relevantAncestors,useLeak,leakProb,leakDecay);
     }
 }
 
@@ -408,32 +475,142 @@ void pedigreeClass2::determineCarrierRoots(bool useLeak, double leakProb, double
     }
 
     unordered_set<personClass*> relevantRoots;
+    unordered_set<personClass*> relevantAncestors;
     for(auto l_it=this->leaves.begin(); l_it!=this->leaves.end(); ++l_it) {
-        goUp(*l_it,false,&relevantRoots,&hasContradiction,useLeak,leakProb,leakDecay);
+        goUp(*l_it,false,&relevantRoots,&hasContradiction,&relevantAncestors,useLeak,leakProb,leakDecay);
     }
 
+    this->possiblyAffectedAncestors = vector<personClass*>(relevantAncestors.begin(),relevantAncestors.end());
     this->carrierRoots = vector<vector<personClass*>>(1,vector<personClass*>(relevantRoots.begin(),relevantRoots.end()));
 }
 
+void pedigreeClass2::makeAffected(personClass* person) {
+    if(!(person->affected)) {        
+        if(this->isDominant) {
+            person->t = 1.0;
+            person->s = 0.5;
+        }
+        else {
+            person->t = 0.0;
+            person->s = 0.5;
+        }
+        person->affected = true;
+    }
+}
 
+void pedigreeClass2::makeUnAffected(personClass* person) {
+    if(person->affected) {        
+        if(this->isDominant) {
+            person->t = 0.0;
+            person->s = 0.5;
+        }
+        else {
+            person->t = 1.0;
+            person->s = 0.5;
+        }
+        person->affected = false;
+    }
+}
 
-vector<double> pedigreeClass2::monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH) {
+void pedigreeClass2::makeCarrier(personClass* person) {
+    if(person->affected) {        
+        if(this->isDominant) {
+            cout << "Can't have carriers in dominant case! " << endl;
+            raise(SIGABRT);
+        }
+        else {
+            person->t = 1.0;
+            person->s = 1.0;
+        }
+        person->affected = false;
+    }
+}
+
+void pedigreeClass2::getDominantOrRecessive() {
+
+    for(auto p_it=this->allPeople.begin(); p_it!=this->allPeople.end(); ++p_it) {
+        if((*p_it)->affected) {
+            if((*p_it)->t == 1.0 && (*p_it)->s == 0.5) {
+                this->isDominant = true;
+                return;
+            }
+            else if((*p_it)->t == 0.0 && (*p_it)->s == 0.5) {
+                this->isDominant = false;
+                return;
+            }
+        }
+        else {
+            if((*p_it)->t == 0.0 && (*p_it)->s == 0.5) {
+                this->isDominant = true;
+                return;
+            }
+            else if((*p_it)->t == 1.0 && (*p_it)->s == 1.0) {
+                this->isDominant = false;
+                return;
+            }
+            else if((*p_it)->t == 1.0 && (*p_it)->s == 0.5) {
+                this->isDominant = false;
+                return;
+            }
+        }
+    }
+    cout << "should have figured out what type this is" << endl;
+    raise(SIGABRT);
+}
+
+vector<double> pedigreeClass2::monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots) {
     srand(1234);
 
+    this->getDominantOrRecessive();
     this->updateAllChildrenAndLeaves();
     this->determineCarrierRoots(useLeak,leakProb,leakDecay);
 
-
     if(printPeople) {
-        for(int i=0; i<this->allPeople.size(); ++i) {
-            this->allPeople[i]->toString();
+        for(int i=0; i<this->roots.size(); ++i) {
+            this->roots.at(i)->toString();
         }
+        for(int i=0; i<this->allPeople.size(); ++i) {
+            if(this->allPeople.at(i)->parentA) {
+                this->allPeople.at(i)->toString();
+            }
+        }
+
+        string str = "pedigreeClass2 pedigree;\npedigree.roots=vector<personClass*>({";
+        for(int i=0; i<this->roots.size(); ++i) {
+            str += "&x_";
+            if(this->roots.at(i)->_id < 0) {
+                str += "_"+to_string(abs(this->roots.at(i)->_id));
+            }
+            else {
+                str += to_string(this->roots.at(i)->_id);
+            }
+            if(i < this->roots.size()-1) {
+                str += ",";
+            }            
+        }
+        str += "});\n";
+        str += "pedigree.allPeople=vector<personClass*>({";
+        for(int i=0; i<this->allPeople.size(); ++i) {
+            str += "&x_";
+            if(this->allPeople.at(i)->_id < 0) {
+                str += "_"+to_string(abs(this->allPeople.at(i)->_id));
+            }
+            else {
+                str += to_string(this->allPeople.at(i)->_id);
+            }
+            if(i < this->allPeople.size()-1) {
+                str += ",";
+            } 
+        }
+        str += "});";
+        cout << str << endl;
     }
     
     if(useMH) {
         return this->_monteCarloMH(numbCalls, printIterations, numbToPrint, useNewDist, K, useLeak, leakProb, leakDecay);
     }
-    else {
-        return this->_uniformMonteCarlo(numbCalls, printIterations, numbToPrint, useNewDist, K, useLeak, leakProb, leakDecay);
+    if(useBruteForce) {
+        return this->_bruteForce(numbCalls, printIterations, numbToPrint, numbRoots);
     }
+    return this->_uniformMonteCarlo(numbCalls, printIterations, numbToPrint, useNewDist, K, useLeak, leakProb, leakDecay);
 }
