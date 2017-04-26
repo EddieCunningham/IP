@@ -5,6 +5,32 @@ from model import *
 from ipNEW import *
 from getGHelper import *
 import numpy as np
+"""
+
+    - AD -> 1 root, heterozygous
+    - AR -> 2 roots, partners, both carriers (parents of the proband)
+    - XL -> disease can be dominant sometimes, recessive sometimes.  1 root should be affected.  
+            if women are less affected, could be shaded differently.  also could have a note saying that the people have a different age of onset to take into account
+    
+    - ADD X LINKED DOMINANT
+    - if consanguinous, literally draw people in the tree
+
+    - journal of genetic counseling
+    - opthalmic genetics
+    - ^ look at a couple different papers in that and look at their structures
+
+"""
+
+
+
+"""
+    THINGS TO TALK ABOUT WITH DANA:
+        - assumptions about the roots
+        - data shes going to show in her presentation
+        - outline of her presentation
+        - how to go about publishing the paper        
+
+"""
 
 '''
 
@@ -39,9 +65,9 @@ questions:
 
 # papers with bullet points
 
-FILENAME = '3383AT.json'
+FILENAME = '1084LN.json'
 
-NUMB_CALLS = 10000
+NUMB_CALLS = 50000
 NUMB_TO_PRINT = NUMB_CALLS*0.5
 
 PRINT_ITERATIONS = False
@@ -59,7 +85,9 @@ LEAKDECAY = 0.5
 USEMH = False
 USEBRUTEFORCE = True
 
-NUMB_ROOTS = 3
+NUMB_ROOTS = 2
+
+USE_HYBRID = False
 
 def runProblem(filename,problemContext,dominantOrRecessive,problemType):
 
@@ -68,7 +96,7 @@ def runProblem(filename,problemContext,dominantOrRecessive,problemType):
     trueIP = pedigreeClass.trueIP
 
     if(USEBRUTEFORCE):
-        ans = pedigreeClass.calculateProbability(NUMB_CALLS,PRINT_ITERATIONS,NUMB_TO_PRINT,PRINT_PEOPLE,USE_NEW_DISTRIBUTION,K,USELEAK,LEAKPROB,LEAKDECAY,USEMH,USEBRUTEFORCE,NUMB_ROOTS)
+        ans = pedigreeClass.calculateProbability(NUMB_CALLS,PRINT_ITERATIONS,NUMB_TO_PRINT,PRINT_PEOPLE,USE_NEW_DISTRIBUTION,K,USELEAK,LEAKPROB,LEAKDECAY,USEMH,USEBRUTEFORCE,NUMB_ROOTS,USE_HYBRID)
         
         numbAncestralRoots = ans[0]
         numbAncestralNonRoots = ans[1]
@@ -76,7 +104,7 @@ def runProblem(filename,problemContext,dominantOrRecessive,problemType):
         toReturn.extend([np.exp(x) if x!=-1 else 0 for i,x in enumerate(ans[2:])])
         return toReturn
     else:
-        contradiction,log_ans,log_stdev = pedigreeClass.calculateProbability(NUMB_CALLS,PRINT_ITERATIONS,NUMB_TO_PRINT,PRINT_PEOPLE,USE_NEW_DISTRIBUTION,K,USELEAK,LEAKPROB,LEAKDECAY,USEMH,USEBRUTEFORCE,NUMB_ROOTS)
+        contradiction,log_ans,log_stdev = pedigreeClass.calculateProbability(NUMB_CALLS,PRINT_ITERATIONS,NUMB_TO_PRINT,PRINT_PEOPLE,USE_NEW_DISTRIBUTION,K,USELEAK,LEAKPROB,LEAKDECAY,USEMH,USEBRUTEFORCE,NUMB_ROOTS,USE_HYBRID)
         if(contradiction == 1.0):
             contradiction = 'yes'
         else:
@@ -90,21 +118,33 @@ def runProblem(filename,problemContext,dominantOrRecessive,problemType):
         return resultString,contradiction,np.exp(log_ans),np.exp(log_stdev),trueIP
 
 def runXLRProb(filename):
+    # 1 root
+    global NUMB_ROOTS
+    NUMB_ROOTS = 1
     problemContext = chromosomeProblem
     dominantOrRecessive = 'recessive'
     return runProblem(filename,problemContext,dominantOrRecessive,'X-Linked Recessive')
 
 def runXLDProb(filename):
+    # 1 root
+    global NUMB_ROOTS
+    NUMB_ROOTS = 1
     problemContext = chromosomeProblem
     dominantOrRecessive = 'dominant'
     return runProblem(filename,problemContext,dominantOrRecessive,'X-Linked Dominant')
 
 def runARProb(filename):
+    # 2 roots
+    global NUMB_ROOTS
+    NUMB_ROOTS = 2
     problemContext = autosomeProblem
     dominantOrRecessive = 'recessive'
     return runProblem(filename,problemContext,dominantOrRecessive,'Autosomal Recessive')
 
 def runADProb(filename):
+    # 1 root
+    global NUMB_ROOTS
+    NUMB_ROOTS = 1
     problemContext = autosomeProblem
     dominantOrRecessive = 'dominant'
     return runProblem(filename,problemContext,dominantOrRecessive,'Autosomal Dominant')
@@ -119,6 +159,15 @@ def evaluateIP(jsonFileName,jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeD
         ansXLR = ansXLR[1:]
     else:
         resultXLR,contradictionXLR,ansXLR,stdevXLR,trueIP = runXLRProb(filename)
+
+    print('\n------------------------------------------------------------------------------------------------------\nRunning solver on XLD problem')
+    if(USEBRUTEFORCE):
+        ansXLD = runXLDProb(filename)
+        trueIP = ansXLD[0]
+        ansXLD = ansXLD[1:]
+    else:
+        resultXLD,contradictionXLD,ansXLD,stdevXLD,trueIP = runXLDProb(filename)
+
 
     print('\n------------------------------------------------------------------------------------------------------\nRunning solver on AR problem')
     if(USEBRUTEFORCE):
@@ -139,7 +188,7 @@ def evaluateIP(jsonFileName,jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeD
     print('\n------------------------------------------------------------------------------------------------------\n')
 
     if(USEBRUTEFORCE):
-        return trueIP,ansXLR,ansAR,ansAD
+        return trueIP,ansXLR,ansXLD,ansAR,ansAD
     else:
         total = 0
 
@@ -151,6 +200,15 @@ def evaluateIP(jsonFileName,jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeD
             if(PRINT_INDIVIDUAL_RESULTS):
                 print('\n\n'+'Contradiction in XLR!  Would have gotten:\n')
                 print(resultXLR)
+
+        if(contradictionXLD != 'yes'):
+            if(PRINT_INDIVIDUAL_RESULTS):
+                print('\n\n'+resultXLD)
+            total += ansXLD
+        else:
+            if(PRINT_INDIVIDUAL_RESULTS):
+                print('\n\n'+'Contradiction in XLD!  Would have gotten:\n')
+                print(resultXLD)
 
         if(contradictionAR != 'yes'):
             if(PRINT_INDIVIDUAL_RESULTS):
@@ -175,6 +233,10 @@ def evaluateIP(jsonFileName,jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeD
             print('Probability of XLR: '+str(ansXLR/float(total)))
         else:
             print('Probability of XLR: 0')
+        if(contradictionXLD != 'yes'):
+            print('Probability of XLD: '+str(ansXLD/float(total)))
+        else:
+            print('Probability of XLD: 0')
         if(contradictionAR != 'yes'):
             print('Probability of AR: '+str(ansAR/float(total)))
         else:
@@ -193,7 +255,7 @@ def evaluateAllPedigrees(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData
 
     with open('pedigreeResultsBruteForce3.csv', 'w') as csvfile:
         if(USEBRUTEFORCE):
-            fieldnames = ['PedigreeId','Correct_IP','ResultsXLR','ResultsAR','ResultsAD']
+            fieldnames = ['PedigreeId','Correct_IP','ResultsXLR','ResultsXLD','ResultsAR','ResultsAD']
         else:
             fieldnames = ['PedigreeId','Correct_IP','contradictionXLR','ansXLR','stdevXLR','contradictionAR','ansAR','stdevAR','contradictionAD','ansAD','stdevAD']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -212,12 +274,13 @@ def evaluateAllPedigrees(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData
                     ans = evaluateIP(f,jsonFolderPath)
                     
                     if(USEBRUTEFORCE):
-                        trueIP,ansXLR,ansAR,ansAD = ans
+                        trueIP,ansXLR,ansXLD,ansAR,ansAD = ans
 
                         writer.writerow({ \
                                         'PedigreeId': str(f), \
                                         'Correct_IP': str(trueIP), \
                                         'ResultsXLR': str(ansXLR), \
+                                        'ResultsXLD': str(ansXLD), \
                                         'ResultsAR': str(ansAR), \
                                         'ResultsAD': str(ansAD) \
                                         })

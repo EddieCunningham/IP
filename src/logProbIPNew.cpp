@@ -63,19 +63,19 @@ void personClass::storeProbAndNormalize() {
     }
     
     
-    if((this->probability < pow(10,-15) or this->probability > 1.0+pow(10,15)) and t == 1.0) {
+    if((this->probability < pow(10,-25) or this->probability > 1.0+pow(10,15)) and t == 1.0) {
 //        cout << " | contradiction at person " << this->_id;
         this->dontInclude = true;
         throw 20;
         return;
     }
-    if(sumOther < pow(10,-15) && t == 0.0) {
+    if(sumOther < pow(10,-25) && t == 0.0) {
 //        cout << " | contradiction at person " << this->_id;
         this->dontInclude = true;
         throw 20;
         return;
     }
-    if(probFromL < pow(10,-15) && (t == 1.0 && s == 1.0)) {
+    if(probFromL < pow(10,-25) && (t == 1.0 && s == 1.0)) {
 //        cout << " | contradiction at person " << this->_id;
         this->dontInclude = true;
         throw 20;
@@ -84,7 +84,7 @@ void personClass::storeProbAndNormalize() {
     
     
     for(int i=0; i<m; ++i) {
-        if(abs(this->probability) < pow(10,-15)) {
+        if(abs(this->probability) < pow(10,-25)) {
             this->probs.at(i) = 0.0;
         }
         else {
@@ -97,7 +97,7 @@ void personClass::storeProbAndNormalize() {
         }
     }
     for(int i=m; i<n; ++i) {
-        if(abs(sumOther) < pow(10,-15)) {
+        if(abs(sumOther) < pow(10,-25)) {
             this->probs.at(i) = 0.0;
         }
         else {
@@ -110,7 +110,7 @@ void personClass::storeProbAndNormalize() {
     for(int i=0; i<this->probs.size(); ++i) {
         totalSum += this->probs.at(i);
     }
-    if(abs(totalSum-1.0) > pow(10,-15)) {
+    if(abs(totalSum-1.0) > pow(10,-25)) {
         // cout << "Total sum wasn't 1!  It was " << totalSum << endl;
         //             string a;
         //             cin >> a;
@@ -558,7 +558,7 @@ void pedigreeClass2::getDominantOrRecessive() {
     raise(SIGABRT);
 }
 
-vector<double> pedigreeClass2::monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots) {
+vector<double> pedigreeClass2::monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid) {
     srand(1234);
 
     this->getDominantOrRecessive();
@@ -611,6 +611,9 @@ vector<double> pedigreeClass2::monteCarlo(long numbCalls, bool printIterations, 
     }
     if(useBruteForce) {
         return this->_bruteForce(numbCalls, printIterations, numbToPrint, numbRoots);
+    }
+    if(useHybrid) {
+        return this->_hybridMonteCarlo(numbCalls, printIterations, numbToPrint, K);
     }
     return this->_uniformMonteCarlo(numbCalls, printIterations, numbToPrint, useNewDist, K, useLeak, leakProb, leakDecay);
 }

@@ -130,6 +130,7 @@ vector<double> pedigreeClass2::_uniformMonteCarlo(long numbCalls, bool printIter
         // currentStdev = log_volume + integral_variance.getLogStdev() - 0.5*log(numbCalls);
         
         if(printIterations) {
+            cout << "\n\n========== DONE ==========\n\n" << endl;
             cout << "\n-----------\nApproximated log integral: " << currentAns << endl;
             // cout << "Current log standard deviation: " << currentStdev << endl;
             cout << "Approximated integral: " << exp(currentAns) << endl;

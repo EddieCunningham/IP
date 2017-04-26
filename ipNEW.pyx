@@ -34,7 +34,7 @@ cdef extern from "logProbIPNew.h":
         pedigreeClass2()
         vector[personClass*] allPeople
         vector[personClass*] roots
-        vector[double] monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots) except *
+        vector[double] monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid) except *
 
 cdef class PyPerson:
     cdef personClass* c_Person
@@ -48,6 +48,7 @@ cdef class PyPerson:
     cdef public vector[vector[vector[double]]] g
     cdef public bool affected
     cdef public int _id
+    cdef public string typeOfShading
 
     def __cinit__(self,object modelPerson,dominantOrRecessive,int l, int m,int n,vector[vector[vector[double]]] g):
         parentA = None
@@ -56,6 +57,7 @@ cdef class PyPerson:
         # ADD SPOT FOR S VAL HERE
         isRoot = (len(modelPerson.parents) == 0)
         if(modelPerson.affected == 'yes'):
+            typeOfShading = 'shaded'
             if(dominantOrRecessive == 'dominant'):
                 tVal = 1.0
                 sVal = 0.5
@@ -65,12 +67,14 @@ cdef class PyPerson:
             else:
                 assert 0
         elif(modelPerson.affected == 'no'):
+            typeOfShading = 'unshaded'
             if(dominantOrRecessive == 'dominant'):
                 # can't have carrier in the dominant case
                 tVal = 0.0
                 sVal = 0.5
             elif(dominantOrRecessive == 'recessive'):
                 if(modelPerson.carrier):
+                    typeOfShading = 'carrier'
                     tVal = 1.0
                     sVal = 1.0
                 else:
@@ -79,6 +83,7 @@ cdef class PyPerson:
             else:
                 assert 0
         elif(modelPerson.affected == 'possibly'):
+            typeOfShading = 'possiblyShaded'
             tVal = 0.5
             sVal = 0.5
         else:
@@ -94,7 +99,7 @@ cdef class PyPerson:
 
         affected = modelPerson.affected!='no'
 
-        self.c_Person = new personClass(_id,NULL,NULL,isRoot,t,s,probability,l,m,n,probs,updated,g,affected)                
+        self.c_Person = new personClass(_id,NULL,NULL,isRoot,t,s,probability,l,m,n,probs,updated,g,affected,typeOfShading)                
 
         self.isRoot = isRoot
         self.t = t
@@ -109,6 +114,7 @@ cdef class PyPerson:
         self.g = g
         self.affected = affected
         self._id = _id
+        self.typeOfShading = typeOfShading
 
     def __dealloc__(self):
         del self.c_Person
@@ -136,6 +142,7 @@ cdef class PyPerson:
         print('\tupdated: '+str(self.updated))
         print('\tg: '+str(self.g))
         print('\t_id: '+str(self._id))
+        print('\ttypeOfShading: '+str(self.typeOfShading))
 
     # def toString(self):
     #     print('personClass x_'+str(self._id)+'('+str(self._id)+','),
@@ -195,6 +202,11 @@ cdef class PyPedigree:
         self.allPeople = []
         self.roots = []
 
+        if(problemName == 'autosome'):
+            self.c_pedigree.sexDependent = False
+        else:
+            self.c_pedigree.sexDependent = True
+
         helperStruct = {}
 
         for p in pedigree.family:
@@ -242,8 +254,8 @@ cdef class PyPedigree:
         # print('\n\n--------------------------------------\n\n')
 
 
-    cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots):
-        ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots)
+    cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid):
+        ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid)
         return ans
 
 

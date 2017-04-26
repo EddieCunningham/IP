@@ -78,8 +78,9 @@ public:
     bool affected;
     bool dontInclude;
     vector<personClass*> children;
+    string typeOfShading;
     
-    personClass(int _id_,personClass* parentA_,personClass* parentB_,bool isRoot_,double t_,double s_,double probability_,int l_,int m_,int n_,vector<double> probs_,bool updated_,vector<vector<vector<double>>> g_,bool affected_)
+    personClass(int _id_,personClass* parentA_,personClass* parentB_,bool isRoot_,double t_,double s_,double probability_,int l_,int m_,int n_,vector<double> probs_,bool updated_,vector<vector<vector<double>>> g_,bool affected_,string typeOfShading_)
     : _id(_id_)
     ,parentA(parentA_)
     ,parentB(parentB_)
@@ -101,6 +102,7 @@ public:
     ,affected(affected_)
     ,dontInclude(false)
     ,children()
+    ,typeOfShading(typeOfShading_)
     {}
 
     void reset() {
@@ -207,11 +209,13 @@ public:
         // str += "\n}));";
 
         if(this->affected) {
-            str += "true);";
+            str += "true,";
         }
         else {
-            str += "false);";
+            str += "false,";
         }
+
+        str += this->typeOfShading+")};";
 
         cout << str << endl;
     }
@@ -223,6 +227,7 @@ private:
     double lastLogEval;
     
     bool isDominant;
+    bool sexDependent;
 
     vector<personClass*> leaves;
 
@@ -248,10 +253,12 @@ private:
     
 
     vector<double> _evaluateFromSingleRoot(long numbCalls, bool printIterations, int numbToPrint, unordered_set<personClass*> rootsToUse);
-    pair<double,string> _bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, int numbRoots, int numbToChange);
-    vector<double> _bruteForce(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, int numbRoots);
+    pair<double,vector<personClass*>> _bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, int numbRoots, int numbToChange);
+    vector<pair<double,vector<personClass*>>> _bruteForceWork(long numbCalls, bool printIterations, int numbToPrint, int numbRoots);
+    vector<double> _bruteForce(long numbCalls, bool printIterations, int numbToPrint, int numbRoots);
     vector<double> _monteCarloMH(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay);
     vector<double> _uniformMonteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay);
+    vector<double> _hybridMonteCarlo(long numbCalls, bool printIterations, int numbToPrint, double K);
 
 public:
 
@@ -269,8 +276,9 @@ public:
     }
 
     pair<double,double> logEvaluation(const vector<double> & x, bool useNewDist, double K, bool samplingFromPDF);
-    vector<double> monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots);
+    vector<double> monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid);
 };
+
 
 
 #endif

@@ -221,15 +221,16 @@ struct combinationIterator {
     }
 };
 
-pair<double,string> pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, int numbRoots, int numbToChange) {
+pair<double,vector<personClass*>> pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, bool printIterations, int numbToPrint, int numbRoots, int numbToChange) {
 
     if(numbToChange > this->possiblyAffectedAncestors.size()+numbRoots) {
-        return pair<double,string>(-1,"Can't change this many");
+        // shouldn't get here
+        raise(SIGABRT);
     }
 
     unordered_set<personClass*> changed;
 
-    pair<double,string> maxVal(-1,"InitialVal");
+    pair<double,vector<personClass*>> maxVal(-1,vector<personClass*>({nullptr}));
     
     combinationIterator combRoot(this->carrierRoots.at(0).size(),numbRoots,0);
     do {
@@ -283,17 +284,16 @@ pair<double,string> pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, 
 //            cout << endl;
             
 
-            string changedString = "All of the changed people: ";
+            vector<personClass*> allChanged = vector<personClass*>();
             for(auto it=changed.begin(); it!= changed.end();++it) {
-                changedString += to_string((*it)->_id)+" ";
+                allChanged.push_back(*it);
             }
-            // cout << changedString << endl;
 
             if(lastEval.at(0) == 0) {
                 // didn't get a contradiction
-                if(lastEval.at(1) > maxVal.first || maxVal.second == "InitialVal") {
+                if(lastEval.at(1) > maxVal.first || maxVal.second.at(0) == nullptr) {
                     maxVal.first = lastEval.at(1);
-                    maxVal.second = changedString;
+                    maxVal.second = allChanged;
                 }
             }
 
@@ -322,9 +322,9 @@ pair<double,string> pedigreeClass2::_bruteForceWithNumbAffected(long numbCalls, 
     return maxVal;
 }
 
-vector<double> pedigreeClass2::_bruteForce(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, int numbRoots) {
- 
-    vector<pair<double,string>> allAnswers = vector<pair<double,string>>();
+vector<pair<double,vector<personClass*>>> pedigreeClass2::_bruteForceWork(long numbCalls, bool printIterations, int numbToPrint, int numbRoots) {
+
+    vector<pair<double,vector<personClass*>>> allAnswers = vector<pair<double,vector<personClass*>>>();
 
     while(numbRoots > this->carrierRoots.at(0).size()) {
         numbRoots -= 1;
@@ -332,24 +332,35 @@ vector<double> pedigreeClass2::_bruteForce(long numbCalls, bool printIterations,
 
     for(int numbToChange=numbRoots; numbToChange<=this->possiblyAffectedAncestors.size()+numbRoots; ++numbToChange) {
         
-        pair<double, string> ansForNumb = this->_bruteForceWithNumbAffected(numbCalls, printIterations, numbToPrint, numbRoots, numbToChange);
-        if(ansForNumb.second == "Can't change this many") {
-            break;
-        }
+        pair<double,vector<personClass*>> ansForNumb = this->_bruteForceWithNumbAffected(numbCalls, printIterations, numbToPrint, numbRoots, numbToChange);
         allAnswers.push_back(ansForNumb);
         
-        // break;
     }
     cout << "\n\n-------------------------\n\n" << endl;
     for(int i=0; i<allAnswers.size(); ++i) {
-        cout << "nChanged: " << i+1 << " (" << allAnswers.at(i).second << ") -> " << exp(allAnswers.at(i).first) << endl;
+        if(!(allAnswers.at(i).second.at(0))) {
+            continue;
+        }
+        cout << "nChanged: " << i+1 << " (";
+        for(int j=0; j<allAnswers.at(i).second.size(); ++j) {
+            cout << allAnswers.at(i).second.at(j)->_id << " ";
+        }
+        cout << ") -> " << exp(allAnswers.at(i).first) << endl;
     }
 
+    return allAnswers;
+
+}
+
+vector<double> pedigreeClass2::_bruteForce(long numbCalls, bool printIterations, int numbToPrint, int numbRoots) {
+ 
+
+    vector<pair<double,vector<personClass*>>> allAnswers = this->_bruteForceWork(numbCalls,printIterations,numbToPrint,numbRoots);
     vector<double> ans;
     ans.push_back(this->carrierRoots.at(0).size());
     ans.push_back(this->possiblyAffectedAncestors.size());
     for(int i=0; i<allAnswers.size(); ++i) {
-        if(allAnswers.at(i).second == "InitialVal") {
+        if(allAnswers.at(i).second.at(0) == nullptr) {
             ans.push_back(-1);
         }
         else {
@@ -358,6 +369,8 @@ vector<double> pedigreeClass2::_bruteForce(long numbCalls, bool printIterations,
     }
     return ans;
 }
+
+
 
 
 

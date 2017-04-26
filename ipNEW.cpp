@@ -547,7 +547,7 @@ struct __pyx_obj_5ipNEW_PyPedigree;
 typedef personClass *__pyx_t_5ipNEW_person_ptr;
 
 /* "ipNEW.pyx":39
- *         vector[double] monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots) except *
+ *         vector[double] monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid) except *
  * 
  * cdef class PyPerson:             # <<<<<<<<<<<<<<
  *     cdef personClass* c_Person
@@ -597,7 +597,7 @@ struct __pyx_obj_5ipNEW_PyPedigree {
 
 
 /* "ipNEW.pyx":39
- *         vector[double] monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots) except *
+ *         vector[double] monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid) except *
  * 
  * cdef class PyPerson:             # <<<<<<<<<<<<<<
  *     cdef personClass* c_Person
@@ -621,7 +621,7 @@ static struct __pyx_vtabstruct_5ipNEW_PyPerson *__pyx_vtabptr_5ipNEW_PyPerson;
 
 struct __pyx_vtabstruct_5ipNEW_PyPedigree {
   PyObject *(*initialization)(struct __pyx_obj_5ipNEW_PyPedigree *, PyObject *, PyObject *, PyObject *, int __pyx_skip_dispatch);
-  PyObject *(*calculateProbability)(struct __pyx_obj_5ipNEW_PyPedigree *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*calculateProbability)(struct __pyx_obj_5ipNEW_PyPedigree *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_5ipNEW_PyPedigree *__pyx_vtabptr_5ipNEW_PyPedigree;
 
@@ -1066,7 +1066,7 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 static PyObject *__pyx_f_5ipNEW_8PyPerson_setParentA(struct __pyx_obj_5ipNEW_PyPerson *__pyx_v_self, struct __pyx_obj_5ipNEW_PyPerson *__pyx_v_parentA); /* proto*/
 static PyObject *__pyx_f_5ipNEW_8PyPerson_setParentB(struct __pyx_obj_5ipNEW_PyPerson *__pyx_v_self, struct __pyx_obj_5ipNEW_PyPerson *__pyx_v_parentB); /* proto*/
 static PyObject *__pyx_f_5ipNEW_10PyPedigree_initialization(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self, PyObject *__pyx_v_filename, PyObject *__pyx_v_problemContext, PyObject *__pyx_v_dominantOrRecessive, int __pyx_skip_dispatch); /* proto*/
-static PyObject *__pyx_f_5ipNEW_10PyPedigree_calculateProbability(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self, PyObject *__pyx_v_numbCalls, PyObject *__pyx_v_printIterations, PyObject *__pyx_v_numbToPrint, PyObject *__pyx_v_printPeople, PyObject *__pyx_v_useNewDist, PyObject *__pyx_v_K, PyObject *__pyx_v_useLeak, PyObject *__pyx_v_leakProb, PyObject *__pyx_v_leakDecay, PyObject *__pyx_v_useMH, PyObject *__pyx_v_bruteForce, PyObject *__pyx_v_numbRoots, int __pyx_skip_dispatch); /* proto*/
+static PyObject *__pyx_f_5ipNEW_10PyPedigree_calculateProbability(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self, PyObject *__pyx_v_numbCalls, PyObject *__pyx_v_printIterations, PyObject *__pyx_v_numbToPrint, PyObject *__pyx_v_printPeople, PyObject *__pyx_v_useNewDist, PyObject *__pyx_v_K, PyObject *__pyx_v_useLeak, PyObject *__pyx_v_leakProb, PyObject *__pyx_v_leakDecay, PyObject *__pyx_v_useMH, PyObject *__pyx_v_bruteForce, PyObject *__pyx_v_numbRoots, PyObject *__pyx_v_useHybrid, int __pyx_skip_dispatch); /* proto*/
 
 /* Module declarations from 'libcpp.vector' */
 
@@ -1180,6 +1180,7 @@ static const char __pyx_k_leakDecay[] = "leakDecay";
 static const char __pyx_k_numbCalls[] = "numbCalls";
 static const char __pyx_k_numbRoots[] = "numbRoots";
 static const char __pyx_k_recessive[] = "recessive";
+static const char __pyx_k_useHybrid[] = "useHybrid";
 static const char __pyx_k_bruteForce[] = "bruteForce";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_useNewDist[] = "useNewDist";
@@ -1280,6 +1281,7 @@ static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_time;
 static PyObject *__pyx_n_s_toString;
 static PyObject *__pyx_kp_s_updated;
+static PyObject *__pyx_n_s_useHybrid;
 static PyObject *__pyx_n_s_useLeak;
 static PyObject *__pyx_n_s_useMH;
 static PyObject *__pyx_n_s_useNewDist;
@@ -1322,7 +1324,7 @@ static PyObject *__pyx_pf_5ipNEW_10PyPedigree_get_filename(struct __pyx_obj_5ipN
 static PyObject *__pyx_pf_5ipNEW_10PyPedigree_2get_pedigree(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self); /* proto */
 static int __pyx_pf_5ipNEW_10PyPedigree_4__cinit__(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5ipNEW_10PyPedigree_6initialization(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self, PyObject *__pyx_v_filename, PyObject *__pyx_v_problemContext, PyObject *__pyx_v_dominantOrRecessive); /* proto */
-static PyObject *__pyx_pf_5ipNEW_10PyPedigree_8calculateProbability(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self, PyObject *__pyx_v_numbCalls, PyObject *__pyx_v_printIterations, PyObject *__pyx_v_numbToPrint, PyObject *__pyx_v_printPeople, PyObject *__pyx_v_useNewDist, PyObject *__pyx_v_K, PyObject *__pyx_v_useLeak, PyObject *__pyx_v_leakProb, PyObject *__pyx_v_leakDecay, PyObject *__pyx_v_useMH, PyObject *__pyx_v_bruteForce, PyObject *__pyx_v_numbRoots); /* proto */
+static PyObject *__pyx_pf_5ipNEW_10PyPedigree_8calculateProbability(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self, PyObject *__pyx_v_numbCalls, PyObject *__pyx_v_printIterations, PyObject *__pyx_v_numbToPrint, PyObject *__pyx_v_printPeople, PyObject *__pyx_v_useNewDist, PyObject *__pyx_v_K, PyObject *__pyx_v_useLeak, PyObject *__pyx_v_leakProb, PyObject *__pyx_v_leakDecay, PyObject *__pyx_v_useMH, PyObject *__pyx_v_bruteForce, PyObject *__pyx_v_numbRoots, PyObject *__pyx_v_useHybrid); /* proto */
 static PyObject *__pyx_pf_5ipNEW_10PyPedigree_9allPeople___get__(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self); /* proto */
 static int __pyx_pf_5ipNEW_10PyPedigree_9allPeople_2__set__(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static int __pyx_pf_5ipNEW_10PyPedigree_9allPeople_4__del__(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self); /* proto */
@@ -5325,13 +5327,13 @@ static PyObject *__pyx_pf_5ipNEW_10PyPedigree_6initialization(struct __pyx_obj_5
 /* "ipNEW.pyx":245
  * 
  * 
- *     cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots):             # <<<<<<<<<<<<<<
- *         ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots)
+ *     cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid):             # <<<<<<<<<<<<<<
+ *         ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid)
  *         return ans
  */
 
 static PyObject *__pyx_pw_5ipNEW_10PyPedigree_9calculateProbability(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_f_5ipNEW_10PyPedigree_calculateProbability(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self, PyObject *__pyx_v_numbCalls, PyObject *__pyx_v_printIterations, PyObject *__pyx_v_numbToPrint, PyObject *__pyx_v_printPeople, PyObject *__pyx_v_useNewDist, PyObject *__pyx_v_K, PyObject *__pyx_v_useLeak, PyObject *__pyx_v_leakProb, PyObject *__pyx_v_leakDecay, PyObject *__pyx_v_useMH, PyObject *__pyx_v_bruteForce, PyObject *__pyx_v_numbRoots, int __pyx_skip_dispatch) {
+static PyObject *__pyx_f_5ipNEW_10PyPedigree_calculateProbability(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self, PyObject *__pyx_v_numbCalls, PyObject *__pyx_v_printIterations, PyObject *__pyx_v_numbToPrint, PyObject *__pyx_v_printPeople, PyObject *__pyx_v_useNewDist, PyObject *__pyx_v_K, PyObject *__pyx_v_useLeak, PyObject *__pyx_v_leakProb, PyObject *__pyx_v_leakDecay, PyObject *__pyx_v_useMH, PyObject *__pyx_v_bruteForce, PyObject *__pyx_v_numbRoots, PyObject *__pyx_v_useHybrid, int __pyx_skip_dispatch) {
   std::vector<double>  __pyx_v_ans;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5353,7 +5355,8 @@ static PyObject *__pyx_f_5ipNEW_10PyPedigree_calculateProbability(struct __pyx_o
   bool __pyx_t_16;
   bool __pyx_t_17;
   int __pyx_t_18;
-  std::vector<double>  __pyx_t_19;
+  bool __pyx_t_19;
+  std::vector<double>  __pyx_t_20;
   __Pyx_RefNannySetupContext("calculateProbability", 0);
   /* Check if called by wrapper */
   if (unlikely(__pyx_skip_dispatch)) ;
@@ -5376,7 +5379,7 @@ static PyObject *__pyx_f_5ipNEW_10PyPedigree_calculateProbability(struct __pyx_o
           __pyx_t_5 = 1;
         }
       }
-      __pyx_t_6 = PyTuple_New(12+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 245, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(13+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 245, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       if (__pyx_t_4) {
         __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -5417,6 +5420,9 @@ static PyObject *__pyx_f_5ipNEW_10PyPedigree_calculateProbability(struct __pyx_o
       __Pyx_INCREF(__pyx_v_numbRoots);
       __Pyx_GIVEREF(__pyx_v_numbRoots);
       PyTuple_SET_ITEM(__pyx_t_6, 11+__pyx_t_5, __pyx_v_numbRoots);
+      __Pyx_INCREF(__pyx_v_useHybrid);
+      __Pyx_GIVEREF(__pyx_v_useHybrid);
+      PyTuple_SET_ITEM(__pyx_t_6, 12+__pyx_t_5, __pyx_v_useHybrid);
       __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 245, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -5431,8 +5437,8 @@ static PyObject *__pyx_f_5ipNEW_10PyPedigree_calculateProbability(struct __pyx_o
 
   /* "ipNEW.pyx":246
  * 
- *     cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots):
- *         ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots)             # <<<<<<<<<<<<<<
+ *     cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid):
+ *         ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid)             # <<<<<<<<<<<<<<
  *         return ans
  * 
  */
@@ -5448,12 +5454,13 @@ static PyObject *__pyx_f_5ipNEW_10PyPedigree_calculateProbability(struct __pyx_o
   __pyx_t_16 = __Pyx_PyObject_IsTrue(__pyx_v_useMH); if (unlikely((__pyx_t_16 == (bool)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L1_error)
   __pyx_t_17 = __Pyx_PyObject_IsTrue(__pyx_v_bruteForce); if (unlikely((__pyx_t_17 == (bool)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L1_error)
   __pyx_t_18 = __Pyx_PyInt_As_int(__pyx_v_numbRoots); if (unlikely((__pyx_t_18 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L1_error)
-  __pyx_t_19 = __pyx_v_self->c_pedigree.monteCarlo(__pyx_t_7, __pyx_t_8, __pyx_t_9, __pyx_t_10, __pyx_t_11, __pyx_t_12, __pyx_t_13, __pyx_t_14, __pyx_t_15, __pyx_t_16, __pyx_t_17, __pyx_t_18); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L1_error)
-  __pyx_v_ans = __pyx_t_19;
+  __pyx_t_19 = __Pyx_PyObject_IsTrue(__pyx_v_useHybrid); if (unlikely((__pyx_t_19 == (bool)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L1_error)
+  __pyx_t_20 = __pyx_v_self->c_pedigree.monteCarlo(__pyx_t_7, __pyx_t_8, __pyx_t_9, __pyx_t_10, __pyx_t_11, __pyx_t_12, __pyx_t_13, __pyx_t_14, __pyx_t_15, __pyx_t_16, __pyx_t_17, __pyx_t_18, __pyx_t_19); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L1_error)
+  __pyx_v_ans = __pyx_t_20;
 
   /* "ipNEW.pyx":247
- *     cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots):
- *         ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots)
+ *     cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid):
+ *         ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid)
  *         return ans             # <<<<<<<<<<<<<<
  * 
  * 
@@ -5468,8 +5475,8 @@ static PyObject *__pyx_f_5ipNEW_10PyPedigree_calculateProbability(struct __pyx_o
   /* "ipNEW.pyx":245
  * 
  * 
- *     cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots):             # <<<<<<<<<<<<<<
- *         ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots)
+ *     cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid):             # <<<<<<<<<<<<<<
+ *         ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid)
  *         return ans
  */
 
@@ -5503,16 +5510,18 @@ static PyObject *__pyx_pw_5ipNEW_10PyPedigree_9calculateProbability(PyObject *__
   PyObject *__pyx_v_useMH = 0;
   PyObject *__pyx_v_bruteForce = 0;
   PyObject *__pyx_v_numbRoots = 0;
+  PyObject *__pyx_v_useHybrid = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("calculateProbability (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_numbCalls,&__pyx_n_s_printIterations,&__pyx_n_s_numbToPrint,&__pyx_n_s_printPeople,&__pyx_n_s_useNewDist,&__pyx_n_s_K,&__pyx_n_s_useLeak,&__pyx_n_s_leakProb,&__pyx_n_s_leakDecay,&__pyx_n_s_useMH,&__pyx_n_s_bruteForce,&__pyx_n_s_numbRoots,0};
-    PyObject* values[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_numbCalls,&__pyx_n_s_printIterations,&__pyx_n_s_numbToPrint,&__pyx_n_s_printPeople,&__pyx_n_s_useNewDist,&__pyx_n_s_K,&__pyx_n_s_useLeak,&__pyx_n_s_leakProb,&__pyx_n_s_leakDecay,&__pyx_n_s_useMH,&__pyx_n_s_bruteForce,&__pyx_n_s_numbRoots,&__pyx_n_s_useHybrid,0};
+    PyObject* values[13] = {0,0,0,0,0,0,0,0,0,0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case 13: values[12] = PyTuple_GET_ITEM(__pyx_args, 12);
         case 12: values[11] = PyTuple_GET_ITEM(__pyx_args, 11);
         case 11: values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
         case 10: values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
@@ -5536,63 +5545,68 @@ static PyObject *__pyx_pw_5ipNEW_10PyPedigree_9calculateProbability(PyObject *__
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_printIterations)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, 1); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 1); __PYX_ERR(0, 245, __pyx_L3_error)
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_numbToPrint)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, 2); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 2); __PYX_ERR(0, 245, __pyx_L3_error)
         }
         case  3:
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_printPeople)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, 3); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 3); __PYX_ERR(0, 245, __pyx_L3_error)
         }
         case  4:
         if (likely((values[4] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_useNewDist)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, 4); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 4); __PYX_ERR(0, 245, __pyx_L3_error)
         }
         case  5:
         if (likely((values[5] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_K)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, 5); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 5); __PYX_ERR(0, 245, __pyx_L3_error)
         }
         case  6:
         if (likely((values[6] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_useLeak)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, 6); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 6); __PYX_ERR(0, 245, __pyx_L3_error)
         }
         case  7:
         if (likely((values[7] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_leakProb)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, 7); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 7); __PYX_ERR(0, 245, __pyx_L3_error)
         }
         case  8:
         if (likely((values[8] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_leakDecay)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, 8); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 8); __PYX_ERR(0, 245, __pyx_L3_error)
         }
         case  9:
         if (likely((values[9] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_useMH)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, 9); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 9); __PYX_ERR(0, 245, __pyx_L3_error)
         }
         case 10:
         if (likely((values[10] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_bruteForce)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, 10); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 10); __PYX_ERR(0, 245, __pyx_L3_error)
         }
         case 11:
         if (likely((values[11] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_numbRoots)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, 11); __PYX_ERR(0, 245, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 11); __PYX_ERR(0, 245, __pyx_L3_error)
+        }
+        case 12:
+        if (likely((values[12] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_useHybrid)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, 12); __PYX_ERR(0, 245, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "calculateProbability") < 0)) __PYX_ERR(0, 245, __pyx_L3_error)
       }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 12) {
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 13) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
@@ -5607,6 +5621,7 @@ static PyObject *__pyx_pw_5ipNEW_10PyPedigree_9calculateProbability(PyObject *__
       values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
       values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
       values[11] = PyTuple_GET_ITEM(__pyx_args, 11);
+      values[12] = PyTuple_GET_ITEM(__pyx_args, 12);
     }
     __pyx_v_numbCalls = values[0];
     __pyx_v_printIterations = values[1];
@@ -5620,29 +5635,30 @@ static PyObject *__pyx_pw_5ipNEW_10PyPedigree_9calculateProbability(PyObject *__
     __pyx_v_useMH = values[9];
     __pyx_v_bruteForce = values[10];
     __pyx_v_numbRoots = values[11];
+    __pyx_v_useHybrid = values[12];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 12, 12, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 245, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("calculateProbability", 1, 13, 13, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 245, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("ipNEW.PyPedigree.calculateProbability", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5ipNEW_10PyPedigree_8calculateProbability(((struct __pyx_obj_5ipNEW_PyPedigree *)__pyx_v_self), __pyx_v_numbCalls, __pyx_v_printIterations, __pyx_v_numbToPrint, __pyx_v_printPeople, __pyx_v_useNewDist, __pyx_v_K, __pyx_v_useLeak, __pyx_v_leakProb, __pyx_v_leakDecay, __pyx_v_useMH, __pyx_v_bruteForce, __pyx_v_numbRoots);
+  __pyx_r = __pyx_pf_5ipNEW_10PyPedigree_8calculateProbability(((struct __pyx_obj_5ipNEW_PyPedigree *)__pyx_v_self), __pyx_v_numbCalls, __pyx_v_printIterations, __pyx_v_numbToPrint, __pyx_v_printPeople, __pyx_v_useNewDist, __pyx_v_K, __pyx_v_useLeak, __pyx_v_leakProb, __pyx_v_leakDecay, __pyx_v_useMH, __pyx_v_bruteForce, __pyx_v_numbRoots, __pyx_v_useHybrid);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5ipNEW_10PyPedigree_8calculateProbability(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self, PyObject *__pyx_v_numbCalls, PyObject *__pyx_v_printIterations, PyObject *__pyx_v_numbToPrint, PyObject *__pyx_v_printPeople, PyObject *__pyx_v_useNewDist, PyObject *__pyx_v_K, PyObject *__pyx_v_useLeak, PyObject *__pyx_v_leakProb, PyObject *__pyx_v_leakDecay, PyObject *__pyx_v_useMH, PyObject *__pyx_v_bruteForce, PyObject *__pyx_v_numbRoots) {
+static PyObject *__pyx_pf_5ipNEW_10PyPedigree_8calculateProbability(struct __pyx_obj_5ipNEW_PyPedigree *__pyx_v_self, PyObject *__pyx_v_numbCalls, PyObject *__pyx_v_printIterations, PyObject *__pyx_v_numbToPrint, PyObject *__pyx_v_printPeople, PyObject *__pyx_v_useNewDist, PyObject *__pyx_v_K, PyObject *__pyx_v_useLeak, PyObject *__pyx_v_leakProb, PyObject *__pyx_v_leakDecay, PyObject *__pyx_v_useMH, PyObject *__pyx_v_bruteForce, PyObject *__pyx_v_numbRoots, PyObject *__pyx_v_useHybrid) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("calculateProbability", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5ipNEW_10PyPedigree_calculateProbability(__pyx_v_self, __pyx_v_numbCalls, __pyx_v_printIterations, __pyx_v_numbToPrint, __pyx_v_printPeople, __pyx_v_useNewDist, __pyx_v_K, __pyx_v_useLeak, __pyx_v_leakProb, __pyx_v_leakDecay, __pyx_v_useMH, __pyx_v_bruteForce, __pyx_v_numbRoots, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 245, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5ipNEW_10PyPedigree_calculateProbability(__pyx_v_self, __pyx_v_numbCalls, __pyx_v_printIterations, __pyx_v_numbToPrint, __pyx_v_printPeople, __pyx_v_useNewDist, __pyx_v_K, __pyx_v_useLeak, __pyx_v_leakProb, __pyx_v_leakDecay, __pyx_v_useMH, __pyx_v_bruteForce, __pyx_v_numbRoots, __pyx_v_useHybrid, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -8682,6 +8698,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_time, __pyx_k_time, sizeof(__pyx_k_time), 0, 0, 1, 1},
   {&__pyx_n_s_toString, __pyx_k_toString, sizeof(__pyx_k_toString), 0, 0, 1, 1},
   {&__pyx_kp_s_updated, __pyx_k_updated, sizeof(__pyx_k_updated), 0, 0, 1, 0},
+  {&__pyx_n_s_useHybrid, __pyx_k_useHybrid, sizeof(__pyx_k_useHybrid), 0, 0, 1, 1},
   {&__pyx_n_s_useLeak, __pyx_k_useLeak, sizeof(__pyx_k_useLeak), 0, 0, 1, 1},
   {&__pyx_n_s_useMH, __pyx_k_useMH, sizeof(__pyx_k_useMH), 0, 0, 1, 1},
   {&__pyx_n_s_useNewDist, __pyx_k_useNewDist, sizeof(__pyx_k_useNewDist), 0, 0, 1, 1},
@@ -8834,7 +8851,7 @@ PyMODINIT_FUNC PyInit_ipNEW(void)
   __pyx_ptype_5ipNEW_PyPerson = &__pyx_type_5ipNEW_PyPerson;
   __pyx_vtabptr_5ipNEW_PyPedigree = &__pyx_vtable_5ipNEW_PyPedigree;
   __pyx_vtable_5ipNEW_PyPedigree.initialization = (PyObject *(*)(struct __pyx_obj_5ipNEW_PyPedigree *, PyObject *, PyObject *, PyObject *, int __pyx_skip_dispatch))__pyx_f_5ipNEW_10PyPedigree_initialization;
-  __pyx_vtable_5ipNEW_PyPedigree.calculateProbability = (PyObject *(*)(struct __pyx_obj_5ipNEW_PyPedigree *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, int __pyx_skip_dispatch))__pyx_f_5ipNEW_10PyPedigree_calculateProbability;
+  __pyx_vtable_5ipNEW_PyPedigree.calculateProbability = (PyObject *(*)(struct __pyx_obj_5ipNEW_PyPedigree *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, int __pyx_skip_dispatch))__pyx_f_5ipNEW_10PyPedigree_calculateProbability;
   if (PyType_Ready(&__pyx_type_5ipNEW_PyPedigree) < 0) __PYX_ERR(0, 156, __pyx_L1_error)
   __pyx_type_5ipNEW_PyPedigree.tp_print = 0;
   if (__Pyx_SetVtable(__pyx_type_5ipNEW_PyPedigree.tp_dict, __pyx_vtabptr_5ipNEW_PyPedigree) < 0) __PYX_ERR(0, 156, __pyx_L1_error)
