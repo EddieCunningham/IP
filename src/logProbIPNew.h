@@ -68,6 +68,7 @@ public:
     int _id;
     personClass* parentA;
     personClass* parentB;
+    vector<personClass*> mates;
     bool isRoot;
     double t,s,probability,probOfShadingAverage;
     int l,m,n,timesUpdated;
@@ -77,10 +78,11 @@ public:
     vector<vector<vector<double>>> g;
     bool affected;
     bool dontInclude;
-    vector<personClass*> children;
+    vector<pair<personClass*,vector<personClass*>>> mateKids;
     string typeOfShading;
+    string sex;
     
-    personClass(int _id_,personClass* parentA_,personClass* parentB_,bool isRoot_,double t_,double s_,double probability_,int l_,int m_,int n_,vector<double> probs_,bool updated_,vector<vector<vector<double>>> g_,bool affected_,string typeOfShading_)
+    personClass(int _id_,personClass* parentA_,personClass* parentB_,bool isRoot_,double t_,double s_,double probability_,int l_,int m_,int n_,vector<double> probs_,bool updated_,vector<vector<vector<double>>> g_,bool affected_,string typeOfShading_,string sex_)
     : _id(_id_)
     ,parentA(parentA_)
     ,parentB(parentB_)
@@ -101,8 +103,9 @@ public:
     ,g(g_)
     ,affected(affected_)
     ,dontInclude(false)
-    ,children()
+    ,mateKids()
     ,typeOfShading(typeOfShading_)
+    ,sex(sex_)
     {}
 
     void reset() {
@@ -129,8 +132,8 @@ public:
     
     void storeProbAndNormalize();
     
-    void toString() {
-        string str = "personClass x_";
+    void toString(string numb) {
+        string str = "personClass x_"+numb;
         if(this->_id < 0) {
             str += "_"+to_string(abs(this->_id));
         }
@@ -140,10 +143,10 @@ public:
         str += "("+to_string(this->_id)+",";
         if(this->parentA) {
             if(this->parentA->_id < 0) {
-                str += "&x__"+to_string(abs(this->parentA->_id))+",";
+                str += "&x_"+numb+"_"+to_string(abs(this->parentA->_id))+",";
             }
             else {
-                str += "&x_"+to_string(this->parentA->_id)+",";
+                str += "&x_"+numb+to_string(this->parentA->_id)+",";
             }
         }
         else {
@@ -151,10 +154,10 @@ public:
         }
         if(this->parentB) {
             if(this->parentB->_id < 0) {
-                str += "&x__"+to_string(abs(this->parentB->_id))+",";
+                str += "&x_"+numb+"_"+to_string(abs(this->parentB->_id))+",";
             }
             else {
-                str += "&x_"+to_string(this->parentB->_id)+",";
+                str += "&x_"+numb+to_string(this->parentB->_id)+",";
             }
         }
         else {
@@ -215,7 +218,9 @@ public:
             str += "false,";
         }
 
-        str += this->typeOfShading+")};";
+        str += "\""+this->typeOfShading+"\""+",";
+        str += "\""+this->sex+"\"";
+        str += ");";
 
         cout << str << endl;
     }
@@ -226,10 +231,6 @@ private:
 
     double lastLogEval;
     
-    bool isDominant;
-    bool sexDependent;
-
-    vector<personClass*> leaves;
 
     vector<vector<personClass*>> carrierRoots;
     vector<personClass*> possiblyAffectedAncestors;
@@ -261,19 +262,28 @@ private:
     vector<double> _hybridMonteCarlo(long numbCalls, bool printIterations, int numbToPrint, double K);
 
 public:
-
-    vector<personClass*> allPeople;
-    vector<personClass*> roots;
+    
     double log_probRoots;
 
+    vector<vector<personClass*>> families;
+    vector<personClass*> allPeople;
+    vector<personClass*> roots;
+    vector<personClass*> leaves;
+    bool isDominant;
+    bool sexDependent;
 
-    pedigreeClass2(){}
+    unordered_map<personClass*,int> mapToIndexAllPeople;
+    unordered_map<personClass*,int> mapToIndexRoots;
+
+    pedigreeClass2() {}
 
     void resetAll() {
         for(auto it=this->allPeople.begin(); it!=this->allPeople.end(); ++it) {
             (*it)->reset();
         }
     }
+
+    void printAllPeople(string numb);
 
     pair<double,double> logEvaluation(const vector<double> & x, bool useNewDist, double K, bool samplingFromPDF);
     vector<double> monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid);

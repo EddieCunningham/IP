@@ -71,7 +71,7 @@ NUMB_CALLS = 50000
 NUMB_TO_PRINT = NUMB_CALLS*0.5
 
 PRINT_ITERATIONS = False
-PRINT_PEOPLE = False
+PRINT_PEOPLE = True
 
 PRINT_INDIVIDUAL_RESULTS = True
 
@@ -123,7 +123,8 @@ def runXLRProb(filename):
     NUMB_ROOTS = 1
     problemContext = chromosomeProblem
     dominantOrRecessive = 'recessive'
-    return runProblem(filename,problemContext,dominantOrRecessive,'X-Linked Recessive')
+    problemType = 'X-Linked Recessive'
+    return runProblem(filename,problemContext,dominantOrRecessive,problemType)
 
 def runXLDProb(filename):
     # 1 root
@@ -131,7 +132,8 @@ def runXLDProb(filename):
     NUMB_ROOTS = 1
     problemContext = chromosomeProblem
     dominantOrRecessive = 'dominant'
-    return runProblem(filename,problemContext,dominantOrRecessive,'X-Linked Dominant')
+    problemType = 'X-Linked Dominant'
+    return runProblem(filename,problemContext,dominantOrRecessive,problemType)
 
 def runARProb(filename):
     # 2 roots
@@ -139,7 +141,8 @@ def runARProb(filename):
     NUMB_ROOTS = 2
     problemContext = autosomeProblem
     dominantOrRecessive = 'recessive'
-    return runProblem(filename,problemContext,dominantOrRecessive,'Autosomal Recessive')
+    problemType = 'Autosomal Recessive'
+    return runProblem(filename,problemContext,dominantOrRecessive,problemType)
 
 def runADProb(filename):
     # 1 root
@@ -147,7 +150,8 @@ def runADProb(filename):
     NUMB_ROOTS = 1
     problemContext = autosomeProblem
     dominantOrRecessive = 'dominant'
-    return runProblem(filename,problemContext,dominantOrRecessive,'Autosomal Dominant')
+    problemType = 'Autosomal Dominant'
+    return runProblem(filename,problemContext,dominantOrRecessive,problemType)
     
 def evaluateIP(jsonFileName,jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
 
@@ -336,8 +340,26 @@ def mainFunction():
     evaluateIP(FILENAME)
 
 
-evaluateAllPedigrees()
+def optimizePedigrees(filenames,problemContext,dominantOrRecessive,problemType,printPeople):
+    optimizer = PyEMOptimizer()
+    for f in filenames:
+        optimizer.addPedigree(f,problemContext,dominantOrRecessive)
+
+    optimizer.lockIn(printPeople)
+
+def testOptimize(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
+
+    filenames = ['test.json','test_XL.json']
+    filenames = [os.path.join(jsonFolderPath,f) for f in filenames]
+    problemContext = autosomeProblem
+    dominantOrRecessive = 'dominant'
+    problemType = 'Autosomal Dominant'
+    printPeople = True
+    optimizePedigrees(filenames,problemContext,dominantOrRecessive,problemType,printPeople)
+
+
+# evaluateAllPedigrees()
 # mainFunction()
 # testIncompletePenetrance()
-
+testOptimize()
 

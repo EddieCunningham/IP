@@ -354,7 +354,6 @@ vector<pair<double,vector<personClass*>>> pedigreeClass2::_bruteForceWork(long n
 
 vector<double> pedigreeClass2::_bruteForce(long numbCalls, bool printIterations, int numbToPrint, int numbRoots) {
  
-
     vector<pair<double,vector<personClass*>>> allAnswers = this->_bruteForceWork(numbCalls,printIterations,numbToPrint,numbRoots);
     vector<double> ans;
     ans.push_back(this->carrierRoots.at(0).size());

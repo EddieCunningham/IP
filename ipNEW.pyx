@@ -12,15 +12,18 @@ from libcpp.string cimport string
 from libcpp.unordered_map cimport unordered_map
 from libcpp cimport bool
 from libc.stdint cimport uintptr_t
+from cython.operator cimport dereference as deref, preincrement as inc
 
 ctypedef personClass* person_ptr
+ctypedef pedigreeClass2* pedigree_ptr
 
 cdef extern from "logProbIPNew.h":
 
     cdef cppclass personClass:
-        personClass(int _id_,personClass* parentA_,personClass* parentB_,bool isRoot_,double t_,double s_,double probability_,int l_,int m_,int n_,vector[double] probs_,bool updated_,vector[vector[vector[double]]] g_,bool affected_)
+        personClass(int _id_,personClass* parentA_,personClass* parentB_,bool isRoot_,double t_,double s_,double probability_,int l_,int m_,int n_,vector[double] probs_,bool updated_,vector[vector[vector[double]]] g_,bool affected_,string typeOfShading_,string sex_)
         personClass* parentA
         personClass* parentB
+        vector[pair[person_ptr,vector[person_ptr]]] mateKids
         bool isRoot
         double t,s,probability
         int m,n
@@ -32,9 +35,25 @@ cdef extern from "logProbIPNew.h":
 
     cdef cppclass pedigreeClass2:
         pedigreeClass2()
+        bool sexDependent
+        vector[vector[person_ptr]] families
         vector[personClass*] allPeople
         vector[personClass*] roots
+        vector[personClass*] leaves
+        unordered_map[person_ptr,int] mapToIndexRoots
+        unordered_map[person_ptr,int] mapToIndexAllPeople
+
         vector[double] monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid) except *
+
+cdef extern from "BMIP.h":
+    
+    cdef cppclass EMPedigreeOptimizer:
+        EMPedigreeOptimizer()
+        void initialize(const vector[pedigreeClass2*]& trainingSet_, bool printPeople)
+        vector[pedigreeClass2] trainingSet
+        vector[vector[vector[double]]] emissionProbs
+        vector[vector[vector[double]]] rootProbs
+        vector[vector[vector[vector[double]]]] transitionProbs
 
 cdef class PyPerson:
     cdef personClass* c_Person
@@ -48,7 +67,7 @@ cdef class PyPerson:
     cdef public vector[vector[vector[double]]] g
     cdef public bool affected
     cdef public int _id
-    cdef public string typeOfShading
+    cdef public string typeOfShading,sex
 
     def __cinit__(self,object modelPerson,dominantOrRecessive,int l, int m,int n,vector[vector[vector[double]]] g):
         parentA = None
@@ -96,10 +115,11 @@ cdef class PyPerson:
             probs.append(0)
         updated = False
         _id = modelPerson.Id
+        sex = modelPerson.sex
 
         affected = modelPerson.affected!='no'
 
-        self.c_Person = new personClass(_id,NULL,NULL,isRoot,t,s,probability,l,m,n,probs,updated,g,affected,typeOfShading)                
+        self.c_Person = new personClass(_id,NULL,NULL,isRoot,t,s,probability,l,m,n,probs,updated,g,affected,typeOfShading,sex)                
 
         self.isRoot = isRoot
         self.t = t
@@ -115,6 +135,7 @@ cdef class PyPerson:
         self.affected = affected
         self._id = _id
         self.typeOfShading = typeOfShading
+        self.sex = sex
 
     def __dealloc__(self):
         del self.c_Person
@@ -143,6 +164,7 @@ cdef class PyPerson:
         print('\tg: '+str(self.g))
         print('\t_id: '+str(self._id))
         print('\ttypeOfShading: '+str(self.typeOfShading))
+        print('\tsex: '+str(self.sex))
 
     # def toString(self):
     #     print('personClass x_'+str(self._id)+'('+str(self._id)+','),
@@ -162,9 +184,11 @@ def empty(obj):
 
 cdef class PyPedigree:
     cdef pedigreeClass2 c_pedigree
+    cdef pedigree_ptr c_pedigree_ptr
 
     cdef public object allPeople
     cdef public object roots
+    cdef public object families
 
     cdef public unordered_map[string,vector[vector[vector[double]]]] allG
     cdef public unordered_map[string,pair[int,int]] allMN
@@ -181,13 +205,22 @@ cdef class PyPedigree:
 
     def __cinit__(self):
         self.c_pedigree = pedigreeClass2()
+        self.c_pedigree_ptr = &(self.c_pedigree)
         self.c_pedigree.allPeople = vector[person_ptr]()
         self.c_pedigree.roots = vector[person_ptr]()
+        self.c_pedigree.families = vector[vector[person_ptr]]()
 
 
     cpdef initialization(self,filename,problemContext,dominantOrRecessive):
         
+        cdef vector[personClass*].iterator it
+        cdef vector[pair[person_ptr,vector[person_ptr]]].iterator it2
         cdef PyPerson tempPerson
+        cdef vector[personClass*] familyToAdd
+        cdef person_ptr parentA
+        cdef person_ptr parentB
+        cdef person_ptr child
+        cdef pair[person_ptr,vector[person_ptr]] tempPair
 
         with open(filename) as data_file:
             
@@ -201,6 +234,9 @@ cdef class PyPedigree:
         allLMN,allG,problemName = problemContext()
         self.allPeople = []
         self.roots = []
+        self.families = []
+
+        familyHelper = {}
 
         if(problemName == 'autosome'):
             self.c_pedigree.sexDependent = False
@@ -217,10 +253,10 @@ cdef class PyPedigree:
 
             l,m,n = allLMN[p.sex]
             if(len(p.parents) > 0):
-                child = p.sex
-                parentA = p.parents[0].sex
-                parentB = p.parents[1].sex
-                g = allG[parentA+','+parentB+'->'+child]
+                childSex = p.sex
+                parentASex = p.parents[0].sex
+                parentBSex = p.parents[1].sex
+                g = allG[parentASex+','+parentBSex+'->'+childSex]
             else:
                 g = vector[vector[vector[double]]]()
 
@@ -228,14 +264,78 @@ cdef class PyPedigree:
 
             if(len(p.parents) == 0):
                 self.roots.append(tempPerson)
-            self.allPeople.append(tempPerson)
-
-            if(len(p.parents) == 0):
+                self.c_pedigree.mapToIndexRoots[tempPerson.c_Person] = len(self.roots)-1
                 self.c_pedigree.roots.push_back(tempPerson.c_Person)
+            else:
+                key = sorted([p.parents[0].Id,p.parents[1].Id])
+                if(str(key) not in familyHelper):
+                    if(p.parents[0].sex == 'female'):
+                        familyHelper[str(key)] = [p.parents[0].Id,p.parents[1].Id,p.Id]
+                    else:
+                        familyHelper[str(key)] = [p.parents[1].Id,p.parents[0].Id,p.Id]
+                else:
+                    familyHelper[str(key)].append(p.Id)
+
+            self.allPeople.append(tempPerson)
             self.c_pedigree.allPeople.push_back(tempPerson.c_Person)
+
+            self.c_pedigree.mapToIndexAllPeople[tempPerson.c_Person] = len(self.allPeople)-1
 
             helperStruct[p.Id] = tempPerson
 
+
+        # update the families
+        for key,fam in familyHelper.items():
+            familyToAdd = vector[person_ptr]()
+
+            assert (<PyPerson>(helperStruct[fam[0]])).sex == 'female','Found that the sex of this person ('+str((<PyPerson>(helperStruct[fam[0]]))._id)+') is '+str((<PyPerson>(helperStruct[fam[0]])).sex)
+            parentA = (<PyPerson>(helperStruct[fam[0]])).c_Person
+            parentB = (<PyPerson>(helperStruct[fam[1]])).c_Person
+
+            # update the mateKids vector for each parent
+            # parentA[0].mateKids.push_back(pair[person_ptr,vector[person_ptr]](<person_ptr>parentB,vector[person_ptr]()))
+            # parentB[0].mateKids.push_back(pair[person_ptr,vector[person_ptr]](<person_ptr>parentA,vector[person_ptr]()))
+
+            tempPair = pair[person_ptr,vector[person_ptr]]()
+            tempPair.first = <person_ptr>parentB
+            tempPair.second = vector[person_ptr]()
+            parentA[0].mateKids.push_back(tempPair)
+
+            tempPair = pair[person_ptr,vector[person_ptr]]()
+            tempPair.first = <person_ptr>parentA
+            tempPair.second = vector[person_ptr]()
+            parentB[0].mateKids.push_back(tempPair)
+
+            for p in fam[2:]:
+                child = (<PyPerson>(helperStruct[p])).c_Person
+                parentA[0].mateKids.back().second.push_back(<person_ptr>child)
+                parentB[0].mateKids.back().second.push_back(<person_ptr>child)
+
+            # update the family structure for the pedigree
+            for p in fam:
+                familyToAdd.push_back((<PyPerson>(helperStruct[p])).c_Person)
+                # (<PyPerson>(helperStruct[p])).c_Person[0].famNumb = len(self.families)
+
+            self.c_pedigree.families.push_back(familyToAdd)
+            self.families.append(fam)
+
+        # update the leaves
+        it = self.c_pedigree.allPeople.begin()
+        while it != self.c_pedigree.allPeople.end():
+            if((<person_ptr>(it[0])).mateKids.size() == 0):
+                self.c_pedigree.leaves.push_back(<person_ptr>(it[0]))
+            else:
+                noKids = True
+                it2 = (<person_ptr>(it[0])).mateKids.begin()
+                while it2 != (<person_ptr>(it[0])).mateKids.end():
+                    if((<pair[person_ptr,vector[person_ptr]]>(it2[0])).second.size() > 0):
+                        noKids = False
+                        break
+                    inc(it2)
+
+                if(noKids):
+                    self.c_pedigree.leaves.push_back(<person_ptr>(it[0]))
+            inc(it)
 
         offset = 0
         for i,p in enumerate(pedigree.family):
@@ -244,8 +344,8 @@ cdef class PyPedigree:
                 continue
             tempPerson = self.allPeople[i-offset]
             if(len(p.parents) > 0):
-                tempPerson.setParentA(helperStruct[p.parents[0].Id])
-                tempPerson.setParentB(helperStruct[p.parents[1].Id])
+                tempPerson.setParentA(<PyPerson>(helperStruct[p.parents[0].Id]))
+                tempPerson.setParentB(<PyPerson>(helperStruct[p.parents[1].Id]))
 
 
         # for a in self.allPeople:
@@ -257,6 +357,38 @@ cdef class PyPedigree:
     cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid):
         ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid)
         return ans
+
+
+
+cdef class PyEMOptimizer:
+    cdef EMPedigreeOptimizer c_EMPedigreeOptimizer
+    cdef object allPedigrees
+
+    def __init__(self):
+        self.allPedigrees = []
+
+    def addPedigree(self,filename,problemContext,dominantOrRecessive):
+        toAdd = PyPedigree()
+        toAdd.initialization(filename,problemContext,dominantOrRecessive)
+        self.allPedigrees.append(toAdd)
+
+    cpdef lockIn(self,printPeople):
+        cdef vector[pedigree_ptr] trainingSet
+        cdef pedigree_ptr adding
+
+        for i in range(len(self.allPedigrees)):
+            adding = (<PyPedigree>(self.allPedigrees[i])).c_pedigree_ptr
+            trainingSet.push_back(adding)
+
+        self.c_EMPedigreeOptimizer.initialize(trainingSet,printPeople)
+
+
+
+
+
+
+
+
 
 
 

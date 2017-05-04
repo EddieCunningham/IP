@@ -14,6 +14,7 @@
 		2CB7DD9E1E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD991E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp */; };
 		2CB7DDA01EA076B3009D340F /* bruteForceMonteCarloIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD9F1EA076B3009D340F /* bruteForceMonteCarloIntegration.cpp */; };
 		2CB7DDA21EA58F4D009D340F /* hybridMonteCarloIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DDA11EA58F4D009D340F /* hybridMonteCarloIntegration.cpp */; };
+		2CB7DDA51EB179C5009D340F /* BMIP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DDA31EB179C5009D340F /* BMIP.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,6 +39,8 @@
 		2CB7DD991E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uniformMonteCarloIntegration.cpp; path = ../../src/uniformMonteCarloIntegration.cpp; sourceTree = "<group>"; };
 		2CB7DD9F1EA076B3009D340F /* bruteForceMonteCarloIntegration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bruteForceMonteCarloIntegration.cpp; path = ../../src/bruteForceMonteCarloIntegration.cpp; sourceTree = "<group>"; };
 		2CB7DDA11EA58F4D009D340F /* hybridMonteCarloIntegration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hybridMonteCarloIntegration.cpp; path = ../../src/hybridMonteCarloIntegration.cpp; sourceTree = "<group>"; };
+		2CB7DDA31EB179C5009D340F /* BMIP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BMIP.cpp; path = ../../src/BMIP.cpp; sourceTree = "<group>"; };
+		2CB7DDA41EB179C5009D340F /* BMIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BMIP.h; path = ../../src/BMIP.h; sourceTree = "<group>"; };
 		2CF93A7E1E84663F0018CE5B /* ipDebugger */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ipDebugger; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -71,6 +74,8 @@
 		2CF93A801E84663F0018CE5B /* ipDebugger */ = {
 			isa = PBXGroup;
 			children = (
+				2CB7DDA31EB179C5009D340F /* BMIP.cpp */,
+				2CB7DDA41EB179C5009D340F /* BMIP.h */,
 				2CB7DDA11EA58F4D009D340F /* hybridMonteCarloIntegration.cpp */,
 				2CB7DD9F1EA076B3009D340F /* bruteForceMonteCarloIntegration.cpp */,
 				2CB7DD931E9FE3F2009D340F /* cMain.cpp */,
@@ -142,6 +147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CB7DD9C1E9FE3F2009D340F /* logProbIPNew.cpp in Sources */,
+				2CB7DDA51EB179C5009D340F /* BMIP.cpp in Sources */,
 				2CB7DDA01EA076B3009D340F /* bruteForceMonteCarloIntegration.cpp in Sources */,
 				2CB7DDA21EA58F4D009D340F /* hybridMonteCarloIntegration.cpp in Sources */,
 				2CB7DD9E1E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp in Sources */,

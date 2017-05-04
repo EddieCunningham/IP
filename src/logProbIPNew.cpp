@@ -1,7 +1,6 @@
-// g++ logProbIPNew.cpp -I/usr/local/include -L/usr/local/lib -lgsl -lgslcblas -O3 -std=c++11
+// g++ logProbIPNew.cpp helperFunctions.cpp uniformMonteCarloIntegration.cpp pdfSamplingMonteCarloIntegration.cpp cMain.cpp -I/usr/local/include -L/usr/local/lib -lgsl -lgslcblas -O3 -std=c++11
 
 #include "logProbIPNew.h"
-
 
 #define MY_DEBUG false
 
@@ -24,7 +23,7 @@ void personClass::storeProbAndNormalize() {
     
     if(MY_DEBUG) {
         cout << "LINE: " << __LINE__ << endl;
-        this->toString();
+        this->toString("");
     }
     double t = this->t;
     double s = this->s;
@@ -136,7 +135,7 @@ void pedigreeClass2::updateProbs(personClass* c) {
     
     if(MY_DEBUG) {
         cout << "LINE: " << __LINE__ << endl;
-        c->toString();
+        c->toString("");
     }
     
     if(c->updated) {
@@ -166,7 +165,7 @@ void pedigreeClass2::updateProbs(personClass* c) {
     
     if(MY_DEBUG) {
         cout << "LINE: " << __LINE__ << endl;
-        c->toString();
+        c->toString("");
     }
 }
 
@@ -350,7 +349,7 @@ pair<double,double> pedigreeClass2::logEvaluation(const vector<double> & x, bool
         for(auto p_it=this->allPeople.begin(); p_it!=this->allPeople.end(); ++p_it) {
             
             cout << "LINE: " << __LINE__ << endl;
-            (*p_it)->toString();
+            (*p_it)->toString("");
         }
         cout << "----------------------------------------" << endl;
     }
@@ -378,19 +377,22 @@ pair<double,double> pedigreeClass2::logEvaluation(const vector<double> & x, bool
 
 void pedigreeClass2::updateAllChildrenAndLeaves() {
 
-    for(auto p_it=this->allPeople.begin(); p_it!=this->allPeople.end(); ++p_it) {
-        if((*p_it)->parentA == nullptr && (*p_it)->parentB == nullptr) {
-            continue;
-        }
-        (*p_it)->parentA->children.push_back(*p_it);
-        (*p_it)->parentB->children.push_back(*p_it);
-    }
+    // this is handled in cython now
 
-    for(auto p_it=this->allPeople.begin(); p_it!=this->allPeople.end(); ++p_it) {
-        if((*p_it)->children.size() == 0) {
-            this->leaves.push_back(*p_it);
-        }
-    }
+
+    // for(auto p_it=this->allPeople.begin(); p_it!=this->allPeople.end(); ++p_it) {
+    //     if((*p_it)->parentA == nullptr && (*p_it)->parentB == nullptr) {
+    //         continue;
+    //     }
+    //     (*p_it)->parentA->children.push_back(*p_it);
+    //     (*p_it)->parentB->children.push_back(*p_it);
+    // }
+
+    // for(auto p_it=this->allPeople.begin(); p_it!=this->allPeople.end(); ++p_it) {
+    //     if((*p_it)->children.size() == 0) {
+    //         this->leaves.push_back(*p_it);
+    //     }
+    // }
 }
 
 bool autosomalContradiction(personClass* person) {
@@ -558,6 +560,154 @@ void pedigreeClass2::getDominantOrRecessive() {
     raise(SIGABRT);
 }
 
+void pedigreeClass2::printAllPeople(string numb) {
+    for(int i=0; i<this->roots.size(); ++i) {
+        this->roots.at(i)->toString(numb);
+    }
+    for(int i=0; i<this->allPeople.size(); ++i) {
+        if(this->allPeople.at(i)->parentA) {
+            this->allPeople.at(i)->toString(numb);
+        }
+    }
+
+    string str = "pedigreeClass2 pedigree"+numb+";\npedigree"+numb+".roots=vector<personClass*>({";
+    for(int i=0; i<this->roots.size(); ++i) {
+        str += "&x_"+numb;
+        // if(this->roots.at(i)->_id < 0) {
+        //     str += "_"+to_string(abs(this->roots.at(i)->_id));
+        // }
+        // else {
+        //     str += to_string(this->roots.at(i)->_id);
+        // }
+        if(this->roots.at(i)->_id < 0) {
+            str += "_";
+        }
+        str += to_string(abs(this->roots.at(i)->_id));
+
+        if(i < this->roots.size()-1) {
+            str += ",";
+        }            
+    }
+    str += "});\n";
+    str += "pedigree"+numb+".allPeople=vector<personClass*>({";
+    for(int i=0; i<this->allPeople.size(); ++i) {
+        str += "&x_"+numb;
+        // if(this->allPeople.at(i)->_id < 0) {
+        //     str += "_"+to_string(abs(this->allPeople.at(i)->_id));
+        // }
+        // else {
+        //     str += to_string(this->allPeople.at(i)->_id);
+        // }
+        if(this->allPeople.at(i)->_id < 0) {
+            str += "_";
+        }
+        str += to_string(abs(this->allPeople.at(i)->_id));
+        if(i < this->allPeople.size()-1) {
+            str += ",";
+        } 
+    }
+    str += "});\n";
+
+    // families
+    str += "pedigree"+numb+".families=vector<vector<personClass*>>({";
+    for(int i=0; i<this->families.size(); ++i) {
+        str += "{";
+        for(int j=0; j<this->families.at(i).size(); ++j) {
+            str += "&x_"+numb;
+            if(this->families.at(i).at(j)->_id < 0) {
+                str += "_";
+            }
+            str += to_string(abs(this->families.at(i).at(j)->_id));
+            if(j < this->families.at(i).size()-1) {
+                str += ",";
+            }
+        }
+        str += "}";
+        if(i < this->families.size()-1) {
+            str += ",";
+        }
+    }
+    str += "});\n";
+
+    // leaves
+    str += "pedigree"+numb+".leaves=vector<personClass*>({";
+    for(int i=0; i<this->leaves.size(); ++i) {
+        str += "&x_"+numb;
+        if(this->leaves.at(i)->_id < 0) {
+            str += "_";
+        }
+        str += to_string(abs(this->leaves.at(i)->_id));
+        if(i < this->leaves.size()-1) {
+            str += ",";
+        } 
+    }
+    str += "});\n";
+
+
+    // isDominant
+    str += "pedigree"+numb+".isDominant=";
+    if(this->isDominant) {
+        str += "true;\n";
+    }
+    else {
+        str += "false;\n";
+    }
+
+    // sexDependent
+    str += "pedigree"+numb+".sexDependent=";
+    if(this->sexDependent) {
+        str += "true;\n";
+    }
+    else {
+        str += "false;\n";
+    }
+
+    // mapToIndexRoots
+    str += "pedigree"+numb+".mapToIndexRoots=unordered_map<personClass*,int>({";
+    int index = 0;
+    for(auto it=this->mapToIndexRoots.begin(); it!=this->mapToIndexRoots.end(); ++it) {
+        personClass* current = it->first;
+        int val = it->second;
+        str += "{";
+        str += "&x_"+numb;
+        if(current->_id < 0) {
+            str += "_";
+        }
+        str += to_string(abs(current->_id));
+        str += ","+to_string(val)+"}";
+
+        if(index < this->mapToIndexRoots.size()-1) {
+            str += ",";
+        }
+        ++index;
+    }
+    str += "});\n";
+
+    // mapToIndexAllPeople
+    str += "pedigree"+numb+".mapToIndexAllPeople=unordered_map<personClass*,int>({";
+    index = 0;
+    for(auto it=this->mapToIndexAllPeople.begin(); it!=this->mapToIndexAllPeople.end(); ++it) {
+        personClass* current = it->first;
+        int val = it->second;
+        str += "{";
+        str += "&x_"+numb;
+        if(current->_id < 0) {
+            str += "_";
+        }
+        str += to_string(abs(current->_id));
+        str += ","+to_string(val)+"}";
+
+        if(index < this->mapToIndexAllPeople.size()-1) {
+            str += ",";
+        }
+        ++index;
+    }
+    str += "});\n";
+
+
+    cout << str << endl;
+}
+
 vector<double> pedigreeClass2::monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid) {
     srand(1234);
 
@@ -566,44 +716,7 @@ vector<double> pedigreeClass2::monteCarlo(long numbCalls, bool printIterations, 
     this->determineCarrierRoots(useLeak,leakProb,leakDecay);
 
     if(printPeople) {
-        for(int i=0; i<this->roots.size(); ++i) {
-            this->roots.at(i)->toString();
-        }
-        for(int i=0; i<this->allPeople.size(); ++i) {
-            if(this->allPeople.at(i)->parentA) {
-                this->allPeople.at(i)->toString();
-            }
-        }
-
-        string str = "pedigreeClass2 pedigree;\npedigree.roots=vector<personClass*>({";
-        for(int i=0; i<this->roots.size(); ++i) {
-            str += "&x_";
-            if(this->roots.at(i)->_id < 0) {
-                str += "_"+to_string(abs(this->roots.at(i)->_id));
-            }
-            else {
-                str += to_string(this->roots.at(i)->_id);
-            }
-            if(i < this->roots.size()-1) {
-                str += ",";
-            }            
-        }
-        str += "});\n";
-        str += "pedigree.allPeople=vector<personClass*>({";
-        for(int i=0; i<this->allPeople.size(); ++i) {
-            str += "&x_";
-            if(this->allPeople.at(i)->_id < 0) {
-                str += "_"+to_string(abs(this->allPeople.at(i)->_id));
-            }
-            else {
-                str += to_string(this->allPeople.at(i)->_id);
-            }
-            if(i < this->allPeople.size()-1) {
-                str += ",";
-            } 
-        }
-        str += "});";
-        cout << str << endl;
+        this->printAllPeople("");
     }
     
     if(useMH) {
