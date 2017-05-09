@@ -349,11 +349,16 @@ def optimizePedigrees(filenames,problemContext,dominantOrRecessive,problemType,p
 
 def testOptimize(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
 
-    filenames = ['test.json','test_XL.json']
+    # filenames = ['test_hmm.json']
+    # filenames = ['test_hmm_hard.json']
+    filenames = ['test_hmm_hard.json','test.json','test_XL.json']
     filenames = [os.path.join(jsonFolderPath,f) for f in filenames]
-    problemContext = autosomeProblem
-    dominantOrRecessive = 'dominant'
-    problemType = 'Autosomal Dominant'
+    # problemContext = autosomeProblem
+    # dominantOrRecessive = 'dominant'
+    # problemType = 'Autosomal Dominant'
+    problemContext = chromosomeProblem
+    dominantOrRecessive = 'recessive'
+    problemType = 'XLinked Recessive'
     printPeople = True
     optimizePedigrees(filenames,problemContext,dominantOrRecessive,problemType,printPeople)
 

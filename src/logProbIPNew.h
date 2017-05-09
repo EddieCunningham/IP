@@ -68,7 +68,6 @@ public:
     int _id;
     personClass* parentA;
     personClass* parentB;
-    vector<personClass*> mates;
     bool isRoot;
     double t,s,probability,probOfShadingAverage;
     int l,m,n,timesUpdated;
@@ -220,7 +219,49 @@ public:
 
         str += "\""+this->typeOfShading+"\""+",";
         str += "\""+this->sex+"\"";
-        str += ");";
+        str += ");\n";
+
+        // update the mateKids
+        str += "x_"+numb;
+        if(this->_id < 0) {
+            str += "_";
+        }
+        str += to_string(abs(this->_id))+".mateKids = vector<pair<personClass*,vector<personClass*>>>({";
+        for(int i=0; i<this->mateKids.size(); ++i) {
+
+            pair<personClass*,vector<personClass*>> current = this->mateKids.at(i);
+            personClass* mate = current.first;
+            vector<personClass*> kids = current.second;
+
+            string mateString = "&x_"+numb;
+            if(mate->_id < 0) {
+                mateString += "_";
+            }
+            mateString += to_string(abs(mate->_id));
+
+            string pairString = "pair<personClass*,vector<personClass*>>("+mateString+",vector<personClass*>({";
+            for(int j=0; j<kids.size(); ++j) {
+
+                personClass* child = kids.at(j);
+
+                string childString = "&x_"+numb;
+                if(child->_id < 0) {
+                    childString += "_";
+                }
+                childString += to_string(abs(child->_id));
+                pairString += childString;
+                if(j != kids.size()-1) {
+                    pairString += ",";
+                }
+            }
+            pairString += "}))";
+
+            str += pairString;
+            if(i != mateKids.size()-1) {
+                str += ",";
+            }
+        }
+        str += "});\n";
 
         cout << str << endl;
     }
@@ -262,7 +303,7 @@ private:
     vector<double> _hybridMonteCarlo(long numbCalls, bool printIterations, int numbToPrint, double K);
 
 public:
-    
+
     double log_probRoots;
 
     vector<vector<personClass*>> families;

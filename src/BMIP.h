@@ -9,39 +9,66 @@
 using namespace std;
 
 class EMPedigreeOptimizer {
+
+    int getSexIndex(pedigreeClass2* pedigree, personClass* person);
+    void sortMates(personClass* mateA, personClass* mateB, personClass*& femaleMate, personClass*& maleMate);
+    int getFamNumb(pedigreeClass2* pedigree, personClass* mateA, personClass* mateB);
+
+    void _checkC();
+    void _checkD();
+    void _checkE();
+
+    double _getUVal(pedigreeClass2* pedigree, int d, personClass* child, int k);
+    double _getWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j);
+    double _getAVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i);
+    double _getBVal(pedigreeClass2* pedigree, int d, int f, int i, int j, personClass* child, int c);
+    void _computeAVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i);
+    void _computeBVal(pedigreeClass2* pedigree, int d, int f, int i, int j, personClass* child, int c);
+    void _computeUVal(pedigreeClass2* pedigree, int d, personClass* child, int k);
+    void _computeWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j);
+
+    void _cUpdate();
+    void _dUpdate();
+    void _eUpdate();
+    void _eStep2();
+
+
+    void _updateRootProbs2();
+    void _updateEmissionProbs2();
+    void _updateTransitionProbs2();
+    void _mStep2();
+
+
 public:
+
+    bool _sexDependent;
+    int _femaleN;
+    int _maleN;
+    int _unknownN;
 
     vector<pedigreeClass2*> _trainingSet;
 
-
-/*
-    _alpha -> [pedigree][person][chromosome]
-    _beta -> [pedigree][familyUnit][chromosomeFemaleParent][chromosomeMaleParent]
-    _gamma -> [pedigree][person][chromosome]
-    _delta -> [pedigree][familyUnit][chromosomeFemaleParent][chromosomeMaleParent]
-    _epsilon -> [pedigree][person][chromosome]
-    _zeta -> [pedigree][familyUnit][chromosomeFemaleParent][chromosomeMaleParent][childChromosome]
-*/
-
     /* =========================================================================================== */
+/*
+    _u -> [pedigree (d)][person (c)][chromosome (k)] -> u_k(c)
+    _w -> [pedigree (d)][familyUnit (f)][p==mother][parentAChromosome (i)][parentBChromosome (j)] -> w_ij(q|p)
+    _a -> [pedigree (d)][familyUnit (f)][p==mother][parentAChromosome (i)] -> a_i(p,q)
+    _b -> [pedigree (d)][familyUnit (f)][motherChromosome (i)][fatherChromosome (j)][childNumber (c)][childSexIndex] -> b_ij(c)
 
-    // [pedigree][person][chromosome]
-    vector<vector<vector<double>>> _alpha;
+    _c -> [pedigree][person][chromosome]
+    _d -> [pedigree][familyUnit][chromosomeFemaleParent][chromosomeMaleParent]
+    _e -> [pedigree][familyUnit][chromosomeFemaleParent][chromosomeMaleParent][childNumber][childSexIndex][childChromosome]
+*/
+    //                      status,value
+    vector<vector<vector<pair<int,double>>>> _u;
+    vector<vector<vector<vector<vector<pair<int,double>>>>>> _w;
+    vector<vector<vector<vector<pair<int,double>>>>> _a;
+    vector<vector<vector<vector<vector<vector<pair<int,double>>>>>>> _b;
 
-    // [pedigree][familyUnit][chromosomeFemaleParent][chromosomeMaleParent]
-    vector<vector<vector<vector<double>>>> _beta;
-    
-    // [pedigree][person][chromosome]
-    vector<vector<vector<double>>> _gamma;
 
-    // [pedigree][familyUnit][chromosomeFemaleParent][chromosomeMaleParent]
-    vector<vector<vector<vector<double>>>> _delta;
-
-    // [pedigree][person][chromosome]
-    vector<vector<vector<double>>> _epsilon;
-
-    // [pedigree][familyUnit][chromosomeFemaleParent][chromosomeMaleParent][childNumber][childSex][childChromosome]
-    vector<vector<vector<vector<vector<vector<vector<double>>>>>>> _zeta;
+    vector<vector<vector<double>>> _c;
+    vector<vector<vector<vector<double>>>> _d;
+    vector<vector<vector<vector<vector<vector<vector<double>>>>>>> _e;
 
     /* =========================================================================================== */
 
@@ -53,7 +80,7 @@ public:
     // root probs is indexed by: [pedigree][root][trueChromosomes]
     vector<vector<vector<double>>> _rootProbs;
 
-    // transition probs is indexed by: [childSex][motherChrom][fatherChrom][childChrom]
+    // transition probs is indexed by: [childSexIndex][motherChrom][fatherChrom][childChrom]
     vector<vector<vector<vector<double>>>> _transitionProbs;
 
     EMPedigreeOptimizer():
@@ -69,22 +96,11 @@ public:
         }
     }
 
-    void _alphaGammaRootCase(pedigreeClass2* pedigree, personClass* person, int N, int d, int pIndex, int sexIndex, int shadingIndex);
-    void _alphaGammaNormalCase(pedigreeClass2* pedigree, personClass* person, int N, int d, int pIndex, int sexIndex, int shadingIndex);
-    void _updateAlphaGamma();
-    void _betaHelper(pedigreeClass2* pedigree, int d, int famNumb);
-    void _updateBeta();
-    void _updateDelta();
-    void _updateEpsilon();
-    void _updateZeta();
-    void _eStep();
 
-    void _updateRootProbs();
-    void _updateEmissionProbs();
-    void _updateTransitionProbs();
-    void _mStep();
-    
-    void _EMStep();
+
+    // void _EMStep();
+
+    void _EMStep2();
 
 };
 
