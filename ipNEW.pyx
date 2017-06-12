@@ -49,7 +49,9 @@ cdef extern from "BMIP.h":
     
     cdef cppclass EMPedigreeOptimizer:
         EMPedigreeOptimizer()
-        void initialize(const vector[pedigreeClass2*]& trainingSet_, bool printPeople)
+        void log_initialize(const vector[pedigreeClass2*]& trainingSet_, bool printPeople)
+        void train()
+        double predictProbability(pedigreeClass2*)
         vector[pedigreeClass2] trainingSet
         vector[vector[vector[double]]] emissionProbs
         vector[vector[vector[double]]] rootProbs
@@ -84,7 +86,7 @@ cdef class PyPerson:
                 tVal = 0.0
                 sVal = 0.5
             else:
-                assert 0
+                assert 0, 'Invalid choice'
         elif(modelPerson.affected == 'no'):
             typeOfShading = 'unshaded'
             if(dominantOrRecessive == 'dominant'):
@@ -100,7 +102,7 @@ cdef class PyPerson:
                     tVal = 1.0
                     sVal = 0.5
             else:
-                assert 0
+                assert 0, 'Invalid choice'
         elif(modelPerson.affected == 'possibly'):
             typeOfShading = 'possiblyShaded'
             tVal = 0.5
@@ -380,7 +382,16 @@ cdef class PyEMOptimizer:
             adding = (<PyPedigree>(self.allPedigrees[i])).c_pedigree_ptr
             trainingSet.push_back(adding)
 
-        self.c_EMPedigreeOptimizer.initialize(trainingSet,printPeople)
+        self.c_EMPedigreeOptimizer.log_initialize(trainingSet,printPeople)
+
+    cpdef train(self):
+        self.c_EMPedigreeOptimizer.train()
+
+    cpdef predictProbability(self,pedigree):
+        cdef pedigree_ptr thePedigree
+
+        thePedigree = (<PyPedigree>(pedigree)).c_pedigree_ptr
+        self.c_EMPedigreeOptimizer.predictProbability(thePedigree)
 
 
 

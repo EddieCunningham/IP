@@ -15,6 +15,7 @@
 #include <random>
 #include <csignal>
 #include <exception>
+#include <queue>
 
 using namespace std;
 
@@ -32,6 +33,7 @@ struct topK {
 
 struct logAddition {
     double log_ans = __DBL_MAX__;
+    queue<double> _lastAddedPoints;
     bool needToInitialize = true;
     void _accumulatePositive(double log_x);
     void _accumulateNegative(double log_x);

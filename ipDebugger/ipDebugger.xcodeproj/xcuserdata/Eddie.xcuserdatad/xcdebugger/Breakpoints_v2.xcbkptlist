@@ -14,9 +14,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "348"
-            endingLineNumber = "348"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "348">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -30,9 +28,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "262"
-            endingLineNumber = "262"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "262">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -46,9 +42,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "263"
-            endingLineNumber = "263"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "263">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -62,9 +56,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "266"
-            endingLineNumber = "266"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "266">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -78,9 +70,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "336"
-            endingLineNumber = "336"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "336">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -94,9 +84,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "335"
-            endingLineNumber = "335"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "335">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -110,9 +98,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "411"
-            endingLineNumber = "411"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "411">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -126,9 +112,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "377"
-            endingLineNumber = "377"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "377">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -142,9 +126,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "400"
-            endingLineNumber = "400"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "400">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -158,9 +140,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "392"
-            endingLineNumber = "392"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "392">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -174,9 +154,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "385"
-            endingLineNumber = "385"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "385">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -190,9 +168,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "381"
-            endingLineNumber = "381"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "381">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -206,9 +182,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "413"
-            endingLineNumber = "413"
-            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
-            landmarkType = "7">
+            endingLineNumber = "413">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -222,9 +196,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "997"
-            endingLineNumber = "997"
-            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "997">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -238,9 +210,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1001"
-            endingLineNumber = "1001"
-            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "1001">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -254,9 +224,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "751"
-            endingLineNumber = "751"
-            landmarkName = "EMPedigreeOptimizer::_computeWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j)"
-            landmarkType = "7">
+            endingLineNumber = "751">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -270,9 +238,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "940"
-            endingLineNumber = "940"
-            landmarkName = "EMPedigreeOptimizer::_dUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "940">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -286,9 +252,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "970"
-            endingLineNumber = "970"
-            landmarkName = "EMPedigreeOptimizer::_dUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "970">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -302,9 +266,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "981"
-            endingLineNumber = "981"
-            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "981">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -318,9 +280,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "980"
-            endingLineNumber = "980"
-            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "980">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -348,9 +308,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "955"
-            endingLineNumber = "955"
-            landmarkName = "EMPedigreeOptimizer::_dUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "955">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -378,9 +336,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "929"
-            endingLineNumber = "929"
-            landmarkName = "EMPedigreeOptimizer::_dUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "929">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -394,9 +350,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "931"
-            endingLineNumber = "931"
-            landmarkName = "EMPedigreeOptimizer::_dUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "931">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -410,9 +364,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1046"
-            endingLineNumber = "1046"
-            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "1046">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -426,9 +378,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1038"
-            endingLineNumber = "1038"
-            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "1038">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -442,9 +392,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1034"
-            endingLineNumber = "1034"
-            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "1034">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -458,9 +406,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "927"
-            endingLineNumber = "927"
-            landmarkName = "EMPedigreeOptimizer::_dUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "927">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -474,9 +420,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1043"
-            endingLineNumber = "1043"
-            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "1043">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -490,9 +434,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "966"
-            endingLineNumber = "966"
-            landmarkName = "EMPedigreeOptimizer::_dUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "966">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -506,9 +448,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1052"
-            endingLineNumber = "1052"
-            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "1052">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -518,13 +458,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../src/cMain.cpp"
-            timestampString = "516057057.009759"
+            timestampString = "518978389.438699"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "306"
-            endingLineNumber = "306"
-            landmarkName = "main()"
-            landmarkType = "9">
+            startingLineNumber = "569"
+            endingLineNumber = "569">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -538,9 +476,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "821"
-            endingLineNumber = "821"
-            landmarkName = "EMPedigreeOptimizer::_cUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "821">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -554,9 +490,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "822"
-            endingLineNumber = "822"
-            landmarkName = "EMPedigreeOptimizer::_cUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "822">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -598,9 +532,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1115"
-            endingLineNumber = "1115"
-            landmarkName = "EMPedigreeOptimizer::_updateRootProbs2()"
-            landmarkType = "7">
+            endingLineNumber = "1115">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -614,9 +546,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1116"
-            endingLineNumber = "1116"
-            landmarkName = "EMPedigreeOptimizer::_updateRootProbs2()"
-            landmarkType = "7">
+            endingLineNumber = "1116">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -630,9 +560,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1117"
-            endingLineNumber = "1117"
-            landmarkName = "EMPedigreeOptimizer::_updateRootProbs2()"
-            landmarkType = "7">
+            endingLineNumber = "1117">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -646,9 +574,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1118"
-            endingLineNumber = "1118"
-            landmarkName = "EMPedigreeOptimizer::_updateRootProbs2()"
-            landmarkType = "7">
+            endingLineNumber = "1118">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -662,9 +588,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1119"
-            endingLineNumber = "1119"
-            landmarkName = "EMPedigreeOptimizer::_updateRootProbs2()"
-            landmarkType = "7">
+            endingLineNumber = "1119">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -678,9 +602,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "770"
-            endingLineNumber = "770"
-            landmarkName = "EMPedigreeOptimizer::_computeWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j)"
-            landmarkType = "7">
+            endingLineNumber = "770">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -694,9 +616,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "699"
-            endingLineNumber = "699"
-            landmarkName = "EMPedigreeOptimizer::_computeUVal(pedigreeClass2* pedigree, int d, personClass* child, int k)"
-            landmarkType = "7">
+            endingLineNumber = "699">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -710,9 +630,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "826"
-            endingLineNumber = "826"
-            landmarkName = "EMPedigreeOptimizer::_cUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "826">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -726,9 +644,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "761"
-            endingLineNumber = "761"
-            landmarkName = "EMPedigreeOptimizer::_computeWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j)"
-            landmarkType = "7">
+            endingLineNumber = "761">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -742,9 +658,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "756"
-            endingLineNumber = "756"
-            landmarkName = "EMPedigreeOptimizer::_computeWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j)"
-            landmarkType = "7">
+            endingLineNumber = "756">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -758,9 +672,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "758"
-            endingLineNumber = "758"
-            landmarkName = "EMPedigreeOptimizer::_computeWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j)"
-            landmarkType = "7">
+            endingLineNumber = "758">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -774,9 +686,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "88"
-            endingLineNumber = "88"
-            landmarkName = "EMPedigreeOptimizer::_checkD()"
-            landmarkType = "7">
+            endingLineNumber = "88">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -790,9 +700,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "990"
-            endingLineNumber = "990"
-            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "990">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -806,9 +714,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "984"
-            endingLineNumber = "984"
-            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
-            landmarkType = "7">
+            endingLineNumber = "984">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -822,9 +728,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "166"
-            endingLineNumber = "166"
-            landmarkName = "EMPedigreeOptimizer::getFamNumb(pedigreeClass2* pedigree, personClass* mateA, personClass* mateB)"
-            landmarkType = "7">
+            endingLineNumber = "166">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -838,7 +742,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "465"
-            endingLineNumber = "465">
+            endingLineNumber = "465"
+            landmarkName = "EMPedigreeOptimizer::_computeBVal(pedigreeClass2* pedigree, int d, int f, int i, int j, personClass* child, int c)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -852,7 +758,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "458"
-            endingLineNumber = "458">
+            endingLineNumber = "458"
+            landmarkName = "EMPedigreeOptimizer::_computeBVal(pedigreeClass2* pedigree, int d, int f, int i, int j, personClass* child, int c)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -866,7 +774,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "370"
-            endingLineNumber = "370">
+            endingLineNumber = "370"
+            landmarkName = "EMPedigreeOptimizer::_computeAVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -880,7 +790,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "375"
-            endingLineNumber = "375">
+            endingLineNumber = "375"
+            landmarkName = "EMPedigreeOptimizer::_computeAVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -894,7 +806,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "407"
-            endingLineNumber = "407">
+            endingLineNumber = "407"
+            landmarkName = "EMPedigreeOptimizer::_computeAVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -908,7 +822,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "404"
-            endingLineNumber = "404">
+            endingLineNumber = "404"
+            landmarkName = "EMPedigreeOptimizer::_computeAVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -922,7 +838,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "118"
-            endingLineNumber = "118">
+            endingLineNumber = "118"
+            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -936,7 +854,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "120"
-            endingLineNumber = "120">
+            endingLineNumber = "120"
+            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -950,7 +870,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "578"
-            endingLineNumber = "578">
+            endingLineNumber = "578"
+            landmarkName = "EMPedigreeOptimizer::_computeWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -964,7 +886,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "470"
-            endingLineNumber = "470">
+            endingLineNumber = "470"
+            landmarkName = "EMPedigreeOptimizer::_computeBVal(pedigreeClass2* pedigree, int d, int f, int i, int j, personClass* child, int c)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -992,7 +916,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "430"
-            endingLineNumber = "430">
+            endingLineNumber = "430"
+            landmarkName = "EMPedigreeOptimizer::_computeBVal(pedigreeClass2* pedigree, int d, int f, int i, int j, personClass* child, int c)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1006,7 +932,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "574"
-            endingLineNumber = "574">
+            endingLineNumber = "574"
+            landmarkName = "EMPedigreeOptimizer::_computeWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1020,7 +948,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "572"
-            endingLineNumber = "572">
+            endingLineNumber = "572"
+            landmarkName = "EMPedigreeOptimizer::_computeWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1034,7 +964,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "571"
-            endingLineNumber = "571">
+            endingLineNumber = "571"
+            landmarkName = "EMPedigreeOptimizer::_computeWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1048,7 +980,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "496"
-            endingLineNumber = "496">
+            endingLineNumber = "496"
+            landmarkName = "EMPedigreeOptimizer::_computeUVal(pedigreeClass2* pedigree, int d, personClass* child, int k)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1062,7 +996,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "517"
-            endingLineNumber = "517">
+            endingLineNumber = "517"
+            landmarkName = "EMPedigreeOptimizer::_computeUVal(pedigreeClass2* pedigree, int d, personClass* child, int k)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1076,7 +1012,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "518"
-            endingLineNumber = "518">
+            endingLineNumber = "518"
+            landmarkName = "EMPedigreeOptimizer::_computeUVal(pedigreeClass2* pedigree, int d, personClass* child, int k)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1090,7 +1028,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "123"
-            endingLineNumber = "123">
+            endingLineNumber = "123"
+            landmarkName = "EMPedigreeOptimizer::initialize(const vector&lt;pedigreeClass2*&gt; &amp; trainingSet_, bool printPeople)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1104,7 +1044,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "782"
-            endingLineNumber = "782">
+            endingLineNumber = "782"
+            landmarkName = "EMPedigreeOptimizer::_dUpdate()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1118,7 +1060,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "783"
-            endingLineNumber = "783">
+            endingLineNumber = "783"
+            landmarkName = "EMPedigreeOptimizer::_dUpdate()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1132,7 +1076,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "793"
-            endingLineNumber = "793">
+            endingLineNumber = "793"
+            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1146,7 +1092,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "434"
-            endingLineNumber = "434">
+            endingLineNumber = "434"
+            landmarkName = "EMPedigreeOptimizer::_computeBVal(pedigreeClass2* pedigree, int d, int f, int i, int j, personClass* child, int c)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1160,7 +1108,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "798"
-            endingLineNumber = "798">
+            endingLineNumber = "798"
+            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1174,7 +1124,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "761"
-            endingLineNumber = "761">
+            endingLineNumber = "761"
+            landmarkName = "EMPedigreeOptimizer::_dUpdate()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1188,7 +1140,647 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "829"
-            endingLineNumber = "829">
+            endingLineNumber = "829"
+            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIP2.cpp"
+            timestampString = "516292928.230615"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "865"
+            endingLineNumber = "865"
+            landmarkName = "EMPedigreeOptimizer::_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "831"
+            endingLineNumber = "831"
+            landmarkName = "EMPedigreeOptimizer::_log_dUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "839"
+            endingLineNumber = "839"
+            landmarkName = "EMPedigreeOptimizer::_log_dUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1004"
+            endingLineNumber = "1004"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518972678.892954"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1013"
+            endingLineNumber = "1013"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIP2.cpp"
+            timestampString = "516295604.36749"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1043"
+            endingLineNumber = "1043"
+            landmarkName = "EMPedigreeOptimizer::_updateEmissionProbs2()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIP2.cpp"
+            timestampString = "516295714.189155"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1034"
+            endingLineNumber = "1034"
+            landmarkName = "EMPedigreeOptimizer::_updateEmissionProbs2()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "516341672.418098"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "746"
+            endingLineNumber = "746"
+            landmarkName = "EMPedigreeOptimizer::_log_cUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "516341672.418098"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "721"
+            endingLineNumber = "721"
+            landmarkName = "EMPedigreeOptimizer::_computeLogWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "807"
+            endingLineNumber = "807"
+            landmarkName = "EMPedigreeOptimizer::_log_cUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "806"
+            endingLineNumber = "806"
+            landmarkName = "EMPedigreeOptimizer::_log_cUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "818"
+            endingLineNumber = "818"
+            landmarkName = "EMPedigreeOptimizer::_log_dUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "825"
+            endingLineNumber = "825"
+            landmarkName = "EMPedigreeOptimizer::_log_dUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "516299651.912123"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "464"
+            endingLineNumber = "464"
+            landmarkName = "EMPedigreeOptimizer::_computeLogAVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "516299812.918918"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "468"
+            endingLineNumber = "468">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "516299982.683857"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "434"
+            endingLineNumber = "434"
+            landmarkName = "EMPedigreeOptimizer::_computeLogAVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "832"
+            endingLineNumber = "832"
+            landmarkName = "EMPedigreeOptimizer::_log_dUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "840"
+            endingLineNumber = "840"
+            landmarkName = "EMPedigreeOptimizer::_log_dUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518972678.892954"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1046"
+            endingLineNumber = "1046"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "883"
+            endingLineNumber = "883"
+            landmarkName = "EMPedigreeOptimizer::_log_dUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "898"
+            endingLineNumber = "898"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518966764.786439"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "954"
+            endingLineNumber = "954"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518972678.892954"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1017"
+            endingLineNumber = "1017"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518972678.892954"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1016"
+            endingLineNumber = "1016"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518972678.892954"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1019"
+            endingLineNumber = "1019"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/cMain.cpp"
+            timestampString = "518978389.438699"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "317"
+            endingLineNumber = "317"
+            landmarkName = "main()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIP.h"
+            timestampString = "516338226.865761"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
+            landmarkName = "_leastSquaresDiff(const vector&lt;vector&lt;vector&lt;double&gt;&gt;&gt; &amp; oldRootProbs, const vector&lt;vector&lt;vector&lt;vector&lt;double&gt;&gt;&gt;&gt; &amp; oldTransitionProbs, const vector&lt;vector&lt;vector&lt;double&gt;&gt;&gt; &amp; oldEmissionProbs)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/cMain.cpp"
+            timestampString = "518978389.438699"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "320"
+            endingLineNumber = "320"
+            landmarkName = "main()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/cMain.cpp"
+            timestampString = "518978389.438699"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "316"
+            endingLineNumber = "316"
+            landmarkName = "main()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518972678.892954"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1045"
+            endingLineNumber = "1045"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518972678.892954"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1044"
+            endingLineNumber = "1044"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518972678.892954"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1037"
+            endingLineNumber = "1037"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "516341672.418098"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "660"
+            endingLineNumber = "660"
+            landmarkName = "EMPedigreeOptimizer::_computeLogWVal(pedigreeClass2* pedigree, int d, int f, int motherIsP, int i, int j)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/helperFunctions.cpp"
+            timestampString = "516341641.157395"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "logAddition::_accumulatePositive(double log_x)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/helperFunctions.cpp"
+            timestampString = "516341641.157395"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "logAddition::_accumulateNegative(double log_x)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/cMain.cpp"
+            timestampString = "518978389.438699"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "330"
+            endingLineNumber = "330"
+            landmarkName = "main()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/cMain.cpp"
+            timestampString = "518978389.438699"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "331"
+            endingLineNumber = "331"
+            landmarkName = "main()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518972678.892954"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1010"
+            endingLineNumber = "1010"
+            landmarkName = "EMPedigreeOptimizer::_log_eUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIPLog.cpp"
+            timestampString = "518973410.096846"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1187"
+            endingLineNumber = "1187"
+            landmarkName = "EMPedigreeOptimizer::_log_updateTransitionProbs2()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/BMIP.h"
+            timestampString = "518973427.373136"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "326"
+            endingLineNumber = "326"
+            landmarkName = "train()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

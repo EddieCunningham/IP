@@ -346,12 +346,14 @@ def optimizePedigrees(filenames,problemContext,dominantOrRecessive,problemType,p
         optimizer.addPedigree(f,problemContext,dominantOrRecessive)
 
     optimizer.lockIn(printPeople)
+    optimizer.train()
 
 def testOptimize(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
 
     # filenames = ['test_hmm.json']
     # filenames = ['test_hmm_hard.json']
-    filenames = ['test_hmm_hard.json','test.json','test_XL.json']
+    # filenames = ['test_hmm_hard.json','test.json','test_XL.json']
+    filenames = ['1084LN.json']
     filenames = [os.path.join(jsonFolderPath,f) for f in filenames]
     # problemContext = autosomeProblem
     # dominantOrRecessive = 'dominant'

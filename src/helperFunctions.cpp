@@ -66,6 +66,11 @@ void logAddition::_accumulateNegative(double log_x) {
 }
 
 void logAddition::_addPoint(int sign, double log_x) {
+
+    if(_lastAddedPoints.size() > 100) {
+        _lastAddedPoints.pop();
+    }
+    _lastAddedPoints.push(log_x);
     if(this->needToInitialize) {
         if(sign == 0) {
             return;

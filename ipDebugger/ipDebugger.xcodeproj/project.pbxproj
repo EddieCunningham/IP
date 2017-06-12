@@ -16,6 +16,7 @@
 		2CB7DDA21EA58F4D009D340F /* hybridMonteCarloIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DDA11EA58F4D009D340F /* hybridMonteCarloIntegration.cpp */; };
 		2CB7DDA51EB179C5009D340F /* BMIP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DDA31EB179C5009D340F /* BMIP.cpp */; };
 		2CB7DDA71EBEDD37009D340F /* BMIP2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DDA61EBEDD37009D340F /* BMIP2.cpp */; };
+		2CB7DDA91EC2A872009D340F /* BMIPLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DDA81EC2A872009D340F /* BMIPLog.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,6 +44,7 @@
 		2CB7DDA31EB179C5009D340F /* BMIP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BMIP.cpp; path = ../../src/BMIP.cpp; sourceTree = "<group>"; };
 		2CB7DDA41EB179C5009D340F /* BMIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BMIP.h; path = ../../src/BMIP.h; sourceTree = "<group>"; };
 		2CB7DDA61EBEDD37009D340F /* BMIP2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BMIP2.cpp; path = ../../src/BMIP2.cpp; sourceTree = "<group>"; };
+		2CB7DDA81EC2A872009D340F /* BMIPLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BMIPLog.cpp; path = ../../src/BMIPLog.cpp; sourceTree = "<group>"; };
 		2CF93A7E1E84663F0018CE5B /* ipDebugger */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ipDebugger; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -76,18 +78,19 @@
 		2CF93A801E84663F0018CE5B /* ipDebugger */ = {
 			isa = PBXGroup;
 			children = (
+				2CB7DDA81EC2A872009D340F /* BMIPLog.cpp */,
 				2CB7DDA61EBEDD37009D340F /* BMIP2.cpp */,
-				2CB7DDA31EB179C5009D340F /* BMIP.cpp */,
+				2CB7DD931E9FE3F2009D340F /* cMain.cpp */,
 				2CB7DDA41EB179C5009D340F /* BMIP.h */,
 				2CB7DDA11EA58F4D009D340F /* hybridMonteCarloIntegration.cpp */,
 				2CB7DD9F1EA076B3009D340F /* bruteForceMonteCarloIntegration.cpp */,
-				2CB7DD931E9FE3F2009D340F /* cMain.cpp */,
 				2CB7DD941E9FE3F2009D340F /* helperFunctions.cpp */,
 				2CB7DD951E9FE3F2009D340F /* logProbIPNew.cpp */,
 				2CB7DD961E9FE3F2009D340F /* logProbIPNew.h */,
 				2CB7DD971E9FE3F2009D340F /* metropolisHastings.h */,
 				2CB7DD981E9FE3F2009D340F /* pdfSamplingMonteCarloIntegration.cpp */,
 				2CB7DD991E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp */,
+				2CB7DDA31EB179C5009D340F /* BMIP.cpp */,
 			);
 			path = ipDebugger;
 			sourceTree = "<group>";
@@ -155,6 +158,7 @@
 				2CB7DDA21EA58F4D009D340F /* hybridMonteCarloIntegration.cpp in Sources */,
 				2CB7DD9E1E9FE3F2009D340F /* uniformMonteCarloIntegration.cpp in Sources */,
 				2CB7DD9A1E9FE3F2009D340F /* cMain.cpp in Sources */,
+				2CB7DDA91EC2A872009D340F /* BMIPLog.cpp in Sources */,
 				2CB7DD9D1E9FE3F2009D340F /* pdfSamplingMonteCarloIntegration.cpp in Sources */,
 				2CB7DDA71EBEDD37009D340F /* BMIP2.cpp in Sources */,
 				2CB7DD9B1E9FE3F2009D340F /* helperFunctions.cpp in Sources */,
