@@ -212,7 +212,7 @@ double pedigreeClass2::getLogProbability() {
     }
     return totalAns;
 }
-
+/*
 void pedigreeClass2::_oneAffectedPDF(double K) {
 
     personClass* itMax = nullptr;
@@ -414,12 +414,6 @@ bool autosomalContradiction(personClass* person) {
 
 void goUp(personClass* person, bool found, unordered_set<personClass*>* relevantRoots, unordered_set<personClass*>* hasContradiction, unordered_set<personClass*>* relevantAncestors, bool useLeak, double leakProb, double leakDecay) {
 
-/*
-    GOAL IS TO MAKE PEOPLE WHO HAVE A PROB OF BEING 0 SOMETHING HIGHER LIKE 0.2
-    TO DO THIS, MARK ONLY THE ANCESTORS OF AFFECTED PEOPLE TO THAT HIGHER VALUE.
-    THEN THOSE PEOPLE WHO ARE BOTH MAKED BY THIS AND REVERSE ANCESTORS OF 
-    THE CARRIER ROOTS
-*/
 
     if(useLeak && found && person->affected == false) {
 
@@ -559,6 +553,30 @@ void pedigreeClass2::getDominantOrRecessive() {
     cout << "should have figured out what type this is" << endl;
     raise(SIGABRT);
 }
+ 
+ vector<double> pedigreeClass2::monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid) {
+ srand(1234);
+ 
+ this->getDominantOrRecessive();
+ this->updateAllChildrenAndLeaves();
+ this->determineCarrierRoots(useLeak,leakProb,leakDecay);
+ 
+ if(printPeople) {
+ this->printAllPeople("");
+ }
+ 
+ if(useMH) {
+ return this->_monteCarloMH(numbCalls, printIterations, numbToPrint, useNewDist, K, useLeak, leakProb, leakDecay);
+ }
+ if(useBruteForce) {
+ return this->_bruteForce(numbCalls, printIterations, numbToPrint, numbRoots);
+ }
+ if(useHybrid) {
+ return this->_hybridMonteCarlo(numbCalls, printIterations, numbToPrint, K);
+ }
+ return this->_uniformMonteCarlo(numbCalls, printIterations, numbToPrint, useNewDist, K, useLeak, leakProb, leakDecay);
+ }
+ */
 
 void pedigreeClass2::printAllPeople(string numb) {
     for(int i=0; i<this->roots.size(); ++i) {
@@ -706,27 +724,4 @@ void pedigreeClass2::printAllPeople(string numb) {
 
 
     cout << str << endl;
-}
-
-vector<double> pedigreeClass2::monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid) {
-    srand(1234);
-
-    this->getDominantOrRecessive();
-    this->updateAllChildrenAndLeaves();
-    this->determineCarrierRoots(useLeak,leakProb,leakDecay);
-
-    if(printPeople) {
-        this->printAllPeople("");
-    }
-    
-    if(useMH) {
-        return this->_monteCarloMH(numbCalls, printIterations, numbToPrint, useNewDist, K, useLeak, leakProb, leakDecay);
-    }
-    if(useBruteForce) {
-        return this->_bruteForce(numbCalls, printIterations, numbToPrint, numbRoots);
-    }
-    if(useHybrid) {
-        return this->_hybridMonteCarlo(numbCalls, printIterations, numbToPrint, K);
-    }
-    return this->_uniformMonteCarlo(numbCalls, printIterations, numbToPrint, useNewDist, K, useLeak, leakProb, leakDecay);
 }

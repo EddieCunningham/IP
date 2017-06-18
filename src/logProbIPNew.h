@@ -66,7 +66,11 @@ struct logVariance {
 
 class personClass {
 public:
-    
+
+    vector<double> log_viterbiProbs;
+    double viterbiConfidence = -1;
+    int mostLikelyState = -1;
+
     int _id;
     personClass* parentA;
     personClass* parentB;
@@ -273,7 +277,6 @@ class pedigreeClass2 {
 private:
 
     double lastLogEval;
-    
 
     vector<vector<personClass*>> carrierRoots;
     vector<personClass*> possiblyAffectedAncestors;
@@ -291,6 +294,7 @@ private:
     void updateAllChildrenAndLeaves();
     void determineCarrierRoots(bool useLeak, double leakProb, double leakDecay);
 
+    /*
     void _bruteForcePDF();
     void _oneAffectedPDF(double K);
     void updateRootLogPDF(bool useNewDist, double K);
@@ -303,10 +307,15 @@ private:
     vector<double> _monteCarloMH(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay);
     vector<double> _uniformMonteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay);
     vector<double> _hybridMonteCarlo(long numbCalls, bool printIterations, int numbToPrint, double K);
-
+     */
 public:
 
+    string filename;
+
     double log_probRoots;
+    
+    double mostLikelyStateProb;
+
 
     vector<vector<personClass*>> families;
     vector<personClass*> allPeople;
@@ -329,7 +338,7 @@ public:
     void printAllPeople(string numb);
 
     pair<double,double> logEvaluation(const vector<double> & x, bool useNewDist, double K, bool samplingFromPDF);
-    vector<double> monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid);
+    // vector<double> monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid);
 };
 
 

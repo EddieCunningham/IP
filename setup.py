@@ -36,15 +36,28 @@ from Cython.Build import cythonize
 #       )))
 
 
+# setup(ext_modules = cythonize(Extension("ipNEW",\
+#            sources=["ipNEW.pyx", "./src/logProbIPNew.cpp",\
+#                                  "./src/helperFunctions.cpp",\
+#                                  "./src/uniformMonteCarloIntegration.cpp",\
+#                                  "./src/pdfSamplingMonteCarloIntegration.cpp",\
+#                                  "./src/bruteForceMonteCarloIntegration.cpp",\
+#                                  "./src/hybridMonteCarloIntegration.cpp",\
+#                                  "./src/BMIP.cpp",\
+#                                  "./src/BMIP2.cpp",\
+#                                  "./src/BMIPLog.cpp"],\
+#            include_dirs = ["/usr/local/include","./src"],\
+#            libraries = ["gsl","gslcblas"],\
+#            library_dirs = ["/usr/local/lib"],\
+#            language = "c++",\
+#            extra_compile_args=["-std=c++11"]\
+#       )))
+
 setup(ext_modules = cythonize(Extension("ipNEW",\
            sources=["ipNEW.pyx", "./src/logProbIPNew.cpp",\
                                  "./src/helperFunctions.cpp",\
-                                 "./src/uniformMonteCarloIntegration.cpp",\
-                                 "./src/pdfSamplingMonteCarloIntegration.cpp",\
-                                 "./src/bruteForceMonteCarloIntegration.cpp",\
-                                 "./src/hybridMonteCarloIntegration.cpp",\
-                                 "./src/BMIP.cpp",\
-                                 "./src/BMIP2.cpp",\
+                                 "./src/BMIP_eStep.cpp",\
+                                 "./src/BMIP_mStep.cpp",\
                                  "./src/BMIPLog.cpp"],\
            include_dirs = ["/usr/local/include","./src"],\
            libraries = ["gsl","gslcblas"],\

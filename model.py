@@ -717,8 +717,8 @@ class Pedigree:
             return 'possibly'
 
         for p in self.family:
-            # print('p.diagnoses '+str(p.diagnoses))
-
+            # print('\n\np.diagnoses '+str(p.diagnoses))
+            # print('probandDisease: '+str(self.probandDisease))
             breakFlag = False
             for pDis in self.probandDisease:
                 for curDis in p.diagnoses:
@@ -748,6 +748,7 @@ class Pedigree:
                     print 'error: proband does not have a disease selected'
                     assert 0
                 self.probandDisease = adding.diagnoses
+                # print('adding the proband disease here  '+str(self.probandDisease))
 
         # initialize all of the implied parents
         for x in self.family:

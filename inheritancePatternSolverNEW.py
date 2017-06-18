@@ -340,20 +340,19 @@ def mainFunction():
     evaluateIP(FILENAME)
 
 
-def optimizePedigrees(filenames,problemContext,dominantOrRecessive,problemType,printPeople):
+def train(filenames,problemContext,dominantOrRecessive,problemType,printPeople):
     optimizer = PyEMOptimizer()
     for f in filenames:
         optimizer.addPedigree(f,problemContext,dominantOrRecessive)
 
-    optimizer.lockIn(printPeople)
-    optimizer.train()
+    optimizer.train(printPeople)
 
 def testOptimize(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
 
     # filenames = ['test_hmm.json']
     # filenames = ['test_hmm_hard.json']
-    # filenames = ['test_hmm_hard.json','test.json','test_XL.json']
-    filenames = ['1084LN.json']
+    filenames = ['test_hmm_hard.json','test.json','test_XL.json']
+    # filenames = ['1084LN.json']
     filenames = [os.path.join(jsonFolderPath,f) for f in filenames]
     # problemContext = autosomeProblem
     # dominantOrRecessive = 'dominant'
@@ -362,7 +361,7 @@ def testOptimize(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeData'):
     dominantOrRecessive = 'recessive'
     problemType = 'XLinked Recessive'
     printPeople = True
-    optimizePedigrees(filenames,problemContext,dominantOrRecessive,problemType,printPeople)
+    train(filenames,problemContext,dominantOrRecessive,problemType,printPeople)
 
 
 # evaluateAllPedigrees()

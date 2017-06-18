@@ -32,10 +32,13 @@ cdef extern from "logProbIPNew.h":
         vector[vector[vector[double]]] g
         bool affected
         int _id
+        double viterbiConfidence
+        int mostLikelyState
 
     cdef cppclass pedigreeClass2:
         pedigreeClass2()
         bool sexDependent
+        string filename
         vector[vector[person_ptr]] families
         vector[personClass*] allPeople
         vector[personClass*] roots
@@ -43,15 +46,15 @@ cdef extern from "logProbIPNew.h":
         unordered_map[person_ptr,int] mapToIndexRoots
         unordered_map[person_ptr,int] mapToIndexAllPeople
 
-        vector[double] monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid) except *
+        # vector[double] monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid) except *
 
 cdef extern from "BMIP.h":
     
     cdef cppclass EMPedigreeOptimizer:
         EMPedigreeOptimizer()
-        void log_initialize(const vector[pedigreeClass2*]& trainingSet_, bool printPeople)
-        void train()
-        double predictProbability(pedigreeClass2*)
+        void train(const vector[pedigreeClass2*]& trainingSet_, string problemType, bool printPeople, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate)
+        double predictExpectedProbability(pedigreeClass2* pedigree, string problemType, bool printPeople)
+        double predictMostLikelyProbability(pedigreeClass2* pedigree, string problemType, bool printPeople)
         vector[pedigreeClass2] trainingSet
         vector[vector[vector[double]]] emissionProbs
         vector[vector[vector[double]]] rootProbs
@@ -59,6 +62,7 @@ cdef extern from "BMIP.h":
 
 cdef class PyPerson:
     cdef personClass* c_Person
+    cdef public object mateKids
     cdef public PyPerson parentA
     cdef public PyPerson parentB
     cdef public bool isRoot
@@ -70,6 +74,7 @@ cdef class PyPerson:
     cdef public bool affected
     cdef public int _id
     cdef public string typeOfShading,sex
+    cdef public vector[int] path
 
     def __cinit__(self,object modelPerson,dominantOrRecessive,int l, int m,int n,vector[vector[vector[double]]] g):
         parentA = None
@@ -95,7 +100,8 @@ cdef class PyPerson:
                 sVal = 0.5
             elif(dominantOrRecessive == 'recessive'):
                 if(modelPerson.carrier):
-                    typeOfShading = 'carrier'
+                    typeOfShading = 'shaded'
+                    # typeOfShading = 'carrier'
                     tVal = 1.0
                     sVal = 1.0
                 else:
@@ -104,7 +110,8 @@ cdef class PyPerson:
             else:
                 assert 0, 'Invalid choice'
         elif(modelPerson.affected == 'possibly'):
-            typeOfShading = 'possiblyShaded'
+            typeOfShading = 'shaded'
+            # typeOfShading = 'possiblyShaded'
             tVal = 0.5
             sVal = 0.5
         else:
@@ -224,6 +231,9 @@ cdef class PyPedigree:
         cdef person_ptr child
         cdef pair[person_ptr,vector[person_ptr]] tempPair
 
+        self.filename = filename
+        self.c_pedigree.filename = filename
+
         with open(filename) as data_file:
             
             data = json.loads(json.load(data_file))
@@ -291,6 +301,12 @@ cdef class PyPedigree:
             familyToAdd = vector[person_ptr]()
 
             assert (<PyPerson>(helperStruct[fam[0]])).sex == 'female','Found that the sex of this person ('+str((<PyPerson>(helperStruct[fam[0]]))._id)+') is '+str((<PyPerson>(helperStruct[fam[0]])).sex)
+            
+            pyParentA = (<PyPerson>(helperStruct[fam[0]]))
+            pyParentB = (<PyPerson>(helperStruct[fam[1]]))
+            pyParentA.mateKids = []
+            pyParentB.mateKids = []
+
             parentA = (<PyPerson>(helperStruct[fam[0]])).c_Person
             parentB = (<PyPerson>(helperStruct[fam[1]])).c_Person
 
@@ -303,15 +319,23 @@ cdef class PyPedigree:
             tempPair.second = vector[person_ptr]()
             parentA[0].mateKids.push_back(tempPair)
 
+            pyParentA.mateKids.append([pyParentB,[]])
+
             tempPair = pair[person_ptr,vector[person_ptr]]()
             tempPair.first = <person_ptr>parentA
             tempPair.second = vector[person_ptr]()
             parentB[0].mateKids.push_back(tempPair)
 
-            for p in fam[2:]:
+            pyParentB.mateKids.append([pyParentA,[]])
+
+
+            for i,p in enumerate(fam[2:]):
                 child = (<PyPerson>(helperStruct[p])).c_Person
+                pyChild = (<PyPerson>(helperStruct[fam[2+i]]))
                 parentA[0].mateKids.back().second.push_back(<person_ptr>child)
                 parentB[0].mateKids.back().second.push_back(<person_ptr>child)
+                pyParentA.mateKids[-1][1].append(pyChild)
+                pyParentB.mateKids[-1][1].append(pyChild)
 
             # update the family structure for the pedigree
             for p in fam:
@@ -350,31 +374,43 @@ cdef class PyPedigree:
                 tempPerson.setParentB(<PyPerson>(helperStruct[p.parents[1].Id]))
 
 
+        for p in self.allPeople:
+            if(p.mateKids == None):
+                p.mateKids = []
+
         # for a in self.allPeople:
         #     a.toString()
 
         # print('\n\n--------------------------------------\n\n')
 
 
-    cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid):
-        ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid)
-        return ans
+    # cpdef calculateProbability(self,numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid):
+    #     ans = self.c_pedigree.monteCarlo(numbCalls,printIterations,numbToPrint,printPeople,useNewDist,K,useLeak,leakProb,leakDecay,useMH,bruteForce,numbRoots,useHybrid)
+    #     return ans
 
 
 
 cdef class PyEMOptimizer:
     cdef EMPedigreeOptimizer c_EMPedigreeOptimizer
     cdef object allPedigrees
+    cdef string problemType
+    cdef string dominantOrRecessive
+    cdef object problemContext    
 
-    def __init__(self):
+
+    def __init__(self,problemType,dominantOrRecessive,problemContext):
         self.allPedigrees = []
+        self.problemType = problemType
+        self.dominantOrRecessive = dominantOrRecessive
+        self.problemContext = problemContext
 
     def addPedigree(self,filename,problemContext,dominantOrRecessive):
         toAdd = PyPedigree()
         toAdd.initialization(filename,problemContext,dominantOrRecessive)
         self.allPedigrees.append(toAdd)
 
-    cpdef lockIn(self,printPeople):
+    cpdef train(self,problemType,printPeople,rootProbUpdate,emissionProbUpdate,transitionProbUpdate):
+
         cdef vector[pedigree_ptr] trainingSet
         cdef pedigree_ptr adding
 
@@ -382,16 +418,31 @@ cdef class PyEMOptimizer:
             adding = (<PyPedigree>(self.allPedigrees[i])).c_pedigree_ptr
             trainingSet.push_back(adding)
 
-        self.c_EMPedigreeOptimizer.log_initialize(trainingSet,printPeople)
+        self.c_EMPedigreeOptimizer.train(trainingSet,problemType,printPeople,rootProbUpdate,emissionProbUpdate,transitionProbUpdate)
 
-    cpdef train(self):
-        self.c_EMPedigreeOptimizer.train()
+    cpdef predictExpectedProbability(self,filename,printPeople):
 
-    cpdef predictProbability(self,pedigree):
         cdef pedigree_ptr thePedigree
+        cdef double prob
+
+        pedigree = PyPedigree()
+        pedigree.initialization(filename,self.problemContext,self.dominantOrRecessive)
 
         thePedigree = (<PyPedigree>(pedigree)).c_pedigree_ptr
-        self.c_EMPedigreeOptimizer.predictProbability(thePedigree)
+        prob = self.c_EMPedigreeOptimizer.predictExpectedProbability(thePedigree,self.problemType,printPeople)
+        return prob
+
+    cpdef predictMostLikelyProbability(self,filename,printPeople):
+
+        cdef pedigree_ptr thePedigree
+        cdef double prob
+
+        pedigree = PyPedigree()
+        pedigree.initialization(filename,self.problemContext,self.dominantOrRecessive)
+
+        thePedigree = (<PyPedigree>(pedigree)).c_pedigree_ptr        
+        prob = self.c_EMPedigreeOptimizer.predictMostLikelyProbability(thePedigree,self.problemType,printPeople)
+        return prob
 
 
 

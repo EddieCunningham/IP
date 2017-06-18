@@ -209,6 +209,10 @@ def chromosomeProblem():
 
     return allLMN,allG,'chromosome'
 
+# allLMN,allG,autoOrChromo = autosomeProblem()
+# print(allLMN)
+# print('\n\n\n')
+# print(allG)
 
 # allLMN,allG,autoOrChromo = chromosomeProblem()
 # print(allLMN)
