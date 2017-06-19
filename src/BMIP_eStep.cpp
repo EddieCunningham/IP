@@ -1,5 +1,5 @@
 #include "BMIP.h"
-
+#define PRINT_VALS false
 
 // _u -> [pedigree (d)][person (c)][chromosome (k)] -> u_k(c)
 double EMPedigreeOptimizer::_getLogUVal(pedigreeClass2* pedigree, int d, personClass* child, int k) {
@@ -9,7 +9,19 @@ double EMPedigreeOptimizer::_getLogUVal(pedigreeClass2* pedigree, int d, personC
     pair<int,double> spot = _log_u.at(d).at(c).at(k);
     int status = spot.first;
     if(status == 0) {
+
+        ++_nTabs;
         _computeLogUVal(pedigree,d,child,k);
+        --_nTabs;
+
+        if(PRINT_VALS) {
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "Just computed u{" << endl;
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "\td: " << d << ", child: " << child->_id << ", k: " << k << endl;
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "} is: " << _log_u.at(d).at(c).at(k).second << endl << endl;
+        }
     }
     else if(status == 2) {
         cout << "Failed at line: " << __LINE__ << endl;
@@ -29,7 +41,22 @@ double EMPedigreeOptimizer::_getLogWVal(pedigreeClass2* pedigree, int d, int f, 
     pair<int,double> spot = _log_w.at(d).at(f).at(motherIsP).at(i).at(j);
     int status = spot.first;
     if(status == 0) {
+        ++_nTabs;
         _computeLogWVal(pedigree,d,f,motherIsP,i,j);
+        --_nTabs;
+
+        vector<personClass*> fam = pedigree->families.at(f);
+        int motherId = fam.at(0)->_id;
+        int fatherId = fam.at(1)->_id;
+
+        if(PRINT_VALS) {
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "Just computed w{" << endl;
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "\td: " << d << ", f: (" << motherId << "," << fatherId << "), motherIsP: " << motherIsP << ", i: " << i << ", j: " << j << endl;
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "} is: " << _log_w.at(d).at(f).at(motherIsP).at(i).at(j).second << endl << endl;
+        }
     }
     else if(status == 2) {
         cout << "Failed at line: " << __LINE__ << endl;
@@ -39,8 +66,8 @@ double EMPedigreeOptimizer::_getLogWVal(pedigreeClass2* pedigree, int d, int f, 
     else if(status == 3) {
         return UNIQUE_ZERO_ID;
     }
-    double uVal = _log_w.at(d).at(f).at(motherIsP).at(i).at(j).second;
-    return uVal;
+    double wVal = _log_w.at(d).at(f).at(motherIsP).at(i).at(j).second;
+    return wVal;
 }
 
 // _a -> [pedigree (d)][familyUnit (f)][p==mother][parentAChromosome (i)] -> a_i(p,q)
@@ -49,7 +76,22 @@ double EMPedigreeOptimizer::_getLogAVal(pedigreeClass2* pedigree, int d, int f, 
     pair<int,double> spot = _log_a.at(d).at(f).at(motherIsP).at(i);
     int status = spot.first;
     if(status == 0) {
+        ++_nTabs;
         _computeLogAVal(pedigree,d,f,motherIsP,i);
+        --_nTabs;
+
+        vector<personClass*> fam = pedigree->families.at(f);
+        int motherId = fam.at(0)->_id;
+        int fatherId = fam.at(1)->_id;
+
+        if(PRINT_VALS) {
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "Just computed a{" << endl;
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "\td: " << d << ", f: (" << motherId << "," << fatherId << "), motherIsP: " << motherIsP << ", i: " << i << endl;
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "} is: " << _log_a.at(d).at(f).at(motherIsP).at(i).second << endl << endl;
+        }
     }
     else if(status == 2) {
         cout << "Failed at line: " << __LINE__ << endl;
@@ -59,8 +101,8 @@ double EMPedigreeOptimizer::_getLogAVal(pedigreeClass2* pedigree, int d, int f, 
     else if(status == 3) {
         return UNIQUE_ZERO_ID;
     }
-    double uVal = _log_a.at(d).at(f).at(motherIsP).at(i).second;
-    return uVal;
+    double aVal = _log_a.at(d).at(f).at(motherIsP).at(i).second;
+    return aVal;
 }
 
 // _b -> [pedigree (d)][familyUnit (f)][motherChromosome (i)][fatherChromosome (j)][childNumber (c)][childSexIndex] -> b_ij(c)
@@ -70,7 +112,22 @@ double EMPedigreeOptimizer::_getLogBVal(pedigreeClass2* pedigree, int d, int f, 
     pair<int,double> spot = _log_b.at(d).at(f).at(i).at(j).at(c).at(sexIndex);
     int status = spot.first;
     if(status == 0) {
+        ++_nTabs;
         _computeLogBVal(pedigree,d,f,i,j,child,c);
+        --_nTabs;
+
+        vector<personClass*> fam = pedigree->families.at(f);
+        int motherId = fam.at(0)->_id;
+        int fatherId = fam.at(1)->_id;
+
+        if(PRINT_VALS) {
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "Just computed b{" << endl;
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "\td: " << d << ", f: (" << motherId << "," << fatherId << "), i: " << i << ", j: " << j << ", child: " << child->_id << ", c: " << c << endl;
+            for(int it=0; it<_nTabs; ++it) {cout << "\t";}
+            cout << "} is: " << _log_b.at(d).at(f).at(i).at(j).at(c).at(sexIndex).second << endl << endl;
+        }
     }
     else if(status == 2) {
         cout << "Failed at line: " << __LINE__ << endl;
@@ -80,8 +137,8 @@ double EMPedigreeOptimizer::_getLogBVal(pedigreeClass2* pedigree, int d, int f, 
     else if(status == 3) {
         return UNIQUE_ZERO_ID;
     }
-    double uVal = _log_b.at(d).at(f).at(i).at(j).at(c).at(sexIndex).second;
-    return uVal;
+    double bVal = _log_b.at(d).at(f).at(i).at(j).at(c).at(sexIndex).second;
+    return bVal;
 
 }
 
@@ -411,7 +468,7 @@ void EMPedigreeOptimizer::_log_cUpdate(double& log_PofY) {
     for(auto ped_it=_trainingSet.begin(); ped_it!=_trainingSet.end(); ++ped_it) {
 
         pedigreeClass2* pedigree = *ped_it;
-
+        
         for(auto p_it=pedigree->allPeople.begin(); p_it!=pedigree->allPeople.end(); ++p_it) {
 
             personClass* person = *p_it;
@@ -422,6 +479,10 @@ void EMPedigreeOptimizer::_log_cUpdate(double& log_PofY) {
             for(int i=0; i<personN; ++i) {
 
                 double log_u_i_p = _getLogUVal(pedigree,d,person,i);
+                if(log_u_i_p == UNIQUE_ZERO_ID) {
+                    _log_c.at(d).at(pIndex).at(i) = UNIQUE_ZERO_ID;
+                    continue;
+                }
                 double log_mProd = 0.0;
                 bool allZeroFlag = false;
                 for(auto pair_it=person->mateKids.begin(); pair_it!=person->mateKids.end(); ++pair_it) {
@@ -451,7 +512,7 @@ void EMPedigreeOptimizer::_log_cUpdate(double& log_PofY) {
                     log_mProd += log_sum.log_ans;
                 }
                 
-                if(log_u_i_p == UNIQUE_ZERO_ID || allZeroFlag) {
+                if(allZeroFlag) {
                     _log_c.at(d).at(pIndex).at(i) = UNIQUE_ZERO_ID;
                 }
                 else {
@@ -459,6 +520,22 @@ void EMPedigreeOptimizer::_log_cUpdate(double& log_PofY) {
                     _log_c.at(d).at(pIndex).at(i) = log_val;
                     log_total.addPositiveLogPoint(log_val);
                 }
+            }
+            
+            if(log_total.needToInitialize) {
+                cout << "Failed at line: " << __LINE__ << endl;
+                cout << "log_total.needToInitialize: " << log_total.needToInitialize << endl;
+                cout << "log_total.log_ans was: " << log_total.log_ans << endl;
+                cout << "Person: " << person->_id << endl;
+                cout << "log_c: ";
+                for(int i=0; i<personN; ++i) {
+                    cout << _log_c.at(d).at(pIndex).at(i) << " ";
+                }
+                cout << endl;
+                
+                
+                cout << endl;
+                raise(SIGABRT);
             }
 
             log_PofY = log_total.log_ans;
@@ -472,23 +549,6 @@ void EMPedigreeOptimizer::_log_cUpdate(double& log_PofY) {
             }
             if(log_sum.needToInitialize || !_logCompare(log_sum.log_ans,0.0)) {
                 cout << "Failed at line: " << __LINE__ << endl;
-                cout << "log_sum.needToInitialize: " << log_sum.needToInitialize << endl;
-                cout << "log_sum.log_ans was: " << log_sum.log_ans << endl;
-                cout << "log_total.needToInitialize: " << log_total.needToInitialize << endl;
-                cout << "log_total.log_ans was: " << log_total.log_ans << endl;
-                cout << "Person: " << person->_id << endl;
-                cout << "log_c: ";
-                for(int i=0; i<personN; ++i) {
-                    cout << "_log_c.at(d).at(pIndex).at(i): " << _log_c.at(d).at(pIndex).at(i) << " ";
-                }
-                cout << endl;
-                
-                cout << "Root probs:";
-                for(int i=0; i<person->n; ++i) {
-                    double prob = _getRootProb(pedigree, person, i);
-                    cout << prob << " ";
-                }
-                cout << endl;
                 raise(SIGABRT);
             }
         }

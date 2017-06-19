@@ -208,7 +208,7 @@ double EMPedigreeOptimizer::_safeReturn(logAddition sum) {
 
 int EMPedigreeOptimizer::_getSexIndex(pedigreeClass2* pedigree, personClass* person) {
     int sexIndex = 0;
-    if(pedigree->sexDependent) {
+    if(_sexDependent) {
         if(person->sex == "male") {
             sexIndex = 0;
         }

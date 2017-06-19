@@ -7,6 +7,7 @@ void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & traini
     
     // initialize the _emissionProbs and _transitionProbs
     bool sexDependent = _trainingSet.at(0)->sexDependent;
+
     int femaleN = -1;
     int maleN = -1;
     int unknownN = -1;
@@ -14,7 +15,12 @@ void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & traini
     int index=0;
     
     for(auto ped_it=_trainingSet.begin(); ped_it!=_trainingSet.end(); ++ped_it) {
-        
+
+        pedigreeClass2* pedigree = *ped_it;
+        if(pedigree->bredthFirstList.size() == 0) {
+            pedigree->makeBFL();
+        }
+
         if(printPeople) {
             (*ped_it)->printAllPeople("z"+to_string(index)+"z");
         }
@@ -201,7 +207,7 @@ void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & traini
         
         if(initializeTransition) {
 
-            double noiseOrder = 400;
+            double noiseOrder = 4;
 
             for(int j=0; j<_transitionProbs.at(i).size(); ++j) {
                 sums.push_back(vector<double>(_transitionProbs.at(i).at(j).size(),0));
@@ -247,7 +253,7 @@ void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & traini
     }
 
     vector<vector<int>> allIndices = initialProbs.at(problemType);
-    double shadedProb = 0.9;
+    double shadedProb = 1.0;
     double unshadedProb = 1 - shadedProb;
 
     // sum over shading observations should equal 1
@@ -369,7 +375,36 @@ void EMPedigreeOptimizer::_log_EMStep2(bool rootProbUpdate, bool emissionProbUpd
     _log_mStep2(rootProbUpdate, emissionProbUpdate, transitionProbUpdate);
 }
 
-void EMPedigreeOptimizer::_train(const vector<pedigreeClass2*> & trainingSet, string problemType, bool printPeople, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate, bool initializeRoots, bool initializeEmission, bool initializeTransition) {
+void EMPedigreeOptimizer::_transitionProbHack() {
+
+    int noiseOrder = 6;
+    vector<vector<double>> sums;
+
+    for(int i=0; i<_transitionProbs.size(); ++i) {
+        for(int j=0; j<_transitionProbs.at(i).size(); ++j) {
+            sums.push_back(vector<double>(_transitionProbs.at(i).at(j).size(),0));
+            
+            for(int k=0; k<_transitionProbs.at(i).at(j).size(); ++k) {
+                
+                for(int l=0; l<_transitionProbs.at(i).at(j).at(k).size(); ++l) {
+
+                    double noise = rand()/(double)RAND_MAX*pow(10,-noiseOrder);
+                    _transitionProbs.at(i).at(j).at(k).at(l) += noise;
+                    sums.at(j).at(k) += _transitionProbs.at(i).at(j).at(k).at(l);
+                }
+            }
+        }
+        for(int j=0; j<_transitionProbs.at(i).size(); ++j) {
+            for(int k=0; k<_transitionProbs.at(i).at(j).size(); ++k) {
+                for(int l=0; l<_transitionProbs.at(i).at(j).at(k).size(); ++l) {
+                    _transitionProbs.at(i).at(j).at(k).at(l) /= sums.at(j).at(k);
+                }
+            }
+        }
+    }
+}
+
+void EMPedigreeOptimizer::_train(const vector<pedigreeClass2*> & trainingSet, string problemType, bool printPeople, bool printWork, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate, bool initializeRoots, bool initializeEmission, bool initializeTransition) {
 
     srand(time(NULL));
     
@@ -381,7 +416,9 @@ void EMPedigreeOptimizer::_train(const vector<pedigreeClass2*> & trainingSet, st
     }
     _log_initialize(trainingSet,problemType,printPeople,initializeRoots,initializeEmission,initializeTransition);
 
-    double stopPoint = pow(10,-5);
+    _transitionProbHack();
+
+    double stopPoint = pow(10,-6);
 
     int nLoops = 0;
     while(true) {
@@ -394,7 +431,9 @@ void EMPedigreeOptimizer::_train(const vector<pedigreeClass2*> & trainingSet, st
         
         vector<double> diffs = _leastSquaresDiff(rootProbsOld, transitionProbsOld, emissionProbsOld);
         double total = diffs.at(0)+diffs.at(1)+diffs.at(2);
-        // cout << "total: " << total << endl;
+        if(printWork) {
+            cout << "total: " << total << endl;
+        }
         if(total < stopPoint) {
             _emissionProbs = emissionProbsOld;
             _rootProbs = rootProbsOld;
@@ -405,9 +444,7 @@ void EMPedigreeOptimizer::_train(const vector<pedigreeClass2*> & trainingSet, st
     }
 }
 
-void EMPedigreeOptimizer::_trainRoots(const vector<pedigreeClass2*> & testSet, string problemType, bool printPeople) {
-
-    bool PRINT = true;
+void EMPedigreeOptimizer::_trainRoots(const vector<pedigreeClass2*> & testSet, string problemType, bool printPeople, bool printWork) {
 
     _rootProbs = vector<vector<vector<double>>>();
 
@@ -419,16 +456,16 @@ void EMPedigreeOptimizer::_trainRoots(const vector<pedigreeClass2*> & testSet, s
     bool emissionProbUpdate = false;
     bool transitionProbUpdate = false;
 
-    _train(testSet,problemType,printPeople,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,reInitializeRoots,reInitializeEmission,reInitializeTransition);
+    _train(testSet,problemType,printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,reInitializeRoots,reInitializeEmission,reInitializeTransition);
     
-    if(PRINT) {
+    if(printWork) {
         cout << "Learned roots for pedigree " << _trainingSet.at(0)->filename << ":" << endl;
     }
     for(int i=0; i<_trainingSet.at(0)->roots.size(); ++i) {
 
         personClass* root = _trainingSet.at(0)->roots.at(i);
         vector<double> distribution = _rootProbs.at(0).at(i);
-        if(PRINT) {
+        if(printWork) {
             cout << "Id: " << root->_id << " :  ";
             for(auto &&d:distribution) {
                 cout << d << " ";
@@ -625,20 +662,18 @@ void EMPedigreeOptimizer::_viterbiUpdate(pedigreeClass2* pedigree) {
     pedigree->mostLikelyStateProb = _safeExp(log_mostLikelyStateProb);
 }
 
-void EMPedigreeOptimizer::_calculateViterbiStates(pedigreeClass2* pedigree, string problemType, bool printPeople) {
+void EMPedigreeOptimizer::_calculateViterbiStates(pedigreeClass2* pedigree, string problemType, bool printPeople, bool printWork) {
 
-    bool PRINT = true;
-
-    _trainRoots(vector<pedigreeClass2*>({pedigree}),problemType,printPeople);
+    _trainRoots(vector<pedigreeClass2*>({pedigree}),problemType,printPeople,printWork);
 
     // run the viterbi algorithm
     _viterbiUpdate(pedigree);
 
-    if(PRINT) {
+    if(printWork) {
         cout << endl;
     }
 
-    for(personClass* person: pedigree->allPeople) {
+    for(personClass* person: pedigree->bredthFirstList) {
 
         if(person->parentA) {
             int motherState = _getMother(person)->mostLikelyState;
@@ -647,7 +682,7 @@ void EMPedigreeOptimizer::_calculateViterbiStates(pedigreeClass2* pedigree, stri
             double emissionProb = _getEmissionProb(pedigree,person,state);
             double transProb = _getTransitionProb(pedigree, person, motherState, fatherState, state);
 
-            if(PRINT) {
+            if(printWork) {
                 cout << "Person " << person->_id << " has state " << state;
                 cout << " and has transition probs (" << motherState << "," << fatherState << ") -> " << state << ": " << transProb;
                 cout << " and emission prob: " << emissionProb << endl;
@@ -659,7 +694,7 @@ void EMPedigreeOptimizer::_calculateViterbiStates(pedigreeClass2* pedigree, stri
             double emissionProb = _getEmissionProb(pedigree,person,state);
             double rootProb = _getRootProb(pedigree, person, state);
 
-            if(PRINT) {
+            if(printWork) {
                 cout << "Person " << person->_id << " has state " << state;
                 cout << " and has initial prob " << rootProb;
                 cout << " and emission prob: " << emissionProb << endl;
@@ -667,7 +702,7 @@ void EMPedigreeOptimizer::_calculateViterbiStates(pedigreeClass2* pedigree, stri
         }
     }
 
-    if(PRINT) {
+    if(printWork) {
         cout << endl;
         for(personClass* person: pedigree->leaves) {
             cout << "Leaf " << person->_id << " has prob of " << _safeExp(person->viterbiConfidence) << endl;
@@ -677,7 +712,7 @@ void EMPedigreeOptimizer::_calculateViterbiStates(pedigreeClass2* pedigree, stri
     double stateProb = pedigree->mostLikelyStateProb;
     double expectedProb = _calcProb();
 
-    if(PRINT) {
+    if(printWork) {
         cout << "\nThe probability of the most likely state is: " << stateProb << endl;
         cout << "The expected probability of the IP is: " << expectedProb << endl;
     }

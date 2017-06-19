@@ -227,8 +227,12 @@ public:
         str += "\""+this->sex+"\"";
         str += ");\n";
 
+        cout << str << endl;
+    }
+
+    void mateKidsString(string numb) {
         // update the mateKids
-        str += "x_"+numb;
+        string str = "x_"+numb;
         if(this->_id < 0) {
             str += "_";
         }
@@ -294,6 +298,33 @@ private:
     void updateAllChildrenAndLeaves();
     void determineCarrierRoots(bool useLeak, double leakProb, double leakDecay);
 
+    int _getFamNumb(personClass* mateA, personClass* mateB) {
+        
+        personClass* femaleParent = nullptr;
+        personClass* maleParent = nullptr;
+            if(mateA->sex == "female") {
+            femaleParent = mateA;
+            maleParent = mateB;
+        }
+        else {
+            maleParent = mateA;
+            femaleParent = mateB;
+        }
+        
+        int ans = 0;
+        for(auto fam_it=families.begin(); fam_it!=families.end(); ++fam_it) {
+            
+            if(femaleParent == fam_it->at(0) && maleParent == fam_it->at(1)) {
+                return ans;
+            }
+            ++ans;
+        }
+        cout << "Couldn't find a family with these two mates!" << endl;
+        raise(SIGABRT);
+        return -1;
+    }
+
+
     /*
     void _bruteForcePDF();
     void _oneAffectedPDF(double K);
@@ -321,6 +352,7 @@ public:
     vector<personClass*> allPeople;
     vector<personClass*> roots;
     vector<personClass*> leaves;
+    vector<personClass*> bredthFirstList;
     bool isDominant;
     bool sexDependent;
 
@@ -328,6 +360,8 @@ public:
     unordered_map<personClass*,int> mapToIndexRoots;
 
     pedigreeClass2() {}
+
+    void makeBFL();
 
     void resetAll() {
         for(auto it=this->allPeople.begin(); it!=this->allPeople.end(); ++it) {

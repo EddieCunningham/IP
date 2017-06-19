@@ -43,8 +43,10 @@ cdef extern from "logProbIPNew.h":
         vector[personClass*] allPeople
         vector[personClass*] roots
         vector[personClass*] leaves
+        vector[personClass*] bredthFirstList
         unordered_map[person_ptr,int] mapToIndexRoots
         unordered_map[person_ptr,int] mapToIndexAllPeople
+        void makeBFL()
 
         # vector[double] monteCarlo(long numbCalls, bool printIterations, int numbToPrint, bool printPeople, bool useNewDist, double K, bool useLeak, double leakProb, double leakDecay, bool useMH, bool useBruteForce, int numbRoots, bool useHybrid) except *
 
@@ -52,13 +54,15 @@ cdef extern from "BMIP.h":
     
     cdef cppclass EMPedigreeOptimizer:
         EMPedigreeOptimizer()
-        void train(const vector[pedigreeClass2*]& trainingSet_, string problemType, bool printPeople, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate)
-        double predictExpectedProbability(pedigreeClass2* pedigree, string problemType, bool printPeople)
-        double predictMostLikelyProbability(pedigreeClass2* pedigree, string problemType, bool printPeople)
+        void train(const vector[pedigreeClass2*]& trainingSet_, string problemType, bool printPeople, bool printWork, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate)
+        double predictExpectedProbability(pedigreeClass2* pedigree, string problemType, bool printPeople, bool printWork)
+        double predictMostLikelyProbability(pedigreeClass2* pedigree, string problemType, bool printPeople, bool printWork)
         vector[pedigreeClass2] trainingSet
         vector[vector[vector[double]]] emissionProbs
         vector[vector[vector[double]]] rootProbs
         vector[vector[vector[vector[double]]]] transitionProbs
+        void printModelParameters(string name)
+
 
 cdef class PyPerson:
     cdef personClass* c_Person
@@ -373,6 +377,7 @@ cdef class PyPedigree:
                 tempPerson.setParentA(<PyPerson>(helperStruct[p.parents[0].Id]))
                 tempPerson.setParentB(<PyPerson>(helperStruct[p.parents[1].Id]))
 
+        self.c_pedigree.makeBFL()
 
         for p in self.allPeople:
             if(p.mateKids == None):
@@ -409,7 +414,7 @@ cdef class PyEMOptimizer:
         toAdd.initialization(filename,problemContext,dominantOrRecessive)
         self.allPedigrees.append(toAdd)
 
-    cpdef train(self,problemType,printPeople,rootProbUpdate,emissionProbUpdate,transitionProbUpdate):
+    cpdef train(self,problemType,printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate):
 
         cdef vector[pedigree_ptr] trainingSet
         cdef pedigree_ptr adding
@@ -418,9 +423,9 @@ cdef class PyEMOptimizer:
             adding = (<PyPedigree>(self.allPedigrees[i])).c_pedigree_ptr
             trainingSet.push_back(adding)
 
-        self.c_EMPedigreeOptimizer.train(trainingSet,problemType,printPeople,rootProbUpdate,emissionProbUpdate,transitionProbUpdate)
+        self.c_EMPedigreeOptimizer.train(trainingSet,problemType,printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate)
 
-    cpdef predictExpectedProbability(self,filename,printPeople):
+    cpdef predictExpectedProbability(self,filename,printPeople,printWork):
 
         cdef pedigree_ptr thePedigree
         cdef double prob
@@ -429,10 +434,10 @@ cdef class PyEMOptimizer:
         pedigree.initialization(filename,self.problemContext,self.dominantOrRecessive)
 
         thePedigree = (<PyPedigree>(pedigree)).c_pedigree_ptr
-        prob = self.c_EMPedigreeOptimizer.predictExpectedProbability(thePedigree,self.problemType,printPeople)
+        prob = self.c_EMPedigreeOptimizer.predictExpectedProbability(thePedigree,self.problemType,printPeople,printWork)
         return prob
 
-    cpdef predictMostLikelyProbability(self,filename,printPeople):
+    cpdef predictMostLikelyProbability(self,filename,printPeople,printWork):
 
         cdef pedigree_ptr thePedigree
         cdef double prob
@@ -441,8 +446,11 @@ cdef class PyEMOptimizer:
         pedigree.initialization(filename,self.problemContext,self.dominantOrRecessive)
 
         thePedigree = (<PyPedigree>(pedigree)).c_pedigree_ptr        
-        prob = self.c_EMPedigreeOptimizer.predictMostLikelyProbability(thePedigree,self.problemType,printPeople)
+        prob = self.c_EMPedigreeOptimizer.predictMostLikelyProbability(thePedigree,self.problemType,printPeople,printWork)
         return prob
+
+    cpdef printModelParameters(self,name):
+        self.c_EMPedigreeOptimizer.printModelParameters(name)
 
 
 

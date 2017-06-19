@@ -578,15 +578,91 @@ void pedigreeClass2::getDominantOrRecessive() {
  }
  */
 
-void pedigreeClass2::printAllPeople(string numb) {
-    for(int i=0; i<this->roots.size(); ++i) {
-        this->roots.at(i)->toString(numb);
-    }
-    for(int i=0; i<this->allPeople.size(); ++i) {
-        if(this->allPeople.at(i)->parentA) {
-            this->allPeople.at(i)->toString(numb);
+bool allReady(const unordered_set<personClass*>& currentSet, personClass* person, unordered_set<personClass*> beingInvestigated) {
+
+    beingInvestigated.insert(person);
+
+    for(auto mk: person->mateKids) {
+
+        personClass* mate = mk.first;
+        if(beingInvestigated.find(mate) != beingInvestigated.end()) {
+            continue;
+        }
+        if(currentSet.find(mate) == currentSet.end()) {
+            return false;
+        }
+        bool mateReady = allReady(currentSet,mate,beingInvestigated);
+        if(!mateReady) {
+            return false;
         }
     }
+    return true;
+}
+
+void pedigreeClass2::makeBFL() {
+
+    vector<personClass*> ans = roots;
+
+    unordered_set<personClass*> currentSet(roots.begin(),roots.end());
+
+    while(currentSet.size() > 0) {
+        unordered_set<personClass*> nextSet;
+        for(personClass* person: currentSet) {
+
+            if(!allReady(currentSet,person,unordered_set<personClass*>())) {
+                nextSet.insert(person);
+                continue;
+            }
+
+            for(auto mk: person->mateKids) {
+
+                vector<personClass*> children = mk.second;
+
+                for(personClass* child: children) {
+                    nextSet.insert(child);
+                    if(find(ans.begin(),ans.end(),child) == ans.end()) {
+                        ans.push_back(child);
+                    }
+                }
+            }
+        }
+        currentSet = nextSet;
+    }
+
+    // check that everyone is covered once
+    for(personClass* person: allPeople) {
+
+        int totalInstances = 0;
+        for(personClass* otherPerson: ans) {
+            if(person == otherPerson) {
+                totalInstances += 1;
+            }
+        }
+        if(totalInstances != 1) {
+            cout << "Should be 1!" << endl;
+            raise(SIGABRT);
+        }
+    }
+    bredthFirstList = ans;
+}
+
+void pedigreeClass2::printAllPeople(string numb) {
+
+    if(bredthFirstList.size() == 0) {
+        makeBFL();
+    }
+    for(personClass* person: bredthFirstList) {
+        person->toString(numb);
+    }
+    for(personClass* person: bredthFirstList) {
+        person->mateKidsString(numb);
+    }
+    
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     string str = "pedigreeClass2 pedigree"+numb+";\npedigree"+numb+".roots=vector<personClass*>({";
     for(int i=0; i<this->roots.size(); ++i) {
@@ -721,6 +797,8 @@ void pedigreeClass2::printAllPeople(string numb) {
         ++index;
     }
     str += "});\n";
+
+    str += "pedigree"+numb+".filename = \""+this->filename+"\";\n";
 
 
     cout << str << endl;
