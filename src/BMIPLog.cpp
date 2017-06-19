@@ -1,18 +1,15 @@
 #include "BMIP.h"
 
 
-void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & trainingSet_, string problemType, bool printPeople, bool initializeRoots, bool initializeEmission, bool initializeTransition) {
+void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & trainingSet_, bool printPeople, bool initializeRoots, bool initializeEmission, bool initializeTransition) {
     
     _trainingSet = trainingSet_;
     
-    // initialize the _emissionProbs and _transitionProbs
-    bool sexDependent = _trainingSet.at(0)->sexDependent;
-
-    int femaleN = -1;
-    int maleN = -1;
-    int unknownN = -1;
-    
     int index=0;
+
+    _femaleN = _getN("female");
+    _maleN = _getN("male");
+    _unknownN = _getN("unknown");
     
     for(auto ped_it=_trainingSet.begin(); ped_it!=_trainingSet.end(); ++ped_it) {
 
@@ -22,80 +19,28 @@ void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & traini
         }
 
         if(printPeople) {
-            (*ped_it)->printAllPeople("z"+to_string(index)+"z");
+            pedigree->printAllPeople("z"+to_string(index)+"z");
         }
-        
-        if(sexDependent != (*ped_it)->sexDependent) {
-            // cout << "NEED SAME SEX DEPENDENCY!!" << endl;
-            cout << "Failed at line: " << __LINE__ << endl;
-            raise(SIGABRT);
-        }
-        
-        for(auto p_it=(*ped_it)->allPeople.begin(); p_it!=(*ped_it)->allPeople.end(); ++p_it) {
+
+        for(auto p_it=pedigree->allPeople.begin(); p_it!=pedigree->allPeople.end(); ++p_it) {
+
+            personClass* person = *p_it;
+            string sex = person->sex;
             
-            if((*p_it)->parentA && (*p_it)->parentA->sex == "unknown") {
+            if(person->parentA && person->parentA->sex == "unknown") {
                 // cout << "DONT SUPPORT THIS CASE YET" << endl;
                 cout << "Failed at line: " << __LINE__ << endl;
                 raise(SIGABRT);
             }
-            
-            string sex = (*p_it)->sex;
-            int n = (*p_it)->n;
-            
-            if(sex == "male") {
-                if(maleN != -1) {
-                    if(maleN != n) {
-                        // cout << "INCONSISTENT " << maleN << endl;
-                        cout << "Failed at line: " << __LINE__ << endl;
-                        raise(SIGABRT);
-                    }
-                }
-                else {
-                    maleN = n;
-                }
-            }
-            else if(sex == "female") {
-                if(femaleN != -1) {
-                    if(femaleN != n) {
-                        // cout << "INCONSISTENT " << femaleN << endl;
-                        cout << "Failed at line: " << __LINE__ << endl;
-                        raise(SIGABRT);
-                    }
-                }
-                else {
-                    femaleN = n;
-                }
-            }
-            else if(sex == "unknown") {
-                if(unknownN != -1) {
-                    if(unknownN != n) {
-                        // cout << "INCONSISTENT " << unknownN << endl;
-                        cout << "Failed at line: " << __LINE__ << endl;
-                        raise(SIGABRT);
-                    }
-                }
-                else {
-                    unknownN = n;
-                }
-            }
-            else {
-                // cout << "INVALID SEX!!" << endl;
+            if(sex != "male" && sex != "female" && sex != "unknown") {
                 cout << "Failed at line: " << __LINE__ << endl;
+                cout << "Invalid sex!" << endl;
                 raise(SIGABRT);
             }
+            int n = _getN(person);
         }
         ++index;
     }
-    
-    _femaleN = femaleN;
-    _maleN = maleN;
-    _unknownN = unknownN;
-    if(unknownN == -1) {
-        // no unknown people
-        unknownN = 0;
-        _unknownN = 0;
-    }
-    _sexDependent = sexDependent;
     
     if(printPeople) {
         string toPrint = "\nvector<pedigreeClass2*> trainingSet({";
@@ -114,40 +59,76 @@ void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & traini
         toPrint += "EMPedigreeOptimizer empo;\n";
         cout << toPrint;
     }
-    
-    if(sexDependent) {
-        // sex is one of ['female','male','unknown']
-        if(initializeEmission) {
-            _emissionProbs = vector<vector<vector<double>>>(3);
-            _emissionProbs.at(0) = vector<vector<double>>(femaleN,vector<double>(_emissionMapping.size()));
-            _emissionProbs.at(1) = vector<vector<double>>(maleN,vector<double>(_emissionMapping.size()));
-            _emissionProbs.at(2) = vector<vector<double>>(unknownN,vector<double>(_emissionMapping.size()));
-        }
-        
-        // WILL ASSUME THAT THERE ARE NO UNKNOWN,UNKNOWN -> CHILD FAMILIES
-        if(initializeTransition) {
-            _transitionProbs = vector<vector<vector<vector<double>>>>(3);
-            _transitionProbs.at(0) = vector<vector<vector<double>>>(femaleN,vector<vector<double>>(maleN,vector<double>(maleN)));
-            _transitionProbs.at(1) = vector<vector<vector<double>>>(femaleN,vector<vector<double>>(maleN,vector<double>(femaleN)));
-            _transitionProbs.at(2) = vector<vector<vector<double>>>(femaleN,vector<vector<double>>(maleN,vector<double>(unknownN)));
-        }
-    }
-    else {
-        // emmision can be ['shaded', 'possiblyShaded', 'unshaded', 'carrier']
-        if(initializeEmission) {
-            _emissionProbs = vector<vector<vector<double>>>(1);
-            _emissionProbs.at(0) = vector<vector<double>>(maleN,vector<double>(_emissionMapping.size()));
-        }
-        if(initializeTransition) {
-            _transitionProbs = vector<vector<vector<vector<double>>>>(1);
-            _transitionProbs.at(0) = vector<vector<vector<double>>>(femaleN,vector<vector<double>>(maleN,vector<double>(maleN)));
-        }
-    }
-    
-    /*
-     ========================================================
-     */
 
+    if(initializeEmission) {
+        _emissionProbs = vector<vector<vector<double>>>(_nSexIndices);
+
+        for(int s=0; s<_nSexIndices; ++s) {
+            string sex = _sexOrder.at(s);
+            int l = _getL(sex);
+            int m = _getM(sex);
+            int n = _getN(sex);
+            int divider = _problemName == "autosome" ? m : m;
+
+            vector<vector<double>> currentEmission = vector<vector<double>>(n,vector<double>(_emissionMapping.size()));
+
+            if(_emissionMapping.size() != 2) {
+                cout << "Failed at line: " << __LINE__ << endl;
+                cout << "Can't handle this yet!!" << endl;
+                raise(SIGABRT);
+            }
+
+            double top,bottom;
+            if(_isDominant) {
+                top = _shadedProb;
+                bottom = 1 - _shadedProb;
+            }
+            else {
+                top = 1 - _shadedProb;
+                bottom = _shadedProb;
+            }
+            for(int i=0; i<n; ++i) {
+                if(i < divider) {
+                    currentEmission.at(i).at(0) = top;
+                    currentEmission.at(i).at(1) = bottom;
+                }
+                else {
+                    currentEmission.at(i).at(0) = bottom;
+                    currentEmission.at(i).at(1) = top;
+                }
+            }
+            _emissionProbs.at(s) = currentEmission;
+        }
+    }
+    if(initializeTransition) {
+        _transitionProbs = vector<vector<vector<vector<double>>>>(_nSexIndices);
+        int femaleN = _getN("female");
+        int maleN = _getN("male");
+        for(int s=0; s<_nSexIndices; ++s) {
+            string sex = _sexOrder.at(s);
+            int childN = _getN(sex);
+            const vector<vector<vector<double>>>& relevantG = _allG.at("female,male->"+sex);
+            vector<vector<vector<double>>> currentTransitions = vector<vector<vector<double>>>(femaleN,vector<vector<double>>(maleN,vector<double>(childN)));
+            for(int i=0; i<femaleN; ++i) {
+                for(int j=0; j<maleN; ++j) {
+                    double sum = 0.0;
+                    for(int k=0; k<childN; ++k) {
+                        double val = relevantG.at(k).at(j).at(i);
+                        currentTransitions.at(i).at(j).at(k) = val;
+                        sum += val;
+                    }
+                    if(abs(sum-1.0) > PRECISION) {
+                        cout << "Failed at line: " << __LINE__ << endl;
+                        cout << "Failed in initializing transition probs!" << endl;
+                        cout << "Sum was: " << sum << endl;
+                        raise(SIGABRT);
+                    }
+                }
+            }
+            _transitionProbs.at(s) = currentTransitions;
+        }
+
+    }
     if(initializeRoots) {
         
         // initialize the _rootProbs
@@ -156,7 +137,9 @@ void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & traini
             vector<vector<double>> rootsToAdd;
             for(auto r_it=(*ped_it)->roots.begin(); r_it!=(*ped_it)->roots.end(); ++r_it) {
                 
-                int n = (*r_it)->n;
+                personClass* root = *r_it;
+
+                int n = _getN(root);
                 vector<double> rootToAdd(n);
                 double total = 0.0;
                 for(int i=0; i<n; ++i) {
@@ -168,114 +151,11 @@ void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & traini
                     rootToAdd.at(i) /= total;
                 }
                 rootsToAdd.push_back(rootToAdd);
-                
             }
             _rootProbs.push_back(rootsToAdd);
         }
     }
 
-
-    // initialize the _transitionProbs
-    // sum over motherChrom fatherChrom should sum to 1 for each childSex
-    for(int i=0; i<_transitionProbs.size(); ++i) {
-        
-        vector<vector<double>> sums = vector<vector<double>>();
-
-        vector<vector<vector<double>>> g;
-        personClass* foundPerson;
-
-        for(auto ped_it=_trainingSet.begin(); ped_it!=_trainingSet.end(); ++ped_it) {
-
-            pedigreeClass2* pedigree = *ped_it;
-            bool found = false;
-            
-            for(auto p_it=pedigree->allPeople.begin(); p_it!=pedigree->allPeople.end(); ++p_it) {
-
-                personClass* person = *p_it;
-                int sexIndex = _getSexIndex(pedigree,person);
-                if(sexIndex == i && person->g.size()>0) {
-                    g = person->g;
-                    found = true;
-                    foundPerson = person;
-                    break;
-                }
-            }
-            if(found) {
-                break;
-            }
-        }
-        
-        if(initializeTransition) {
-
-            double noiseOrder = 4;
-
-            for(int j=0; j<_transitionProbs.at(i).size(); ++j) {
-                sums.push_back(vector<double>(_transitionProbs.at(i).at(j).size(),0));
-                
-                for(int k=0; k<_transitionProbs.at(i).at(j).size(); ++k) {
-                    
-                    for(int l=0; l<_transitionProbs.at(i).at(j).at(k).size(); ++l) {
-                        double randomNumb = 0;//rand()/(double)RAND_MAX*pow(10,-noiseOrder);
-                        double gPlusNoise = g.at(l).at(k).at(j) + randomNumb;
-
-                        _transitionProbs.at(i).at(j).at(k).at(l) = gPlusNoise;
-                        sums.at(j).at(k) += gPlusNoise;
-                    }
-                }
-            }
-            for(int j=0; j<_transitionProbs.at(i).size(); ++j) {
-                for(int k=0; k<_transitionProbs.at(i).at(j).size(); ++k) {
-                    for(int l=0; l<_transitionProbs.at(i).at(j).at(k).size(); ++l) {
-                        _transitionProbs.at(i).at(j).at(k).at(l) /= sums.at(j).at(k);
-                    }
-                }
-            }
-        }
-    }
-    
-    unordered_map<string,vector<vector<int>>> initialProbs(
-        {
-            {
-                "AD",{{0,1,2},{0,1,2},{0,1,2}}
-            },
-            {
-                "AR",{{3},{3},{3}}
-            },
-            {
-                "XLR",{{0},{0,1},{0,1,2}}
-            }
-        }
-        );
-    if(initialProbs.find(problemType) == initialProbs.end()) {
-        cout << "Failed at line: " << __LINE__ << endl;
-        cout << "Invalid problem type.  Was expecting \"AD\", \"AR\" or \"XLR\"" << endl;
-        raise(SIGABRT);
-    }
-
-    vector<vector<int>> allIndices = initialProbs.at(problemType);
-    double shadedProb = 1.0;
-    double unshadedProb = 1 - shadedProb;
-
-    // sum over shading observations should equal 1
-    // initialize the _emissionProbs
-    if(initializeEmission) {
-
-        for(int i=0; i<_emissionProbs.size(); ++i) {
-
-            vector<int> indices = allIndices.at(i);
-            for(int j=0; j<_emissionProbs.at(i).size(); ++j) {
-
-                if(find(indices.begin(),indices.end(),j) != indices.end()) {
-                    _emissionProbs.at(i).at(j).at(0) = shadedProb;
-                    _emissionProbs.at(i).at(j).at(1) = unshadedProb;
-                }
-                else {
-                    _emissionProbs.at(i).at(j).at(0) = unshadedProb;
-                    _emissionProbs.at(i).at(j).at(1) = shadedProb;
-                }
-            }
-        }
-    }
 
     _log_u = vector<vector<vector<pair<int,double>>>>();
     _log_w = vector<vector<vector<vector<vector<pair<int,double>>>>>>();
@@ -287,22 +167,26 @@ void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & traini
     _log_e = vector<vector<vector<vector<vector<vector<vector<double>>>>>>>();
     
     for(auto ped_it=_trainingSet.begin(); ped_it!=_trainingSet.end(); ++ped_it) {
+
+        pedigreeClass2* pedigree = *ped_it;
         
         vector<vector<pair<int,double>>> people = vector<vector<pair<int,double>>>();
         vector<vector<double>> people2 = vector<vector<double>>();
-        for(auto p_it=(*ped_it)->allPeople.begin(); p_it!=(*ped_it)->allPeople.end(); ++p_it) {
+        for(auto p_it=pedigree->allPeople.begin(); p_it!=pedigree->allPeople.end(); ++p_it) {
+
+            personClass* person = *p_it;
             
-            int N = (*p_it)->n;
-            vector<pair<int,double>> toAdd = vector<pair<int,double>>(N,pair<int,double>(false,0));
+            int n = _getN(person);
+            vector<pair<int,double>> toAdd = vector<pair<int,double>>(n,pair<int,double>(false,0));
             people.push_back(toAdd);
-            vector<double> toAdd2 = vector<double>(N,0);
+            vector<double> toAdd2 = vector<double>(n,0);
             people2.push_back(toAdd2);
         }
         _log_u.push_back(people);
         _log_c.push_back(people2);   
 
 
-        int numFams = (int)(*ped_it)->families.size();
+        int numFams = (int)pedigree->families.size();
 
         vector<vector<vector<vector<pair<int,double>>>>> vAddition(numFams,
                           vector<vector<vector<pair<int,double>>>>({
@@ -327,31 +211,24 @@ void EMPedigreeOptimizer::_log_initialize(const vector<pedigreeClass2*> & traini
                                                                                            vector<vector<vector<vector<double>>>>(_maleN)));
 
 
-        for(int f=0; f<(*ped_it)->families.size(); ++f) {
+        for(int f=0; f<pedigree->families.size(); ++f) {
             
             int numbChildren = (int)(*ped_it)->families.at(f).size()-2;
             vector<vector<pair<int,double>>> lastBPart;
             vector<vector<vector<double>>> lastEPart;
-            if(_sexDependent) {
-
-                lastBPart = vector<vector<pair<int,double>>>(numbChildren,
-                                    vector<pair<int,double>>(3,pair<int,double>(false,0)));
-
-                lastEPart = vector<vector<vector<double>>>(numbChildren,
-                                    vector<vector<double>>({
-                                            vector<double>(_femaleN),
-                                            vector<double>(_maleN),
-                                            vector<double>(_unknownN)}));
-            }
-            else {
-                lastBPart = vector<vector<pair<int,double>>>(numbChildren,
-                                    vector<pair<int,double>>(1,pair<int,double>(false,0)));
-
-                lastEPart = vector<vector<vector<double>>>(numbChildren,
-                                    vector<vector<double>>(1,
-                                            vector<double>(_femaleN)));
-            }
             
+            lastBPart = vector<vector<pair<int,double>>>(numbChildren,
+                                vector<pair<int,double>>(_nSexIndices,pair<int,double>(false,0)));
+
+            vector<vector<double>> inE;
+            for(int s=0; s<_nSexIndices; ++s) {
+                string sex = _sexOrder.at(s);
+                int n = _getN(sex);
+                inE.push_back(vector<double>(n));
+            }
+            lastEPart = vector<vector<vector<double>>>(numbChildren,inE);
+
+
             for(int i=0; i<_femaleN; ++i) {
                 for(int j=0; j<_maleN; ++j) {
                     bAddition.at(f).at(i).at(j) = lastBPart;
@@ -378,33 +255,27 @@ void EMPedigreeOptimizer::_log_EMStep2(bool rootProbUpdate, bool emissionProbUpd
 void EMPedigreeOptimizer::_transitionProbHack() {
 
     int noiseOrder = 6;
-    vector<vector<double>> sums;
 
     for(int i=0; i<_transitionProbs.size(); ++i) {
         for(int j=0; j<_transitionProbs.at(i).size(); ++j) {
-            sums.push_back(vector<double>(_transitionProbs.at(i).at(j).size(),0));
-            
             for(int k=0; k<_transitionProbs.at(i).at(j).size(); ++k) {
                 
+                double sum = 0.0;
                 for(int l=0; l<_transitionProbs.at(i).at(j).at(k).size(); ++l) {
 
                     double noise = rand()/(double)RAND_MAX*pow(10,-noiseOrder);
                     _transitionProbs.at(i).at(j).at(k).at(l) += noise;
-                    sums.at(j).at(k) += _transitionProbs.at(i).at(j).at(k).at(l);
+                    sum += _transitionProbs.at(i).at(j).at(k).at(l);
                 }
-            }
-        }
-        for(int j=0; j<_transitionProbs.at(i).size(); ++j) {
-            for(int k=0; k<_transitionProbs.at(i).at(j).size(); ++k) {
                 for(int l=0; l<_transitionProbs.at(i).at(j).at(k).size(); ++l) {
-                    _transitionProbs.at(i).at(j).at(k).at(l) /= sums.at(j).at(k);
+                    _transitionProbs.at(i).at(j).at(k).at(l) /= sum;
                 }
             }
         }
     }
 }
 
-void EMPedigreeOptimizer::_train(const vector<pedigreeClass2*> & trainingSet, string problemType, bool printPeople, bool printWork, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate, bool initializeRoots, bool initializeEmission, bool initializeTransition) {
+void EMPedigreeOptimizer::_train(const vector<pedigreeClass2*> & trainingSet, bool printPeople, bool printWork, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate, bool initializeRoots, bool initializeEmission, bool initializeTransition) {
 
     srand(time(NULL));
     
@@ -414,7 +285,7 @@ void EMPedigreeOptimizer::_train(const vector<pedigreeClass2*> & trainingSet, st
         initializeTransition = true;
         _firstUpdate = true;
     }
-    _log_initialize(trainingSet,problemType,printPeople,initializeRoots,initializeEmission,initializeTransition);
+    _log_initialize(trainingSet,printPeople,initializeRoots,initializeEmission,initializeTransition);
 
     _transitionProbHack();
 
@@ -444,7 +315,7 @@ void EMPedigreeOptimizer::_train(const vector<pedigreeClass2*> & trainingSet, st
     }
 }
 
-void EMPedigreeOptimizer::_trainRoots(const vector<pedigreeClass2*> & testSet, string problemType, bool printPeople, bool printWork) {
+void EMPedigreeOptimizer::_trainRoots(const vector<pedigreeClass2*> & testSet, bool printPeople, bool printWork) {
 
     _rootProbs = vector<vector<vector<double>>>();
 
@@ -456,7 +327,7 @@ void EMPedigreeOptimizer::_trainRoots(const vector<pedigreeClass2*> & testSet, s
     bool emissionProbUpdate = false;
     bool transitionProbUpdate = false;
 
-    _train(testSet,problemType,printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,reInitializeRoots,reInitializeEmission,reInitializeTransition);
+    _train(testSet,printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,reInitializeRoots,reInitializeEmission,reInitializeTransition);
     
     if(printWork) {
         cout << "Learned roots for pedigree " << _trainingSet.at(0)->filename << ":" << endl;
@@ -493,7 +364,7 @@ void EMPedigreeOptimizer::_viterbiUpdate(pedigreeClass2* pedigree) {
 
     for(personClass* person: pedigree->allPeople) {
 
-        person->log_viterbiProbs = vector<double>(person->probs.size(),-1);
+        person->log_viterbiProbs = vector<double>(_getN(person),-1);
     }
 
     vector<personClass*> currentSet;
@@ -509,7 +380,7 @@ void EMPedigreeOptimizer::_viterbiUpdate(pedigreeClass2* pedigree) {
         for(int i=0; i<root->log_viterbiProbs.size(); ++i) {
 
             double rootProb = _getRootProb(pedigree,root,i);
-            double emissionProb = _getEmissionProb(pedigree,root,i);
+            double emissionProb = _getEmissionProb(root,i);
             double log_currentProb;
             if(rootProb == 0 || emissionProb == 0) {
                 log_currentProb = UNIQUE_ZERO_ID;
@@ -575,7 +446,7 @@ void EMPedigreeOptimizer::_viterbiUpdate(pedigreeClass2* pedigree) {
 
             for(int k=0; k<person->log_viterbiProbs.size(); ++k) {
 
-                double emissionProb = _getEmissionProb(pedigree,person,k);
+                double emissionProb = _getEmissionProb(person,k);
                 double maxV = UNIQUE_ZERO_ID;
                 bool set2 = false;
 
@@ -584,7 +455,7 @@ void EMPedigreeOptimizer::_viterbiUpdate(pedigreeClass2* pedigree) {
                     double log_motherProb = mother->log_viterbiProbs.at(i);
                     for(int j=0; j<father->log_viterbiProbs.size(); ++j) {
 
-                        double transitionProb = _getTransitionProb(pedigree,person,i,j,k);
+                        double transitionProb = _getTransitionProb(person,i,j,k);
                         double log_fatherProb = father->log_viterbiProbs.at(j);
 
                         double totalProb;
@@ -636,9 +507,9 @@ void EMPedigreeOptimizer::_viterbiUpdate(pedigreeClass2* pedigree) {
 
             int motherState = _getMother(person)->mostLikelyState;
             int fatherState = _getFather(person)->mostLikelyState;
-            double maxTransitionProb = _getTransitionProb(pedigree,person,motherState,fatherState,person->mostLikelyState);
+            double maxTransitionProb = _getTransitionProb(person,motherState,fatherState,person->mostLikelyState);
 
-            double emissionProb = _getEmissionProb(pedigree,person,person->mostLikelyState);
+            double emissionProb = _getEmissionProb(person,person->mostLikelyState);
 
             log_mostLikelyStateProb = _safeAdd(log_mostLikelyStateProb, log(emissionProb));
             log_mostLikelyStateProb = _safeAdd(log_mostLikelyStateProb, log(maxTransitionProb));
@@ -662,9 +533,9 @@ void EMPedigreeOptimizer::_viterbiUpdate(pedigreeClass2* pedigree) {
     pedigree->mostLikelyStateProb = _safeExp(log_mostLikelyStateProb);
 }
 
-void EMPedigreeOptimizer::_calculateViterbiStates(pedigreeClass2* pedigree, string problemType, bool printPeople, bool printWork) {
+void EMPedigreeOptimizer::_calculateViterbiStates(pedigreeClass2* pedigree, bool printPeople, bool printWork) {
 
-    _trainRoots(vector<pedigreeClass2*>({pedigree}),problemType,printPeople,printWork);
+    _trainRoots(vector<pedigreeClass2*>({pedigree}),printPeople,printWork);
 
     // run the viterbi algorithm
     _viterbiUpdate(pedigree);
@@ -679,8 +550,8 @@ void EMPedigreeOptimizer::_calculateViterbiStates(pedigreeClass2* pedigree, stri
             int motherState = _getMother(person)->mostLikelyState;
             int fatherState = _getFather(person)->mostLikelyState;
             int state = person->mostLikelyState;
-            double emissionProb = _getEmissionProb(pedigree,person,state);
-            double transProb = _getTransitionProb(pedigree, person, motherState, fatherState, state);
+            double emissionProb = _getEmissionProb(person,state);
+            double transProb = _getTransitionProb( person, motherState, fatherState, state);
 
             if(printWork) {
                 cout << "Person " << person->_id << " has state " << state;
@@ -691,7 +562,7 @@ void EMPedigreeOptimizer::_calculateViterbiStates(pedigreeClass2* pedigree, stri
         else {
 
             int state = person->mostLikelyState;
-            double emissionProb = _getEmissionProb(pedigree,person,state);
+            double emissionProb = _getEmissionProb(person,state);
             double rootProb = _getRootProb(pedigree, person, state);
 
             if(printWork) {

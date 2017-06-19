@@ -103,6 +103,7 @@ void personClass::storeProbAndNormalize() {
             this->probs.at(i) *= (1.0-t)/sumOther;
         }
     }
+    
     /////////////////////////////////////////////////////
     
     double totalSum = 0.0;

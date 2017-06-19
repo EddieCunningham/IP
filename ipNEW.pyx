@@ -54,14 +54,16 @@ cdef extern from "BMIP.h":
     
     cdef cppclass EMPedigreeOptimizer:
         EMPedigreeOptimizer()
-        void train(const vector[pedigreeClass2*]& trainingSet_, string problemType, bool printPeople, bool printWork, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate)
-        double predictExpectedProbability(pedigreeClass2* pedigree, string problemType, bool printPeople, bool printWork)
-        double predictMostLikelyProbability(pedigreeClass2* pedigree, string problemType, bool printPeople, bool printWork)
+        EMPedigreeOptimizer(const unordered_map[string,int]& emissionMapping, const unordered_map[string,vector[int]]& allLMN, const unordered_map[string,vector[vector[vector[double]]]]& allG, string problemName, bool isDominant)
+        void train(const vector[pedigreeClass2*]& trainingSet_, bool printPeople, bool printWork, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate)
+        double predictExpectedProbability(pedigreeClass2* pedigree, bool printPeople, bool printWork)
+        double predictMostLikelyProbability(pedigreeClass2* pedigree, bool printPeople, bool printWork)
         vector[pedigreeClass2] trainingSet
         vector[vector[vector[double]]] emissionProbs
         vector[vector[vector[double]]] rootProbs
         vector[vector[vector[vector[double]]]] transitionProbs
         void printModelParameters(string name)
+        void printInitializer(string name)
 
 
 cdef class PyPerson:
@@ -398,23 +400,35 @@ cdef class PyPedigree:
 cdef class PyEMOptimizer:
     cdef EMPedigreeOptimizer c_EMPedigreeOptimizer
     cdef object allPedigrees
-    cdef string problemType
     cdef string dominantOrRecessive
     cdef object problemContext    
 
 
-    def __init__(self,problemType,dominantOrRecessive,problemContext):
+    def __init__(self,dominantOrRecessive,problemContext):
         self.allPedigrees = []
-        self.problemType = problemType
+        if(dominantOrRecessive != "dominant" and dominantOrRecessive != "recessive"):
+            print("dominantOrRecessive needs to be either 'dominant' or 'recessive'!!!")
+            assert 0
+
         self.dominantOrRecessive = dominantOrRecessive
         self.problemContext = problemContext
+        self.initCClass()
+
+    def initCClass(self):
+        allLMN,allG,problemName = self.problemContext()
+        isDominant = (self.dominantOrRecessive == "dominant")
+        emissionMapping = {
+            'shaded':0,
+            'unshaded':1
+        }
+        self.c_EMPedigreeOptimizer = EMPedigreeOptimizer(emissionMapping,allLMN,allG,problemName,isDominant)
 
     def addPedigree(self,filename,problemContext,dominantOrRecessive):
         toAdd = PyPedigree()
         toAdd.initialization(filename,problemContext,dominantOrRecessive)
         self.allPedigrees.append(toAdd)
 
-    cpdef train(self,problemType,printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate):
+    cpdef train(self,printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate):
 
         cdef vector[pedigree_ptr] trainingSet
         cdef pedigree_ptr adding
@@ -423,7 +437,7 @@ cdef class PyEMOptimizer:
             adding = (<PyPedigree>(self.allPedigrees[i])).c_pedigree_ptr
             trainingSet.push_back(adding)
 
-        self.c_EMPedigreeOptimizer.train(trainingSet,problemType,printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate)
+        self.c_EMPedigreeOptimizer.train(trainingSet,printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate)
 
     cpdef predictExpectedProbability(self,filename,printPeople,printWork):
 
@@ -434,7 +448,7 @@ cdef class PyEMOptimizer:
         pedigree.initialization(filename,self.problemContext,self.dominantOrRecessive)
 
         thePedigree = (<PyPedigree>(pedigree)).c_pedigree_ptr
-        prob = self.c_EMPedigreeOptimizer.predictExpectedProbability(thePedigree,self.problemType,printPeople,printWork)
+        prob = self.c_EMPedigreeOptimizer.predictExpectedProbability(thePedigree,printPeople,printWork)
         return prob
 
     cpdef predictMostLikelyProbability(self,filename,printPeople,printWork):
@@ -446,8 +460,11 @@ cdef class PyEMOptimizer:
         pedigree.initialization(filename,self.problemContext,self.dominantOrRecessive)
 
         thePedigree = (<PyPedigree>(pedigree)).c_pedigree_ptr        
-        prob = self.c_EMPedigreeOptimizer.predictMostLikelyProbability(thePedigree,self.problemType,printPeople,printWork)
+        prob = self.c_EMPedigreeOptimizer.predictMostLikelyProbability(thePedigree,printPeople,printWork)
         return prob
+
+    cpdef printInitializer(self,name):
+        self.c_EMPedigreeOptimizer.printInitializer(name)
 
     cpdef printModelParameters(self,name):
         self.c_EMPedigreeOptimizer.printModelParameters(name)

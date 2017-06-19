@@ -108,7 +108,7 @@ double EMPedigreeOptimizer::_getLogAVal(pedigreeClass2* pedigree, int d, int f, 
 // _b -> [pedigree (d)][familyUnit (f)][motherChromosome (i)][fatherChromosome (j)][childNumber (c)][childSexIndex] -> b_ij(c)
 double EMPedigreeOptimizer::_getLogBVal(pedigreeClass2* pedigree, int d, int f, int i, int j, personClass* child, int c) {
     
-    int sexIndex = _getSexIndex(pedigree,child);
+    int sexIndex = _getSexIndex(child);
     pair<int,double> spot = _log_b.at(d).at(f).at(i).at(j).at(c).at(sexIndex);
     int status = spot.first;
     if(status == 0) {
@@ -180,7 +180,7 @@ void EMPedigreeOptimizer::_computeLogAVal(pedigreeClass2* pedigree, int d, int f
         if(mate == q) {
             continue;
         }
-        int mateN = mate->n;
+        int mateN = _getN(mate);
         int newF = _getFamNumb(pedigree,p,mate);
 
         logAddition sum;
@@ -211,7 +211,7 @@ void EMPedigreeOptimizer::_computeLogAVal(pedigreeClass2* pedigree, int d, int f
 // _b -> [pedigree (d)][familyUnit (f)][motherChromosome (i)][fatherChromosome (j)][childNumber (c)][childSexIndex] -> b_ij(c)
 void EMPedigreeOptimizer::_computeLogBVal(pedigreeClass2* pedigree, int d, int f, int i, int j, personClass* child, int c) {
 
-    int sexIndex = _getSexIndex(pedigree,child);
+    int sexIndex = _getSexIndex(child);
 
     if(_log_b.at(d).at(f).at(i).at(j).at(c).at(sexIndex).first == 1 || _log_b.at(d).at(f).at(i).at(j).at(c).at(sexIndex).first == 3) {
         return;
@@ -224,15 +224,15 @@ void EMPedigreeOptimizer::_computeLogBVal(pedigreeClass2* pedigree, int d, int f
     _log_b.at(d).at(f).at(i).at(j).at(c).at(sexIndex).first = 2;
 
     // int shadingIndex = _emissionMapping.at(child->typeOfShading);
-    int childN = child->n;
+    int childN = _getN(child);
     int motherIsP = (int)(child->sex=="female");
 
     logAddition log_val;
 
     for(int k=0; k<childN; ++k) {
 
-        double A_ijk = _getTransitionProb(pedigree,child,i,j,k);
-        double bVal = _getEmissionProb(pedigree,child,k);
+        double A_ijk = _getTransitionProb(child,i,j,k);
+        double bVal = _getEmissionProb(child,k);
 
         double log_cProd = 0.0;
         bool allZeroFlag = false;
@@ -240,7 +240,7 @@ void EMPedigreeOptimizer::_computeLogBVal(pedigreeClass2* pedigree, int d, int f
         for(auto pair_it=child->mateKids.begin(); pair_it!=child->mateKids.end(); ++pair_it) {
 
             personClass* mate = pair_it->first;
-            int mateN = mate->n;
+            int mateN = _getN(mate);
             int newF = _getFamNumb(pedigree,child,mate);
 
             logAddition sum;
@@ -295,7 +295,7 @@ void EMPedigreeOptimizer::_computeLogUVal(pedigreeClass2* pedigree, int d, perso
     if(child->parentA == nullptr) {
 
         double piVal = _getRootProb(pedigree,child,k);
-        double bVal = _getEmissionProb(pedigree,child,k);
+        double bVal = _getEmissionProb(child,k);
         if(piVal < PRECISION || bVal < PRECISION) {
             log_val = -1;
         }
@@ -309,8 +309,8 @@ void EMPedigreeOptimizer::_computeLogUVal(pedigreeClass2* pedigree, int d, perso
         personClass* father;
         _sortMates(child->parentA,child->parentB,mother,father);
 
-        int motherN = mother->n;
-        int fatherN = father->n;
+        int motherN = _getN(mother);
+        int fatherN = _getN(father);
         
         
         int f = _getFamNumb(pedigree,mother,father);
@@ -325,8 +325,8 @@ void EMPedigreeOptimizer::_computeLogUVal(pedigreeClass2* pedigree, int d, perso
             }
             for(int j=0; j<fatherN; ++j) {
 
-                double A_ijk = _getTransitionProb(pedigree,child,i,j,k);
-                double bVal = _getEmissionProb(pedigree,child,k);
+                double A_ijk = _getTransitionProb(child,i,j,k);
+                double bVal = _getEmissionProb(child,k);
                 double log_a_j_qp = _getLogAVal(pedigree,d,f,false,j);
                 if(A_ijk < PRECISION || bVal < PRECISION || log_a_j_qp == UNIQUE_ZERO_ID) {
                     continue;
@@ -472,7 +472,7 @@ void EMPedigreeOptimizer::_log_cUpdate(double& log_PofY) {
         for(auto p_it=pedigree->allPeople.begin(); p_it!=pedigree->allPeople.end(); ++p_it) {
 
             personClass* person = *p_it;
-            int personN = person->n;
+            int personN = _getN(person);
             int pIndex = pedigree->mapToIndexAllPeople.at(person);
 
             logAddition log_total;
@@ -488,7 +488,7 @@ void EMPedigreeOptimizer::_log_cUpdate(double& log_PofY) {
                 for(auto pair_it=person->mateKids.begin(); pair_it!=person->mateKids.end(); ++pair_it) {
 
                     personClass* mate = pair_it->first;
-                    int mateN = mate->n;
+                    int mateN = _getN(mate);
 
                     personClass* mother;
                     personClass* father;
@@ -569,8 +569,8 @@ void EMPedigreeOptimizer::_log_dUpdate(double& log_PofY) {
             vector<personClass*> family = pedigree->families.at(f);
             personClass* mother = family.at(0);
             personClass* father = family.at(1);
-            int motherN = mother->n;
-            int fatherN = father->n;
+            int motherN = _getN(mother);
+            int fatherN = _getN(father);
             int mIndex = pedigree->mapToIndexAllPeople.at(mother);
             int fIndex = pedigree->mapToIndexAllPeople.at(father);
 
@@ -658,14 +658,14 @@ void EMPedigreeOptimizer::_log_eUpdate(double& log_PofY) {
             vector<personClass*> family = pedigree->families.at(f);
             personClass* mother = family.at(0);
             personClass* father = family.at(1);
-            int motherN = mother->n;
-            int fatherN = father->n;
+            int motherN = _getN(mother);
+            int fatherN = _getN(father);
 
             for(int c=0; c<family.size()-2; ++c) {
 
                 personClass* child = family.at(c+2);
-                int childN = child->n;
-                int sexIndex = _getSexIndex(pedigree,child);
+                int childN = _getN(child);
+                int sexIndex = _getSexIndex(child);
                 int motherIsP = (int)(child->sex=="female");
 
                 logAddition log_total;
@@ -699,13 +699,13 @@ void EMPedigreeOptimizer::_log_eUpdate(double& log_PofY) {
                         logAddition log_shouldEqual_b_ij_c;
                         for(int k=0; k<childN; ++k) {
 
-                            double A_ijk = _getTransitionProb(pedigree,child,i,j,k);
-                            double B_k_c = _getEmissionProb(pedigree,child,k);
+                            double A_ijk = _getTransitionProb(child,i,j,k);
+                            double B_k_c = _getEmissionProb(child,k);
                             double log_mProd = 0.0;
                             for(auto pair_it=child->mateKids.begin(); pair_it!=child->mateKids.end(); ++pair_it) {
 
                                 personClass* mate = pair_it->first;
-                                int mateN = mate->n;
+                                int mateN = _getN(mate);
                                 personClass* mother_;
                                 personClass* father_;
                                 _sortMates(child,mate,mother_,father_);

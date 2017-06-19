@@ -9,8 +9,9 @@ import numpy as np
 PRINT = False
 
 
-def generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedAllele,childSex,leftParentSex,rightParentSex,chromoOrAuto):
+def generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedAllele,sexOfChild,leftParentSex,rightParentSex,chromoOrAuto):
 
+    # each g is indexed by [child][left][right]
 
     # make sure that we have valid alleles
     for x in inputString:
@@ -47,7 +48,7 @@ def generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedA
 
     left = [inputString[x] for x in sexMappings[leftParentSex]]
     right = [inputString[x] for x in sexMappings[rightParentSex]]
-    child = [inputString[x] for x in sexMappings[childSex]]
+    child = [inputString[x] for x in sexMappings[sexOfChild]]
 
    
     # get all MN for the sexes
@@ -73,7 +74,7 @@ def generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedA
     for L in range(allLMN[rightParentSex][0]):
         assert len([x for x in [_x for _x in right[L] if _x != 'y'] if x == affectedAllele]) ==  len([_x for _x in right[L] if _x != 'y'])
     
-    for L in range(allLMN[childSex][0]):
+    for L in range(allLMN[sexOfChild][0]):
         assert len([x for x in [_x for _x in child[L] if _x != 'y'] if x == affectedAllele]) ==  len([_x for _x in child[L] if _x != 'y'])
 
 
@@ -111,9 +112,9 @@ def generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedA
 
                 allCombos = [l[0]+r[0],l[0]+r[1],l[1]+r[0],l[1]+r[1]]
                 if(chromoOrAuto == 'chromosome'):
-                    if(childSex == 'male'):
+                    if(sexOfChild == 'male'):
                         total = len([x for x in allCombos if (x not in illegal and 'y' in x)])
-                    elif(childSex == 'female'):
+                    elif(sexOfChild == 'female'):
                         total = len([x for x in allCombos if (x not in illegal and 'y' not in x)])
                     else:
                         total = len([x for x in allCombos if x not in illegal])
@@ -170,11 +171,11 @@ def generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedA
 def allGHelper(inputString,validAlleles,orderMatters,illegal,affectedAllele,autoOrChromo):
     allG = {}
     for x in itertools.product(['unknown','male','female'],repeat=3):
-        leftParentSex,rightParentSex,childSex = x
+        leftParentSex,rightParentSex,sexOfChild = x
         if((leftParentSex == 'male' and rightParentSex == 'male') or (leftParentSex == 'female' and rightParentSex == 'female') or (leftParentSex == 'unknown' and rightParentSex != 'unknown') or (leftParentSex != 'unknown' and rightParentSex == 'unknown')):
             continue
-        key = leftParentSex+','+rightParentSex+'->'+childSex
-        allG[key],allLMN = generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedAllele,childSex,leftParentSex,rightParentSex,autoOrChromo)
+        key = leftParentSex+','+rightParentSex+'->'+sexOfChild
+        allG[key],allLMN = generatePunnetSquare(inputString,validAlleles,orderMatters,illegal,affectedAllele,sexOfChild,leftParentSex,rightParentSex,autoOrChromo)
 
     return allG,allLMN
 

@@ -21,6 +21,346 @@ using namespace std;
 
 /* ------------------------------------------------------------------------------------------- */
 
+string EMPedigreeOptimizer::_getTransitionProbString() {
+    string transProbString = "vector<vector<vector<vector<double>>>>({";
+    for(int i=0; i<_transitionProbs.size(); ++i) {
+        transProbString += "\n\t{";
+        for(int j=0; j<_transitionProbs.at(i).size(); ++j) {
+            transProbString += "\n\t\t{";
+            for(int k=0; k<_transitionProbs.at(i).at(j).size(); ++k) {
+                transProbString += "\n\t\t\t{";
+                for(int l=0; l<_transitionProbs.at(i).at(j).at(k).size(); ++l) {
+
+                    double val = _transitionProbs.at(i).at(j).at(k).at(l);
+                    if(l < _transitionProbs.at(i).at(j).at(k).size()-1) {
+                        transProbString += to_string(val)+",";
+                    }
+                    else {
+                        transProbString += to_string(val);
+                    }
+                }
+                if(k < _transitionProbs.at(i).at(j).size()-1) {
+                    transProbString += "\n\t\t\t},";
+                }
+                else {
+                    transProbString += "\n\t\t\t}";
+                }
+            }
+            if(j < _transitionProbs.at(i).size()-1) {
+                transProbString += "\n\t\t},";
+            }
+            else {
+                transProbString += "\n\t\t}";
+            }
+        }
+        if(i < _transitionProbs.size()-1) {
+            transProbString += "\n\t},";
+        }
+        else {
+            transProbString += "\n\t}";
+        }
+    }
+    transProbString += "\n})";
+    return transProbString;
+}
+
+string EMPedigreeOptimizer::_getEmissionProbString() {
+
+    string emissProbString = "vector<vector<vector<double>>>({";
+    for(int i=0; i<_emissionProbs.size(); ++i) {
+        emissProbString += "\n\t{";
+        for(int j=0; j<_emissionProbs.at(i).size(); ++j) {
+            emissProbString += "\n\t\t{";
+            for(int k=0; k<_emissionProbs.at(i).at(j).size(); ++k) {
+                
+                double val = _emissionProbs.at(i).at(j).at(k);
+                if(k < _emissionProbs.at(i).at(j).size()-1) {
+                    emissProbString += to_string(val)+",";
+                }
+                else {
+                    emissProbString += to_string(val);
+                }                    
+            }
+            if(j < _emissionProbs.at(i).size()-1) {
+                emissProbString += "\n\t\t},";
+            }
+            else {
+                emissProbString += "\n\t\t}";
+            }
+        }
+        if(i < _emissionProbs.size()-1) {
+            emissProbString += "\n\t},";
+        }
+        else {
+            emissProbString += "\n\t}";
+        }
+    }
+    emissProbString += "\n})";
+    return emissProbString;
+}
+
+string EMPedigreeOptimizer::_getEmissionMappingString() {
+    string ans = "unordered_map<string,int>({";
+    int counter = 0;
+    for(auto keyVal: _emissionMapping) {
+        string sex = keyVal.first;
+        int index = keyVal.second;
+        ans += "{\""+sex+"\","+to_string(index)+"}";
+        if(counter < _emissionMapping.size()-1) {
+            ans += ",";
+        }
+        ++counter;
+    }
+    ans += "})";
+    return ans;
+}
+
+string EMPedigreeOptimizer::_getAllLMNString() {
+
+    string ans = "unordered_map<string,vector<int>>({";
+    int counter = 0;
+    for(auto keyVal: _allLMN) {
+        string sex = keyVal.first;
+        vector<int> lmn = keyVal.second;
+        ans += "{\""+sex+"\",vector<int>({";
+
+        for(int i=0; i<lmn.size(); ++i) {
+            int val = lmn.at(i);
+            ans += to_string(val);
+            if(i < lmn.size()-1) {
+                ans += ",";
+            }
+        }
+        ans += "})}";
+
+        if(counter < _allLMN.size()-1) {
+            ans += ",";
+        }
+        ++counter;
+    }
+    ans += "})";
+    return ans;
+}
+
+string EMPedigreeOptimizer::_getAllGString() {
+    string ans = "unordered_map<string,vector<vector<vector<double>>>>({";
+    int counter = 0;
+    for(auto keyVal: _allG) {
+        string sex = keyVal.first;
+        vector<vector<vector<double>>> transitions = keyVal.second;
+        ans += "{\""+sex+"\",vector<vector<vector<double>>>({";
+
+        for(int i=0; i<transitions.size(); ++i) {
+            ans += "{";
+            for(int j=0; j<transitions.at(i).size(); ++j) {
+                ans += "{";
+                for(int k=0; k<transitions.at(i).at(j).size(); ++k) {
+
+                    double val = transitions.at(i).at(j).at(k);
+                    ans += to_string(val);
+
+                    if(k < transitions.at(i).at(j).size()-1) {
+                        ans += ",";
+                    }
+                }
+                ans += "}";
+                if(j < transitions.at(i).size()-1) {
+                    ans += ",";
+                }
+            }
+
+            ans += "}";
+            if(i < transitions.size()-1) {
+                ans += ",";
+            }
+        }
+        ans += "})}";
+
+        if(counter < _allG.size()-1) {
+            ans += ",";
+        }
+        ++counter;
+    }
+    ans += "})";
+    return ans;
+}
+
+
+void EMPedigreeOptimizer::_updateMaleLMN() {
+    vector<int> lmn = _allLMN.at("male");
+    _maleL = lmn.at(0);
+    _maleM = lmn.at(1);
+    _maleN = lmn.at(2);
+}
+void EMPedigreeOptimizer::_updateFemaleLMN() {
+    vector<int> lmn = _allLMN.at("female");
+    _femaleL = lmn.at(0);
+    _femaleM = lmn.at(1);
+    _femaleN = lmn.at(2);
+}
+void EMPedigreeOptimizer::_updateUnknownLMN() {
+    vector<int> lmn = _allLMN.at("unknown");
+    _unknownL = lmn.at(0);
+    _unknownM = lmn.at(1);
+    _unknownN = lmn.at(2);
+}
+
+int EMPedigreeOptimizer::_getL(personClass* person) {
+    if(person->sex == "male") {
+        if(_maleL == -1) {
+            _updateMaleLMN();
+        }
+        return _maleL;
+    }
+    else if(person->sex == "female") {
+        if(_femaleL == -1) {
+            _updateFemaleLMN();
+        }
+        return _femaleL;
+    }
+    else if(person->sex == "unknown") {
+        if(_unknownL == -1) {
+            _updateUnknownLMN();
+        }
+        return _unknownL;
+    }
+    else {
+        cout << "Invalid sex" << endl;
+        raise(SIGABRT);
+    }
+    return -1;
+}
+
+int EMPedigreeOptimizer::_getM(personClass* person) {
+    if(person->sex == "male") {
+        if(_maleM == -1) {
+            _updateMaleLMN();
+        }
+        return _maleM;
+    }
+    else if(person->sex == "female") {
+        if(_femaleM == -1) {
+            _updateFemaleLMN();
+        }
+        return _femaleM;
+    }
+    else if(person->sex == "unknown") {
+        if(_unknownM == -1) {
+            _updateUnknownLMN();
+        }
+        return _unknownM;
+    }
+    else {
+        cout << "Invalid sex" << endl;
+        raise(SIGABRT);
+    }
+    return -1;
+}
+
+int EMPedigreeOptimizer::_getN(personClass* person) {
+    if(person->sex == "male") {
+        if(_maleN == -1) {
+            _updateMaleLMN();
+        }
+        return _maleN;
+    }
+    else if(person->sex == "female") {
+        if(_femaleN == -1) {
+            _updateFemaleLMN();
+        }
+        return _femaleN;
+    }
+    else if(person->sex == "unknown") {
+        if(_unknownN == -1) {
+            _updateUnknownLMN();
+        }
+        return _unknownN;
+    }
+    else {
+        cout << "Invalid sex" << endl;
+        raise(SIGABRT);
+    }
+    return -1;
+}
+
+int EMPedigreeOptimizer::_getL(string sex) {
+    if(sex == "male") {
+        if(_maleL == -1) {
+            _updateMaleLMN();
+        }
+        return _maleL;
+    }
+    else if(sex == "female") {
+        if(_femaleL == -1) {
+            _updateFemaleLMN();
+        }
+        return _femaleL;
+    }
+    else if(sex == "unknown") {
+        if(_unknownL == -1) {
+            _updateUnknownLMN();
+        }
+        return _unknownL;
+    }
+    else {
+        cout << "Invalid sex" << endl;
+        raise(SIGABRT);
+    }
+    return -1;
+}
+
+int EMPedigreeOptimizer::_getM(string sex) {
+    if(sex == "male") {
+        if(_maleM == -1) {
+            _updateMaleLMN();
+        }
+        return _maleM;
+    }
+    else if(sex == "female") {
+        if(_femaleM == -1) {
+            _updateFemaleLMN();
+        }
+        return _femaleM;
+    }
+    else if(sex == "unknown") {
+        if(_unknownM == -1) {
+            _updateUnknownLMN();
+        }
+        return _unknownM;
+    }
+    else {
+        cout << "Invalid sex" << endl;
+        raise(SIGABRT);
+    }
+    return -1;
+}
+
+int EMPedigreeOptimizer::_getN(string sex) {
+    if(sex == "male") {
+        if(_maleN == -1) {
+            _updateMaleLMN();
+        }
+        return _maleN;
+    }
+    else if(sex == "female") {
+        if(_femaleN == -1) {
+            _updateFemaleLMN();
+        }
+        return _femaleN;
+    }
+    else if(sex == "unknown") {
+        if(_unknownN == -1) {
+            _updateUnknownLMN();
+        }
+        return _unknownN;
+    }
+    else {
+        cout << "Invalid sex" << endl;
+        raise(SIGABRT);
+    }
+    return -1;
+}
+
 double EMPedigreeOptimizer::_safeAdd(double lhs, double rhs) {
 
     if(lhs == UNIQUE_ZERO_ID || rhs == UNIQUE_ZERO_ID) {
@@ -151,8 +491,8 @@ bool EMPedigreeOptimizer::_logCompare(double log_a, double log_b) {
     return diff < -LOG_PRECISION;
 }
 
-double EMPedigreeOptimizer::_getEmissionProb(pedigreeClass2* pedigree, personClass* person, int state) {
-    int sexIndex = _getSexIndex(pedigree,person);
+double EMPedigreeOptimizer::_getEmissionProb(personClass* person, int state) {
+    int sexIndex = _getSexIndex(person);
     int shadingIndex = _emissionMapping.at(person->typeOfShading);
     double emissionProb = _emissionProbs.at(sexIndex).at(state).at(shadingIndex);
     return emissionProb;
@@ -171,8 +511,8 @@ double EMPedigreeOptimizer::_getRootProb(pedigreeClass2* pedigree, personClass* 
     return rootProb;
 }
 
-double EMPedigreeOptimizer::_getTransitionProb(pedigreeClass2* pedigree, personClass* person, int motherState, int fatherState, int state) {
-    int sexIndex = _getSexIndex(pedigree,person);
+double EMPedigreeOptimizer::_getTransitionProb(personClass* person, int motherState, int fatherState, int state) {
+    int sexIndex = _getSexIndex(person);
     double transProb = _transitionProbs.at(sexIndex).at(motherState).at(fatherState).at(state);
     return transProb;
 }
@@ -206,24 +546,8 @@ double EMPedigreeOptimizer::_safeReturn(logAddition sum) {
     return sum.log_ans;
 }
 
-int EMPedigreeOptimizer::_getSexIndex(pedigreeClass2* pedigree, personClass* person) {
-    int sexIndex = 0;
-    if(_sexDependent) {
-        if(person->sex == "male") {
-            sexIndex = 0;
-        }
-        else if(person->sex == "female") {
-            sexIndex = 1;
-        }
-        else if(person->sex == "unknown") {
-            sexIndex = 2;
-        }
-        else {
-            cout << "Invalid sex" << endl;
-            raise(SIGABRT);
-        }
-    }
-    return sexIndex;
+int EMPedigreeOptimizer::_getSexIndex(personClass* person) {
+    return _sexIndexMapping.at(person->sex);
 }
 
 void EMPedigreeOptimizer::_sortMates(personClass* mateA, personClass* mateB, personClass*& femaleMate, personClass*& maleMate) {

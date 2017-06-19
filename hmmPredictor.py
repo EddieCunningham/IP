@@ -16,21 +16,24 @@ class PedigreeClassifier:
         self.autosomeContext = autosomeProblem
         self.chromosomeContext = chromosomeProblem
 
-        self.ADOpt = PyEMOptimizer('AD',self.dominantString,self.autosomeContext)
-        self.AROpt = PyEMOptimizer('AR',self.recessiveString,self.autosomeContext)
-        self.XLROpt = PyEMOptimizer('XLR',self.recessiveString,self.chromosomeContext)
+        self.ADOpt = PyEMOptimizer(self.dominantString,self.autosomeContext)
+        self.AROpt = PyEMOptimizer(self.recessiveString,self.autosomeContext)
+        self.XLROpt = PyEMOptimizer(self.recessiveString,self.chromosomeContext)
 
         self.attempts = 1
 
-    def printParameters(self):
+    def printForDebug(self):
 
         adName = "empoAD"
+        self.ADOpt.printInitializer(adName)
         self.ADOpt.printModelParameters(adName)
 
         arName = "empoAR"
+        self.AROpt.printInitializer(arName)
         self.AROpt.printModelParameters(arName)
 
         xlrName = "empoXLR"
+        self.XLROpt.printInitializer(xlrName)
         self.XLROpt.printModelParameters(xlrName)
 
     def train(self,ADfilenames,ARfilenames,XLRfilenames,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,printPeople,printWork):
@@ -45,9 +48,9 @@ class PedigreeClassifier:
         self.ARfilenames = ARfilenames
         self.XLRfilenames = XLRfilenames
 
-        self.ADOpt.train('AD',printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate)
-        self.AROpt.train('AR',printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate)
-        self.XLROpt.train('XLR',printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate)
+        self.ADOpt.train(printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate)
+        self.AROpt.train(printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate)
+        self.XLROpt.train(printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate)
 
 
     def predictExpectedProbability(self,opt,f,printPeople,printWork):
@@ -297,9 +300,13 @@ def runOnData(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeDataOLDBUTWORKS
     XLRTest = XLRData
 
     classifier = PedigreeClassifier()
+
+
+    # classifier.train([],[],['/Users/Eddie/kec-bot/app/pedigreeDataOLDBUTWORKS/test_AD.json','/Users/Eddie/kec-bot/app/pedigreeDataOLDBUTWORKS/test_AR.json','/Users/Eddie/kec-bot/app/pedigreeDataOLDBUTWORKS/test_XL.json'],rootProbUpdate,emissionProbUpdate,transitionProbUpdate,True,printWork)
+    # assert 0
+
+    # classifier.printForDebug()
     classifier.train(ADTrain,ARTrain,XLRTrain,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,printPeople,printWork)
-    classifier.printParameters()
-    assert 0
 
     print('\n==========================================\nAD TESTS\n==========================================\n')
     resultMostLikely,resultExpected = classifier.testAll(ADTest,printPeople,printWork)

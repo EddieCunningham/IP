@@ -11,7 +11,7 @@ void EMPedigreeOptimizer::_log_updateRootProbs2() {
         for(auto r_it=(*ped_it)->roots.begin(); r_it!=(*ped_it)->roots.end(); ++r_it) {
             
             personClass* root = *r_it;
-            int rootN = root->n;
+            int rootN = _getN(root);
             int rIndex = (*ped_it)->mapToIndexAllPeople.at(root);
             
             double totalSum = 0.0;
@@ -52,110 +52,7 @@ void EMPedigreeOptimizer::_log_updateRootProbs2() {
     }
 }
 
-// void EMPedigreeOptimizer::_log_updateTransitionProbs2() {
-    
-//     vector<int> sexToIterate;
-//     if(_sexDependent) {
-//         sexToIterate = vector<int>({_femaleN,_maleN,_unknownN});
-//     }
-//     else {
-//         sexToIterate = vector<int>({_femaleN});
-//     }
-    
-    
-//     for(int i=0; i<_femaleN; ++i) {
-//         for(int j=0; j<_maleN; ++j) {
-            
-
-//             vector<vector<logAddition>> vals(sexToIterate.size());
-//             for(int s=0; s<vals.size(); ++s) {
-//                 vals.at(s) = vector<logAddition>(_transitionProbs.at(s).at(i).at(j).size());
-//             }
-
-//             logAddition log_denominator;
-            
-//             int d = 0;
-//             for(auto ped_it=_trainingSet.begin(); ped_it!=_trainingSet.end(); ++ped_it) {
-                
-//                 for(int f=0; f<(*ped_it)->families.size(); ++f) {
-                    
-//                     vector<personClass*> currentFam = (*ped_it)->families.at(f);
-                    
-//                     for(int c=0; c<currentFam.size()-2; ++c) {
-                        
-//                         double log_delta_ij_f = _log_d.at(d).at(f).at(i).at(j);
-//                         if(log_delta_ij_f != UNIQUE_ZERO_ID) {
-//                             log_denominator.addPositiveLogPoint(log_delta_ij_f);
-//                         }
-                        
-//                         personClass* child = currentFam.at(c+2);
-//                         int childN = child->n;
-//                         int sexOfChild = _getSexIndex(*ped_it,child);
-                        
-//                         for(int k=0; k<childN; ++k) {
-//                             double log_zeta_ijk_f = _log_e.at(d).at(f).at(i).at(j).at(c).at(sexOfChild).at(k);
-//                             if(log_zeta_ijk_f != UNIQUE_ZERO_ID) {
-//                                 vals.at(sexOfChild).at(k).addPositiveLogPoint(log_zeta_ijk_f);
-//                             }
-//                         }
-//                     }
-//                 }
-//                 ++d;
-//             }
-            
-//             double total = 0.0;
-//             int count = 0;
-//             for(int s=0; s<_transitionProbs.size(); ++s) {
-//                 for(int k=0; k<_transitionProbs.at(s).at(i).at(j).size(); ++k) {
-//                     ++count;
-//                     double expVal;
-//                     if(vals.at(s).at(k).needToInitialize) {
-//                         expVal = 0.0;
-//                     }
-//                     else {
-//                         if(log_denominator.needToInitialize) {
-//                             cout << "Failed at line: " << __LINE__ << endl;
-//                             cout << "Dividing by zero!" << endl;
-//                             raise(SIGABRT);
-//                         }
-//                         double val = vals.at(s).at(k).log_ans - log_denominator.log_ans;
-//                         expVal = exp(val);
-//                     }
-//                     _transitionProbs.at(s).at(i).at(j).at(k) = expVal;
-//                     total += expVal;
-//                 }
-//             }
-//             if(abs(total-0.0) < PRECISION) {
-//                 // then we had no examples of this and should set uniform probs
-//                 total = 0.0;
-//                 for(int s=0; s<_transitionProbs.size(); ++s) {
-//                     for(int k=0; k<_transitionProbs.at(s).at(i).at(j).size(); ++k) {
-//                         double newVal = 1.0/(double)count;
-//                         _transitionProbs.at(s).at(i).at(j).at(k) = newVal;
-//                         total += newVal;
-//                     }
-//                 }
-//             }
-//             if(abs(total-1.0) > pow(10,-4)) {
-
-//                cout << "Failed at line: " << __LINE__ << endl;
-//                cout << "Total was: " << total << endl;
-//                raise(SIGABRT);
-//             }
-//         }
-//     }
-// }
-
-
 void EMPedigreeOptimizer::_log_updateTransitionProbs2() {
-    
-    vector<int> sexToIterate;
-    if(_sexDependent) {
-        sexToIterate = vector<int>({_femaleN,_maleN,_unknownN});
-    }
-    else {
-        sexToIterate = vector<int>({_femaleN});
-    }
 
     for(int s=0; s<_transitionProbs.size(); ++s) {
         for(int i=0; i<_femaleN; ++i) {
@@ -192,7 +89,7 @@ void EMPedigreeOptimizer::_log_updateTransitionProbs2() {
                             for(int c=0; c<currentFam.size()-2; ++c) {
                                 
                                 personClass* child = currentFam.at(c+2);
-                                int sexOfChild = _getSexIndex(*ped_it,child);
+                                int sexOfChild = _getSexIndex(child);
 
                                 if(sexOfChild != s) {
                                     continue;
@@ -240,18 +137,11 @@ void EMPedigreeOptimizer::_log_updateTransitionProbs2() {
 
 
 void EMPedigreeOptimizer::_log_updateEmissionProbs2() {
-    
-    vector<int> sexToIterate;
-    if(_sexDependent) {
-        sexToIterate = vector<int>({_femaleN,_maleN,_unknownN});
-    }
-    else {
-        sexToIterate = vector<int>({_femaleN});
-    }
-    
-    for(int sex=0; sex<sexToIterate.size(); ++sex) {
+
+    for(int sex=0; sex<_nSexIndices; ++sex) {
         
-        int sexN = sexToIterate.at(sex);
+        string sexString = _sexOrder.at(sex);
+        int sexN = _getN(sexString);
         
         for(int i=0; i<sexN; ++i) {
             
@@ -269,7 +159,7 @@ void EMPedigreeOptimizer::_log_updateEmissionProbs2() {
                         
                         personClass* current = *p_it;
                         int pIndex = (*ped_it)->mapToIndexAllPeople.at(current);
-                        int sexInner = _getSexIndex(*ped_it,current);
+                        int sexInner = _getSexIndex(current);
                         int shadingIndex = _emissionMapping.at(current->typeOfShading);
                         
                         if(sex != sexInner) {

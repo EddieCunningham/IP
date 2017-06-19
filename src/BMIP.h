@@ -16,14 +16,32 @@ using namespace std;
 
 class EMPedigreeOptimizer {
 
+    string _problemName;
+    unordered_map<string,vector<int>> _allLMN;
+    unordered_map<string,vector<vector<vector<double>>>> _allG;
+
     int _nTabs = 0;
 
     bool _firstUpdate = false;
 
-    bool _sexDependent;
-    int _femaleN;
-    int _maleN;
-    int _unknownN;
+    bool _isDominant;
+    int _nSexIndices = -1;
+    unordered_map<string,int> _sexIndexMapping;
+
+    vector<string> _sexOrder = vector<string>({"female","male","unknown"});
+
+    int _femaleL = -1;
+    int _femaleM = -1;
+    int _femaleN = -1;
+
+    int _maleL = -1;
+    int _maleM = -1;
+    int _maleN = -1;
+
+    int _unknownL = -1;
+    int _unknownM = -1;
+    int _unknownN = -1;
+
     vector<pedigreeClass2*> _trainingSet;
 
     /* =========================================================================================== */
@@ -47,26 +65,40 @@ class EMPedigreeOptimizer {
     vector<vector<vector<double>>> _rootProbs;
     vector<vector<vector<vector<double>>>> _transitionProbs;
     vector<vector<vector<double>>> _emissionProbs;
+
+
     unordered_map<string,int> _emissionMapping;
+
+    double _shadedProb = 0.99;
     
     /* =========================================================================================== */
 
     /* fuck this shit tho */
+    // this literally just adds noise to _transitionProbs
     void _transitionProbHack();
 
     /* implemented in helperFunctions.cpp */
+    void _updateMaleLMN();
+    void _updateFemaleLMN();
+    void _updateUnknownLMN();
+    int _getL(string sex);
+    int _getM(string sex);
+    int _getN(string sex);
+    int _getL(personClass* person);
+    int _getM(personClass* person);
+    int _getN(personClass* person);
     double _safeAdd(double lhs, double rhs);
     void _safeAdd(logAddition &lhs, double rhs);
     double _safeExp(double log_val);
     bool _logCompare(double log_a, double log_b);
-    double _getEmissionProb(pedigreeClass2* pedigree, personClass* person, int state);
+    double _getEmissionProb(personClass* person, int state);
     double _getRootProb(pedigreeClass2* pedigree, personClass* person, int state);
-    double _getTransitionProb(pedigreeClass2* pedigree, personClass* person, int motherState, int fatherState, int state);
+    double _getTransitionProb(personClass* person, int motherState, int fatherState, int state);
     vector<personClass*>& _getFamily(pedigreeClass2* pedigree, personClass* parentA, personClass* parentB);
     personClass* _getMother(personClass* person);
     personClass* _getFather(personClass* person);
     double _safeReturn(logAddition sum);
-    int _getSexIndex(pedigreeClass2* pedigree, personClass* person);
+    int _getSexIndex(personClass* person);
     void _sortMates(personClass* mateA, personClass* mateB, personClass*& femaleMate, personClass*& maleMate);
     int _getFamNumb(pedigreeClass2* pedigree, personClass* mateA, personClass* mateB);
     void _resetDataStructures();
@@ -94,14 +126,19 @@ class EMPedigreeOptimizer {
     void _log_mStep2(bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate);
 
     /* implemented in BMIPLog.cpp */
-    void _log_initialize(const vector<pedigreeClass2*> & trainingSet_, string problemType, bool printPeople, bool initializeRoots, bool initializeEmission, bool initializeTransition);
+    void _log_initialize(const vector<pedigreeClass2*> & trainingSet_, bool printPeople, bool initializeRoots, bool initializeEmission, bool initializeTransition);
     void _log_EMStep2(bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate);
-    void _train(const vector<pedigreeClass2*> & trainingSet, string problemType, bool printPeople, bool printWork, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate, bool initializeRoots, bool initializeEmission, bool initializeTransition);
-    void _trainRoots(const vector<pedigreeClass2*> & testSet, string problemType, bool printPeople, bool printWork);
+    void _train(const vector<pedigreeClass2*> & trainingSet, bool printPeople, bool printWork, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate, bool initializeRoots, bool initializeEmission, bool initializeTransition);
+    void _trainRoots(const vector<pedigreeClass2*> & testSet, bool printPeople, bool printWork);
     double _calcProb();
     void _viterbiUpdate(pedigreeClass2* pedigree);
-    void _calculateViterbiStates(pedigreeClass2* pedigree, string problemType, bool printPeople, bool printWork);
+    void _calculateViterbiStates(pedigreeClass2* pedigree, bool printPeople, bool printWork);
 
+    string _getTransitionProbString();
+    string _getEmissionProbString();
+    string _getEmissionMappingString();
+    string _getAllLMNString();
+    string _getAllGString();
 
 public:
 
@@ -113,101 +150,81 @@ public:
 
     void printModelParameters(string name) {
 
-        string transProbString = "vector<vector<vector<vector<double>>>>({";
-        for(int i=0; i<_transitionProbs.size(); ++i) {
-            transProbString += "\n\t{";
-            for(int j=0; j<_transitionProbs.at(i).size(); ++j) {
-                transProbString += "\n\t\t{";
-                for(int k=0; k<_transitionProbs.at(i).at(j).size(); ++k) {
-                    transProbString += "\n\t\t\t{";
-                    for(int l=0; l<_transitionProbs.at(i).at(j).at(k).size(); ++l) {
-
-                        double val = _transitionProbs.at(i).at(j).at(k).at(l);
-                        if(l < _transitionProbs.at(i).at(j).at(k).size()-1) {
-                            transProbString += to_string(val)+",";
-                        }
-                        else {
-                            transProbString += to_string(val);
-                        }
-                    }
-                    if(k < _transitionProbs.at(i).at(j).size()-1) {
-                        transProbString += "\n\t\t\t},";
-                    }
-                    else {
-                        transProbString += "\n\t\t\t}";
-                    }
-                }
-                if(j < _transitionProbs.at(i).size()-1) {
-                    transProbString += "\n\t\t},";
-                }
-                else {
-                    transProbString += "\n\t\t}";
-                }
-            }
-            if(i < _transitionProbs.size()-1) {
-                transProbString += "\n\t},";
-            }
-            else {
-                transProbString += "\n\t}";
-            }
+        if(!_firstUpdate) {
+            bool printPeople = false;
+            bool initializeRoots = false;
+            bool initializeEmission = true;
+            bool initializeTransition = true;
+            _log_initialize(vector<pedigreeClass2*>({}),printPeople,initializeRoots,initializeEmission,initializeTransition);
         }
-        transProbString += "\n})";
 
-
-        string emissProbString = "vector<vector<vector<double>>>({";
-        for(int i=0; i<_emissionProbs.size(); ++i) {
-            emissProbString += "\n\t{";
-            for(int j=0; j<_emissionProbs.at(i).size(); ++j) {
-                emissProbString += "\n\t\t{";
-                for(int k=0; k<_emissionProbs.at(i).at(j).size(); ++k) {
-                    
-                    double val = _emissionProbs.at(i).at(j).at(k);
-                    if(k < _emissionProbs.at(i).at(j).size()-1) {
-                        emissProbString += to_string(val)+",";
-                    }
-                    else {
-                        emissProbString += to_string(val);
-                    }                    
-                }
-                if(j < _emissionProbs.at(i).size()-1) {
-                    emissProbString += "\n\t\t},";
-                }
-                else {
-                    emissProbString += "\n\t\t}";
-                }
-            }
-            if(i < _emissionProbs.size()-1) {
-                emissProbString += "\n\t},";
-            }
-            else {
-                emissProbString += "\n\t}";
-            }
-        }
-        emissProbString += "\n})";
-
+        string transProbString = _getTransitionProbString();
+        string emissProbString = _getEmissionProbString();
         string toPrint = name+".setModelParameters("+transProbString+","+emissProbString+");";
         cout << toPrint << endl;
     }
 
 
-    EMPedigreeOptimizer():
-    _emissionMapping({{"shaded",0},{"unshaded",1}}) {
-        _trainingSet = vector<pedigreeClass2*>();
+    void printInitializer(string name) {
+
+        string emissionMappingString = _getEmissionMappingString();
+        string allLMNString = _getAllLMNString();
+        string allGString = _getAllGString();
+        string problemNameString = _problemName;
+        string isDominantString = _isDominant ? "true" : "false";
+
+
+        string toPrint = "EMPedigreeOptimizer "+name+"(";
+        toPrint += emissionMappingString + ",";
+        toPrint += allLMNString + ",";
+        toPrint += allGString + ",";
+        toPrint += "\""+problemNameString+"\"" + ",";
+        toPrint += "\""+isDominantString+"\"";
+        toPrint += ");\n";
+
+        cout << toPrint;
     }
 
-    // EMPedigreeOptimizer():
-    // _emissionMapping({{"shaded",0},{"possiblyShaded",1},{"unshaded",2},{"carrier",3}}) {
-    //     _trainingSet = vector<pedigreeClass2*>();
-    // }
+    EMPedigreeOptimizer(){}
+
+    EMPedigreeOptimizer(const unordered_map<string,int>& emissionMapping, const unordered_map<string,vector<int>>& allLMN, const unordered_map<string,vector<vector<vector<double>>>>& allG, string problemName, bool isDominant):
+    _emissionMapping(emissionMapping),
+    _allLMN(allLMN),
+    _allG(allG),
+    _isDominant(isDominant) {
+        _trainingSet = vector<pedigreeClass2*>();
+        if(problemName == "autosome") {
+            _nSexIndices = 1;
+            _sexIndexMapping = unordered_map<string,int>({
+                {"female",0},
+                {"male",0},
+                {"unknown",0}
+            });
+        }
+        else if(problemName == "chromosome") {
+            _nSexIndices = 3;
+            _sexIndexMapping = unordered_map<string,int>({
+                {"female",0},
+                {"male",1},
+                {"unknown",2}
+            });
+        }
+        else {
+            cout << "Failed at line: " << __LINE__ << endl;
+            cout << "Invalid problem name! " << endl;
+            raise(SIGABRT);
+        }
+        _problemName = problemName;
+    }
 
     
-    void train(const vector<pedigreeClass2*> & trainingSet, string problemType, bool printPeople, bool printWork, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate) {
+    void train(const vector<pedigreeClass2*> & trainingSet, bool printPeople, bool printWork, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate) {
 
         bool initializeRoots = true;
         bool initializeEmission = true;
         bool initializeTransition = true;
 
-        _train(trainingSet,problemType,printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,initializeRoots,initializeEmission,initializeTransition);
+        _train(trainingSet,printPeople,printWork,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,initializeRoots,initializeEmission,initializeTransition);
         
         cout << "DONE TRAINING!" << endl;
 
@@ -239,15 +256,15 @@ public:
         }
     }
 
-    double predictExpectedProbability(pedigreeClass2* pedigree, string problemType, bool printPeople, bool printWork) {
+    double predictExpectedProbability(pedigreeClass2* pedigree, bool printPeople, bool printWork) {
 
-        _trainRoots(vector<pedigreeClass2*>({pedigree}),problemType,printPeople,printWork);
+        _trainRoots(vector<pedigreeClass2*>({pedigree}),printPeople,printWork);
         return _calcProb();
     }
 
-    double predictMostLikelyProbability(pedigreeClass2* pedigree, string problemType, bool printPeople, bool printWork) {
+    double predictMostLikelyProbability(pedigreeClass2* pedigree, bool printPeople, bool printWork) {
 
-        _calculateViterbiStates(pedigree,problemType,printPeople,printWork);
+        _calculateViterbiStates(pedigree,printPeople,printWork);
         return pedigree->mostLikelyStateProb;
     }
 
