@@ -22,6 +22,16 @@ class PedigreeClassifier:
 
         self.attempts = 1
 
+    def printModelParams(self):
+        adName = "empoAD"
+        self.ADOpt.printModelParameters(adName)
+
+        arName = "empoAR"
+        self.AROpt.printModelParameters(arName)
+
+        xlrName = "empoXLR"
+        self.XLROpt.printModelParameters(xlrName)
+
     def printForDebug(self):
 
         adName = "empoAD"
@@ -114,6 +124,7 @@ class PedigreeClassifier:
     def testAll(self,filenames,printPeople,printWork):
         predictionsMostLikely = []
         predictionsExpected = []
+        allPredictions = []
         for f in filenames:
 
             print('\n\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Now working on '+str(f)+' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
@@ -145,10 +156,11 @@ class PedigreeClassifier:
 
             predictionsMostLikely.append(np.argmax([ADMostLikelyProb,ARMostLikelyProb,XLRMostLikelyProb]))
             predictionsExpected.append(np.argmax([ADExpectedProb,ARExpectedProb,XLRExpectedProb]))
+            allPredictions.append([[ADMostLikelyProb,ADExpectedProb],[ARMostLikelyProb,ARExpectedProb],[XLRMostLikelyProb,XLRExpectedProb]])
 
         print('Most likely predictions: '+str(predictionsMostLikely))
         print('Expected predictions: '+str(predictionsExpected))
-        return [predictionsMostLikely,predictionsExpected]
+        return [predictionsMostLikely,predictionsExpected,allPredictions]
 
 
 def hasCycle(pedigree):
@@ -302,29 +314,32 @@ def runOnData(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeDataOLDBUTWORKS
     classifier = PedigreeClassifier()
 
 
-    # classifier.train([],[],['/Users/Eddie/kec-bot/app/pedigreeDataOLDBUTWORKS/test_AD.json','/Users/Eddie/kec-bot/app/pedigreeDataOLDBUTWORKS/test_AR.json','/Users/Eddie/kec-bot/app/pedigreeDataOLDBUTWORKS/test_XL.json'],rootProbUpdate,emissionProbUpdate,transitionProbUpdate,True,printWork)
+    # classifier.train([],[],['/Users/Eddie/kec-bot/app/pedigreeDataOLDBUTWORKS/test_XL.json'],rootProbUpdate,emissionProbUpdate,transitionProbUpdate,True,printWork)
     # assert 0
 
     # classifier.printForDebug()
     classifier.train(ADTrain,ARTrain,XLRTrain,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,printPeople,printWork)
 
     print('\n==========================================\nAD TESTS\n==========================================\n')
-    resultMostLikely,resultExpected = classifier.testAll(ADTest,printPeople,printWork)
+    resultMostLikely,resultExpected,allPredictionsAD = classifier.testAll(ADTest,printPeople,printWork)
     accuracyADMostLikely = len([x for x in resultMostLikely if x == 0])/float(len(resultMostLikely))
     accuracyADExpected = len([x for x in resultExpected if x == 0])/float(len(resultExpected))
     print('Accuracy for AD - Most likely: '+str(accuracyADMostLikely)+' Expected: '+str(accuracyADExpected))
+    allPredictionsAD = [0,allPredictionsAD]
 
     print('\n==========================================\nAR TESTS\n==========================================\n')
-    resultMostLikely,resultExpected = classifier.testAll(ARTest,printPeople,printWork)
+    resultMostLikely,resultExpected,allPredictionsAR = classifier.testAll(ARTest,printPeople,printWork)
     accuracyARMostLikely = len([x for x in resultMostLikely if x == 1])/float(len(resultMostLikely))
     accuracyARExpected = len([x for x in resultExpected if x == 1])/float(len(resultExpected))
     print('Accuracy for AR - Most likely: '+str(accuracyARMostLikely)+' Expected: '+str(accuracyARExpected))
+    allPredictionsAR = [1,allPredictionsAR]
 
     print('\n==========================================\nXLR TESTS\n==========================================\n')
-    resultMostLikely,resultExpected = classifier.testAll(XLRTest,printPeople,printWork)
+    resultMostLikely,resultExpected,allPredictionsXLR = classifier.testAll(XLRTest,printPeople,printWork)
     accuracyXLRMostLikely = len([x for x in resultMostLikely if x == 2])/float(len(resultMostLikely))
     accuracyXLRExpected = len([x for x in resultExpected if x == 2])/float(len(resultExpected))
     print('Accuracy for XLR - Most likely: '+str(accuracyXLRMostLikely)+' Expected: '+str(accuracyXLRExpected))
+    allPredictionsXLR = [2,allPredictionsXLR]
 
     print('\n\nFor later analysis:')
     print('accuracyADMostLikely: '+str(accuracyADMostLikely))
@@ -336,8 +351,97 @@ def runOnData(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeDataOLDBUTWORKS
     print('accuracyXLRMostLikely: '+str(accuracyXLRMostLikely))
     print('accuracyXLRExpected: '+str(accuracyXLRExpected))
 
+    classifier.printModelParams()
+
+    print('\n\nallPredictionsAD\n')
+    print(allPredictionsAD)
+    print('\n\nallPredictionsAR\n')
+    print(allPredictionsAR)
+    print('\n\nallPredictionsXLR\n')
+    print(allPredictionsXLR)
+
+def loocv(jsonFolderPath = '/Users/Eddie/kec-bot/app/pedigreeDataOLDBUTWORKS'):
+
+    ADData,ARData,XLRData = allFiles()
+
+    ADData = ADData 
+    ARData = ARData 
+    XLRData = XLRData
+
+    for f in ADData:
+        print(f)
+    print('\n')
+    for f in ARData:
+        print(f)
+    print('\n')
+    for f in XLRData:
+        print(f)
+    print('\n')
+    print('There are '+str(len(ADData))+' AD data points, '+str(len(ARData))+' AR data points, '+str(len(XLRData))+' XLR data points')
+
+    printPeople = False
+    printWork = False
+
+    rootProbUpdate = True
+    emissionProbUpdate = True
+    transitionProbUpdate = True
+
+    allResults = []
+
+    adAccuracy = [0,0]
+    for testPoint in ADData:
+        ADTrain = [x for x in ADData if x != testPoint]
+        ARTrain = ARData
+        XLRTrain = XLRData
+
+        classifier = PedigreeClassifier()
+        classifier.train(ADTrain,ARTrain,XLRTrain,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,printPeople,printWork)
+
+        resultMostLikely,resultExpected,allPredictions = classifier.testAll([testPoint],printPeople,printWork)
+        if(resultMostLikely[0] == 0):
+            adAccuracy[0] += 1
+        if(resultExpected[0] == 0):
+            adAccuracy[1] += 1
+        allResults.append([0,allPredictions])
+
+    arAccuracy = [0,0]
+    for testPoint in ARData:
+        ADTrain = ADData
+        ARTrain = [x for x in ARData if x != testPoint]
+        XLRTrain = XLRData
+
+        classifier = PedigreeClassifier()
+        classifier.train(ADTrain,ARTrain,XLRTrain,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,printPeople,printWork)
+
+        resultMostLikely,resultExpected,allPredictions = classifier.testAll([testPoint],printPeople,printWork)
+        if(resultMostLikely[0] == 0):
+            arAccuracy[0] += 1
+        if(resultExpected[0] == 0):
+            arAccuracy[1] += 1
+        allResults.append([1,allPredictions])
+
+    xlrAccuracy = [0,0]
+    for testPoint in XLRData:
+        ADTrain = ADData
+        ARTrain = ARData
+        XLRTrain = [x for x in XLRData if x != testPoint]
+
+        classifier = PedigreeClassifier()
+        classifier.train(ADTrain,ARTrain,XLRTrain,rootProbUpdate,emissionProbUpdate,transitionProbUpdate,printPeople,printWork)
+
+        resultMostLikely,resultExpected,allPredictions = classifier.testAll([testPoint],printPeople,printWork)
+        if(resultMostLikely[0] == 0):
+            xlrAccuracy[0] += 1
+        if(resultExpected[0] == 0):
+            xlrAccuracy[1] += 1
+        allResults.append([2,allPredictions])
+
+    print('\n\nadAccuracy ('+str(len(ADData))+' total): ['+str(adAccuracy[0]/float(len(ADData)))+','+str(adAccuracy[1]/float(len(ADData)))+']')
+    print('arAccuracy ('+str(len(ARData))+' total): ['+str(arAccuracy[0]/float(len(ARData)))+','+str(arAccuracy[1]/float(len(ARData)))+']')
+    print('xlrAccuracy ('+str(len(XLRData))+' total): ['+str(xlrAccuracy[0]/float(len(XLRData)))+','+str(xlrAccuracy[1]/float(len(XLRData)))+']')
+    print(allResults)
 
 # There are 35 AD data points, 41 AR data points, 21 XLR data points
 
-runOnData()
-
+# runOnData()
+loocv()

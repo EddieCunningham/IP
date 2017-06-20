@@ -403,7 +403,6 @@ cdef class PyEMOptimizer:
     cdef string dominantOrRecessive
     cdef object problemContext    
 
-
     def __init__(self,dominantOrRecessive,problemContext):
         self.allPedigrees = []
         if(dominantOrRecessive != "dominant" and dominantOrRecessive != "recessive"):

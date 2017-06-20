@@ -273,6 +273,22 @@ void EMPedigreeOptimizer::_transitionProbHack() {
             }
         }
     }
+
+    for(int j=0; j<_emissionProbs.size(); ++j) {
+        for(int k=0; k<_emissionProbs.at(j).size(); ++k) {
+            
+            double sum = 0.0;
+            for(int l=0; l<_emissionProbs.at(j).at(k).size(); ++l) {
+
+                double noise = rand()/(double)RAND_MAX*pow(10,-noiseOrder);
+                _emissionProbs.at(j).at(k).at(l) += noise;
+                sum += _emissionProbs.at(j).at(k).at(l);
+            }
+            for(int l=0; l<_emissionProbs.at(j).at(k).size(); ++l) {
+                _emissionProbs.at(j).at(k).at(l) /= sum;
+            }
+        }
+    }
 }
 
 void EMPedigreeOptimizer::_train(const vector<pedigreeClass2*> & trainingSet, bool printPeople, bool printWork, bool rootProbUpdate, bool emissionProbUpdate, bool transitionProbUpdate, bool initializeRoots, bool initializeEmission, bool initializeTransition) {
